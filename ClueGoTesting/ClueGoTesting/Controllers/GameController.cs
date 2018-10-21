@@ -21,31 +21,45 @@ namespace ClueGoTesting.Controllers
         }
         
 
-
+        //get a json with all gameData
         [Route("gamedata/{GID}")]// api/ClueGoTesting/gamedata/"gid"
         [HttpGet]
-        public List<GameData> GetGameData(int GID)
+        public List<GameData> GetGameData()
         {
-            var list = new List<GameData>();
-
-            list.Add(new GameData()
-            {
-                UserId = 2,
-                GamesLost = 0,
-                GameDataId =GID,
-                GamesWon =1,
-                CluesFound =5,
-                UserScore =2,
-                
-            });
-            
-            return list;
+            var listGameData = new List<GameData>();
+            listGameData = _dbcontext.GameDatas.ToList();
+            return listGameData;
         }
 
 
+
+        //get a json with gamedata of a user.
+        [Route("gamedata/{UID}")]
+        [HttpGet]
+
+        public List<GameData> GetUserGameData (int GID)
+        {
+            //Logic missing
+            return null;
+        }
+
+
+
+        //ADD Game data to db
+        [Route("gamedata/add/")] 
+        [HttpPost]
+        public IActionResult AddGameData([FromQuery] GameData gamedata)
+
+        {
+            _dbcontext.GameDatas.Add(gamedata);
+            _dbcontext.SaveChanges();
+            return Created("", gamedata);
+
+        }
+
         //gets static object, not from databse atm
-        
-        
+
+
         [Route("user/{UID}")] // api/ClueGoTEsting/user/"uid"
         [HttpGet]
        
