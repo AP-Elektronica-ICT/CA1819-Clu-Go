@@ -59,7 +59,6 @@ namespace ClueGoTesting.Controllers
 
         //gets static object, not from databse atm
 
-
         [Route("user/{UID}")] // api/ClueGoTEsting/user/"uid"
         [HttpGet]
        
