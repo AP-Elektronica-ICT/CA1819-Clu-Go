@@ -11,7 +11,8 @@ namespace ClueGoTesting.Models
         [Key]
         public int CaseId { get; set; }
         public string GameInfo { get; set; }
-        public int SuspectId { get; set; }
+        
+      //  public int SuspectId { get; set; }
         public ICollection<Suspects> Suspects { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace ClueGoTesting.Models
 
         //attributes
         public string Name { get; set; }
+        public string Password { get; set; }
         public string Email { get; set; }
         //PK
         [Key]
