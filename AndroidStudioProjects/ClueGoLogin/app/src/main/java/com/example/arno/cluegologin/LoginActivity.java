@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.util.Log;
 import android.view.View;
 
 
@@ -26,6 +27,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -33,6 +35,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +59,9 @@ import static android.Manifest.permission.READ_CONTACTS;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+    private RequestQueue mRequestQueue;
+    private StringRequest stringRequest;
+    private String url= "http://192.168.1.10:45455/api/user";
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -149,7 +168,46 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
+        String email = mEmailView.getText().toString();
+        String password = mPasswordView.getText().toString();
+
+
+        mRequestQueue = Volley.newRequestQueue(this);
+        String url= "http://192.168.1.10:45455/api/user/inlog/"+email+"/"+password;
+
+        stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i(response, response.toString());
+                TextView tv = (TextView)findViewById(R.id.link_to_login);
+                tv.setText(response);
+                String value = response;
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("Error.response", error.toString());
+                TextView tv = (TextView)findViewById(R.id.link_to_login);
+                tv.setText("Username or pasword incorrect!");
+
+            }
+        });
+        mRequestQueue.add(stringRequest);
+
+        hideKeyBoard();
+        Toast toast = Toast.makeText(this, email, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    public void hideKeyBoard(){
+        try  {
+            InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+        }
+    }
+      /*  if (mAuthTask != null) {
             return;
         }
 
@@ -193,7 +251,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         }
-    }
+    }*/
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
@@ -309,6 +367,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
+
+
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
