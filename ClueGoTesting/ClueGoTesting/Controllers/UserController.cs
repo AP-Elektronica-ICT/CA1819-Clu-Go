@@ -42,7 +42,6 @@ namespace ClueGoTesting.Data
         public ActionResult<User> GetByEmail(string username, string password)
         {
             var item = _context.Users.SingleOrDefault(c => c.Username == username && (c.Password == PasswordHash(password) || c.Password == password));
-            //==================== Pass Validation check =======================
 
 
             if (item == null)
@@ -64,7 +63,7 @@ namespace ClueGoTesting.Data
 
             bool usernameAlreadyExists = _context.Users.Any(x => x.Username == newUser.Username);
             bool emailAlreadyExists = _context.Users.Any(x => x.Email == newUser.Email);
-
+            //==================== Pass Validation check =======================
             if (_pwd == newUser.Username)
                 serverResponse = "Password cannot match username!";
             else if (_pwd.Length < 6)
