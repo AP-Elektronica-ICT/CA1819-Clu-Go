@@ -13,8 +13,8 @@ namespace ClueGoTesting.Models
         [Key]
         public int ClueId { get; set; }
         public int Distance { get; set; }
-        public string difficulty { get; set; }
-        public string description { get; set; }
-        public string picture { get; set; }
-        }
+        public string Difficulty { get; set; }
+        public string DescriptionClue { get; set; }
+        public string Picture { get; set; }
+    }
 }

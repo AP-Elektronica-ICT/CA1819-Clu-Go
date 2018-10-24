@@ -110,6 +110,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                login();
                 attemptLogin();
             }
         });
@@ -117,7 +118,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
+    private void login(){
+        String email = mEmailView.getText().toString();
+        Intent intent = new Intent(this, MapsActivity.class);
 
+        if (email == "Admin") {
+            this.startActivity(intent);
+            Toast toast = Toast.makeText(this, "test", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
@@ -171,7 +181,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-
         mRequestQueue = Volley.newRequestQueue(this);
         String url= "http://192.168.1.10:45455/api/user/inlog/"+email+"/"+password;
 
@@ -182,7 +191,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 TextView tv = (TextView)findViewById(R.id.link_to_login);
                 tv.setText(response);
                 String value = response;
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -190,11 +198,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Log.i("Error.response", error.toString());
                 TextView tv = (TextView)findViewById(R.id.link_to_login);
                 tv.setText("Username or pasword incorrect!");
-
             }
         });
         mRequestQueue.add(stringRequest);
-
         hideKeyBoard();
         Toast toast = Toast.makeText(this, email, Toast.LENGTH_SHORT);
         toast.show();
@@ -343,13 +349,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     public void signInFacebook(View view) {
-        Toast toast = Toast.makeText(this, R.string.toast_message, Toast.LENGTH_SHORT);
-        toast.show();
+        Intent mapsActivity = new Intent(LoginActivity.this, MapsActivity.class);
+        startActivity(mapsActivity);
+        //login();
     }
 
     public void openRegisterForm(View view) {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
+    }
+
+    public void signInEmail(View view) {
     }
 
 

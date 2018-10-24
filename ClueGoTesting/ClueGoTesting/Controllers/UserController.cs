@@ -20,13 +20,6 @@ namespace ClueGoTesting.Data
         public UserController(GameContext context)
         {
             _context = context;
-
-            if (_context.Users.Count() == 0)
-            {
-
-                _context.Users.Add(new User { Username = "Admin" });
-                _context.SaveChanges();
-            }
         }
         
 
