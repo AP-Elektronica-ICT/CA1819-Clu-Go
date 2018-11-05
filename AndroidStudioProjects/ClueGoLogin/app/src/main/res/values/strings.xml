@@ -1,6 +1,23 @@
 <resources>
-    <string name="app_name">ClueGoLogin</string>
-    <!-- Strings related to login -->
+    <string name="app_name">Cluego</string>
+    <string name="title_home">Game</string>
+    <string name="title_dashboard">Suspects</string>
+    <string name="title_notifications">Stats</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="start">A crime has been commited the king has been killed by Jopperman presumably</string>
+    <string name="game">HERE COMES GAME</string>
+    <string name="stats">HERE COMES STATS</string>
+    <string-array name="suspects_array">
+        <item>John</item>
+        <item>Paul</item>
+        <item>Morgan</item>
+        <item>Ibrahim</item>
+        <item>Arno</item>
+        <item>Antoine</item>
+        <item>Jopperman</item>
+        <item>Omar</item>
+    </string-array>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_re_enter_password">Re-enter password</string>
@@ -22,4 +39,7 @@
     <string name="title_activity_maps">Map</string>
     <string name="facebook_app_id">1895042873936175</string>
     <string name="fb_login_protocol_scheme">fb1895042873936175</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

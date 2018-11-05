@@ -117,7 +117,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        Intent mapsActivity = new Intent(LoginActivity.this, MapsActivity.class);
+                        Intent mapsActivity = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(mapsActivity);
                     }
 
@@ -135,8 +135,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
         if (isLoggedIn){
-            Intent mapsActivity = new Intent(LoginActivity.this, MapsActivity.class);
-            startActivity(mapsActivity);
+            Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(mainActivity);
         }
         //====================================================================
         // Set up the login form.
@@ -398,7 +398,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     public void signInFacebook(View view) {
-        Intent mapsActivity = new Intent(LoginActivity.this, MapsActivity.class);
+        Intent mapsActivity = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(mapsActivity);
         //login();
     }
