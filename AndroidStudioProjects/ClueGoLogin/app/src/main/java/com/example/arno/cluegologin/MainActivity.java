@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void switchToGame() {
         FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.fragment_container, new GameFragment()).addToBackStack(null).commit();
+        manager.beginTransaction().replace(R.id.fragment_container, new MapViewFragment()).addToBackStack(null).commit();
     }
 
     public void switchToSuspect(){

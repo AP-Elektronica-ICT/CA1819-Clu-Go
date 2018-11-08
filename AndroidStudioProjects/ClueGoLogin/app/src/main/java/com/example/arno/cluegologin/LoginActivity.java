@@ -169,7 +169,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
     private void login(){
         String email = mEmailView.getText().toString();
-        Intent intent = new Intent(this, MapsActivity.class);
+        Intent intent = new Intent(this, StartGameFragment.class);
 
         if (email == "Admin") {
             this.startActivity(intent);
