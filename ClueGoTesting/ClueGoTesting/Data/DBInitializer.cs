@@ -65,6 +65,7 @@ namespace ClueGoTesting.Data
                   CaseId = 1,
                     GameDataId = 1,
                    // GameId = 1
+                  
                 };
                 context.Games.Add(game);
                 context.SaveChanges();
@@ -122,7 +123,7 @@ namespace ClueGoTesting.Data
 
                 context.SaveChanges();
             }
-
+            
             if (!context.Locations.Any())
             {
 

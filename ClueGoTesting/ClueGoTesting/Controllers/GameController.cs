@@ -21,17 +21,121 @@ namespace ClueGoTesting.Controllers
             
         }
         
-
+       
+      
         //get a json with all gameData
-       // [Route("{GID}")]// api/ClueGoTesting/gamedata/"gid"
-        [HttpGet("{GID}")]
-        public List<GameData> GetGameData()
+        // [Route("{GID}")]// api/ClueGoTesting/gamedata/"gid"
+        [HttpGet("gamedata/{GDID}")]
+        public List<GameData> GetGameData(int GDID)
         {
             var listGameData = new List<GameData>();
+            var gameDataById = new GameData();
+
+            int id = GDID;
+
+            gameDataById = _dbcontext.GameDatas.Find(id);
             listGameData = _dbcontext.GameDatas.ToList();
             return listGameData;
         }
 
+
+
+        //find Case by Id
+        [HttpGet("case/{CID}")]
+        public Case GetCase(int CID)
+        {
+
+            var caseById = new Case();
+            int id = CID;
+
+            caseById = _dbcontext.Cases.Find(id);
+
+            return caseById;
+           
+        }
+
+        //find Game by ID
+        [HttpGet("{GID}")]
+        public Game getGame(int GID)
+        {
+
+            var gameById = new Game();
+            int id = GID;
+            
+            gameById = _dbcontext.Games.Find(id);
+            
+            return gameById;
+          
+        }
+
+        //get game info from certain game
+        //I know the ID of a game and I need the gameinfo from that particular game.
+        
+        [HttpGet("gameinfo/{GID}")]
+        public String getGameInfoFromGame(int GID)
+        {
+            var gameById = new Game();
+            var caseFromGame = new Case();
+            string gameInfo;
+            gameById = getGame(GID);
+
+            var caseId = gameById.CaseId;
+            caseFromGame = GetCase(caseId);
+            gameInfo = caseFromGame.GameInfo;
+
+            return gameInfo;
+            
+        }
+        
+
+        [HttpPost("newgame")]
+
+        public Game CreateNewGame()
+        {
+            var newGame = new Game();
+            var newCase = new Case();
+            var newGameData = new GameData();
+            var listSuspects = new List<Suspects>();
+
+            //Create a suspect,Normaly not necesary, Database will be filled with suspect profiles and random one will be chosen from these.
+            var suspect = new Suspects()
+            {
+                //  SuspectId = 1,
+
+                Description = "description of the  new suspect",
+                Name = "suspect1",
+                Weapons = "knife"
+
+            };
+            //add suspects to the list of suspects within the case data.
+            listSuspects.Add(suspect);
+            
+
+
+
+
+            newGame.CaseId = newCase.CaseId;
+            newGame.GameDataId = newGameData.GameDataId;
+
+            newCase.GameInfo = "game info placeholder data";
+            newCase.Suspects = listSuspects;
+
+
+            _dbcontext.Suspects.Add(suspect);
+            _dbcontext.Cases.Add(newCase);
+            _dbcontext.Games.Add(newGame);
+            _dbcontext.SaveChanges();
+
+            Console.WriteLine(newCase.Suspects);
+            
+            return newGame;
+
+        }
+         
+        
+
+        
+        
 
 
         //get a json with gamedata of a user.
