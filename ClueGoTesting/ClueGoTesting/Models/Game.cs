@@ -11,6 +11,5 @@ namespace ClueGoTesting.Models
         public int GameId { get; set; }    
         public int GameDataId { get; set; }
         public int CaseId { get; set; }
-        
     }
 }

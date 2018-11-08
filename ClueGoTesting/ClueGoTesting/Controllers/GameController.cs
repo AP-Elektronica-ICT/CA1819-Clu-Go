@@ -9,7 +9,7 @@ using ClueGoTesting.Data;
 
 namespace ClueGoTesting.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/ClueGoTesting")]
     [ApiController]
     public class GameController : ControllerBase
     {
@@ -18,101 +18,64 @@ namespace ClueGoTesting.Controllers
         public GameController(GameContext dbcontext)
         {
             _dbcontext = dbcontext;
-            
         }
         
 
-        //get a json with all gameData
-       // [Route("{GID}")]// api/ClueGoTesting/gamedata/"gid"
-        [HttpGet("{GID}")]
-        public List<GameData> GetGameData()
+
+        [Route("gamedata/{GID}")]// api/ClueGoTesting/gamedata/"gid"
+        [HttpGet]
+        public List<GameData> GetGameData(int GID)
         {
-            var listGameData = new List<GameData>();
-            listGameData = _dbcontext.GameDatas.ToList();
-            return listGameData;
-        }
+            var list = new List<GameData>();
 
-
-
-        //get a json with gamedata of a user.
-        //[Route("{UID}")]
-        [HttpGet("{UID}")]
-
-        public List<GameData> GetUserGameData (int GID)
-        {
-            //Logic missing
-            return null;
-        }
-
-
-
-        //ADD Game data to db
-        //[Route("add/")] 
-        [HttpPost("add/")]
-        public IActionResult AddGameData([FromQuery] GameData gamedata)
-
-        {
-            _dbcontext.GameDatas.Add(gamedata);
-            _dbcontext.SaveChanges();
-            return Created("", gamedata);
-
-        }
-
-        //gets static object, not from databse at
-
-
-        // Adds a user by posting like this: /api/ClueGoTesting/add/?Name=test&Email=testemail
-
-       // [Route("add")]
-        [HttpPost("add")]
-        public IActionResult AddUser([FromQuery ] User user )
-        {
-            var newUser = new User
+            list.Add(new GameData()
             {
-                Email = user.Email,
-                Username = user.Username
-            };
-
-            _dbcontext.Users.Add(newUser);
-             _dbcontext.SaveChanges();
-             return Created("", newUser);
-        }
-
-
-        //Gets all Users In the Users Tabel.
-
-      //  [Route("get")] //api/ClueGoTesting/get
-        [HttpGet("get")]
-        public List<User> GetUsers()
-        {
-            var listUsers = new List<User>();
-            listUsers = _dbcontext.Users.ToList();
+                UserId = 2,
+                GamesLost = 0,
+                GameDataId =GID,
+                GamesWon =1,
+                CluesFound =5,
+                UserScore =2,
+                
+            });
             
-            return listUsers;
+            return list;
+        }
+        [Route("user/{UID}")] // api/ClueGoTEsting/user/"uid"
+        [HttpGet]
+
+        public List<User> GetUsers(int UID)
+        {
+            var list = new List<User>();
+
+            list.Add(new User()
+            {
+                Name = "Jeff",
+                UserId =UID,
+                Email ="Jeff@Mynameis.com"
+
+            });
+
+            return list;
+         }
+        [Route("adduser")]
+        [HttpPost]
+        public IActionResult AddUser([FromBody] User newUser)
+        {
+            _dbcontext.Users.Add(newUser);
+            _dbcontext.SaveChanges();
+            return Created("", newUser);
         }
 
+        [Route("get")] //api/ClueGoTesting/get
+        [HttpGet]
+        public List<User> getUsers()
+        {
+            var list = new List<User>();
+            list = _dbcontext.Users.ToList();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            return list;
+        }
 
     }
 }

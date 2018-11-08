@@ -9,12 +9,11 @@ namespace ClueGoTesting.Models
     {
 
         //attributes
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public string Name { get; set; }
         public string Email { get; set; }
         //PK
         [Key]
-        public long UserId { get; set; }
+        public int UserId { get; set; }
 
     }
 }
