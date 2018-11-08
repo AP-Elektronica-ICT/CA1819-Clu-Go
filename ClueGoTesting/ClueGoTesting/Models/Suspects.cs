@@ -12,7 +12,7 @@ namespace ClueGoTesting.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public string Weapons { get; set; }
-        public int ClueId { get; set; }
+        // public int ClueId { get; set; }
 
         public ICollection<Clues> Clues { get; set; }
     }

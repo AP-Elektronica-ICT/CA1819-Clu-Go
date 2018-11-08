@@ -44,7 +44,7 @@ namespace ClueGoTesting
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, GameContext gamecontext )
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, GameContext gameContext)
         {
             if (env.IsDevelopment())
             {
@@ -60,7 +60,7 @@ namespace ClueGoTesting
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            DBInitializer.Initialize(gamecontext);
+            DBInitializer.Initialize(gameContext);
 
             app.UseAuthentication();
             

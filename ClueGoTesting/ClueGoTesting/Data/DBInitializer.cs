@@ -21,10 +21,10 @@ namespace ClueGoTesting.Data
                 var clue = new Clues()
                 {
                    // ClueId = 1,
-                    description = "this is a clue",
-                    difficulty ="really hard",
+                    DescriptionClue = "this is a clue",
+                    Difficulty ="really hard",
                     Distance = 15,
-                    picture ="somerandomurlyey"
+                    Picture ="somerandomurlyey"
 
                 };
                 context.Clues.Add(clue);
@@ -36,7 +36,7 @@ namespace ClueGoTesting.Data
                 {
                   //  CaseId = 1,
                     GameInfo = "here is some random info about the case",
-                    SuspectId = 1
+                    
 
                 };
                 context.Cases.Add(case1);
@@ -65,6 +65,7 @@ namespace ClueGoTesting.Data
                   CaseId = 1,
                     GameDataId = 1,
                    // GameId = 1
+                  
                 };
                 context.Games.Add(game);
                 context.SaveChanges();
@@ -75,7 +76,7 @@ namespace ClueGoTesting.Data
                 var suspect = new Suspects()
                 {
                   //  SuspectId = 1,
-                    ClueId =1,
+                    
                     Description ="description of the suspect",
                     Name ="suspect1",
                     Weapons = "knife"
@@ -86,17 +87,80 @@ namespace ClueGoTesting.Data
 
             }
 
-            if(!context.Users.Any())
+            if (!context.Users.Any())
             {
-                var user = new User()
+                var admin = new User()
                 {
-                    Name = "Jeff",
-                    Email ="randomemail@email.com",
-                  // UserId =1
+                    Username = "WeynsA",
+                    Email = "weyns.arno@gmail.com",
+                    Password = "123456"
                 };
-                context.Users.Add(user);
+
+                var admin1 = new User()
+                {
+                    Username = "MassureA",
+                    Email = "s091998@ap.be",
+                    Password = "3D9188577CC9BFE9291AC66B5CC872B7"
+                };
+
+                var admin2 = new User()
+                {
+                    Username = "JoppeM",
+                    Email = "joppe.mertens@gmail.com",
+                    Password = "3D9188577CC9BFE9291AC66B5CC872B7"
+                };
+
+                var admin3 = new User()
+                {
+                    Username = "AlIbra",
+                    Email = "s091997@ap.be",
+                    Password = "azerty"
+                };
+                context.Users.Add(admin);
+                context.Users.Add(admin1);
+                context.Users.Add(admin2);
+                context.Users.Add(admin3);
+
                 context.SaveChanges();
-            }            
+            }
+            
+            if (!context.Locations.Any())
+            {
+
+                var location1 = new Location()
+                {
+                    LocName = "Brabo",
+                    LocLat = 51.221228,
+                    LocLong = 4.399698,
+                    LocDescription = "Standbeeld van Brabo."
+                };
+                var location2 = new Location()
+                {
+                    LocName = "Standbeeld Stadhuis",
+                    LocLat = 51.220884,
+                    LocLong = 4.398995,
+                    LocDescription = "Standbeeld Vrijheid blijheid nabij stadhuis."
+                };
+                var location3 = new Location()
+                {
+                    LocName = "Het Steen",
+                    LocLat = 51.222773,
+                    LocLong = 4.397367,
+                    LocDescription = "Het Steen"
+                };
+                var location4 = new Location()
+                {
+                    LocName = "Pieter Paul Rubens",
+                    LocLat = 51.219326,
+                    LocLong = 4.401576,
+                    LocDescription = "Groenplaats, standbeeld Pieter Paul Rubens."
+                };
+                context.Locations.Add(location1);
+                context.Locations.Add(location2);
+                context.Locations.Add(location3);
+                context.Locations.Add(location4);
+                context.SaveChanges();
+            }
         }
     }
 }

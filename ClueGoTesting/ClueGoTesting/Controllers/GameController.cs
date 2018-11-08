@@ -9,7 +9,7 @@ using ClueGoTesting.Data;
 
 namespace ClueGoTesting.Controllers
 {
-    [Route("api/ClueGoTesting")]
+    [Route("api/[controller]")]
     [ApiController]
     public class GameController : ControllerBase
     {
@@ -18,64 +18,205 @@ namespace ClueGoTesting.Controllers
         public GameController(GameContext dbcontext)
         {
             _dbcontext = dbcontext;
+            
+        }
+        
+       
+      
+        //get a json with all gameData
+        // [Route("{GID}")]// api/ClueGoTesting/gamedata/"gid"
+        [HttpGet("gamedata/{GDID}")]
+        public List<GameData> GetGameData(int GDID)
+        {
+            var listGameData = new List<GameData>();
+            var gameDataById = new GameData();
+
+            int id = GDID;
+
+            gameDataById = _dbcontext.GameDatas.Find(id);
+            listGameData = _dbcontext.GameDatas.ToList();
+            return listGameData;
+        }
+
+
+
+        //find Case by Id
+        [HttpGet("case/{CID}")]
+        public Case GetCase(int CID)
+        {
+
+            var caseById = new Case();
+            int id = CID;
+
+            caseById = _dbcontext.Cases.Find(id);
+
+            return caseById;
+           
+        }
+
+        //find Game by ID
+        [HttpGet("{GID}")]
+        public Game getGame(int GID)
+        {
+
+            var gameById = new Game();
+            int id = GID;
+            
+            gameById = _dbcontext.Games.Find(id);
+            
+            return gameById;
+          
+        }
+
+        //get game info from certain game
+        //I know the ID of a game and I need the gameinfo from that particular game.
+        
+        [HttpGet("gameinfo/{GID}")]
+        public String getGameInfoFromGame(int GID)
+        {
+            var gameById = new Game();
+            var caseFromGame = new Case();
+            string gameInfo;
+            gameById = getGame(GID);
+
+            var caseId = gameById.CaseId;
+            caseFromGame = GetCase(caseId);
+            gameInfo = caseFromGame.GameInfo;
+
+            return gameInfo;
+            
         }
         
 
+        [HttpPost("newgame")]
 
-        [Route("gamedata/{GID}")]// api/ClueGoTesting/gamedata/"gid"
-        [HttpGet]
-        public List<GameData> GetGameData(int GID)
+        public Game CreateNewGame()
         {
-            var list = new List<GameData>();
+            var newGame = new Game();
+            var newCase = new Case();
+            var newGameData = new GameData();
+            var listSuspects = new List<Suspects>();
 
-            list.Add(new GameData()
+            //Create a suspect,Normaly not necesary, Database will be filled with suspect profiles and random one will be chosen from these.
+            var suspect = new Suspects()
             {
-                UserId = 2,
-                GamesLost = 0,
-                GameDataId =GID,
-                GamesWon =1,
-                CluesFound =5,
-                UserScore =2,
-                
-            });
+                //  SuspectId = 1,
+
+                Description = "description of the  new suspect",
+                Name = "suspect1",
+                Weapons = "knife"
+
+            };
+            //add suspects to the list of suspects within the case data.
+            listSuspects.Add(suspect);
             
-            return list;
-        }
-        [Route("user/{UID}")] // api/ClueGoTEsting/user/"uid"
-        [HttpGet]
 
-        public List<User> GetUsers(int UID)
-        {
-            var list = new List<User>();
 
-            list.Add(new User()
-            {
-                Name = "Jeff",
-                UserId =UID,
-                Email ="Jeff@Mynameis.com"
 
-            });
 
-            return list;
-         }
-        [Route("adduser")]
-        [HttpPost]
-        public IActionResult AddUser([FromBody] User newUser)
-        {
-            _dbcontext.Users.Add(newUser);
+            newGame.CaseId = newCase.CaseId;
+            newGame.GameDataId = newGameData.GameDataId;
+
+            newCase.GameInfo = "game info placeholder data";
+            newCase.Suspects = listSuspects;
+
+
+            _dbcontext.Suspects.Add(suspect);
+            _dbcontext.Cases.Add(newCase);
+            _dbcontext.Games.Add(newGame);
             _dbcontext.SaveChanges();
-            return Created("", newUser);
-        }
 
-        [Route("get")] //api/ClueGoTesting/get
-        [HttpGet]
-        public List<User> getUsers()
+            Console.WriteLine(newCase.Suspects);
+            
+            return newGame;
+
+        }
+         
+        
+
+        
+        
+
+
+        //get a json with gamedata of a user.
+        //[Route("{UID}")]
+        [HttpGet("{UID}")]
+
+        public List<GameData> GetUserGameData (int GID)
         {
-            var list = new List<User>();
-            list = _dbcontext.Users.ToList();
-
-            return list;
+            //Logic missing
+            return null;
         }
+
+
+
+        //ADD Game data to db
+        //[Route("add/")] 
+        [HttpPost("add/")]
+        public IActionResult AddGameData([FromQuery] GameData gamedata)
+
+        {
+            _dbcontext.GameDatas.Add(gamedata);
+            _dbcontext.SaveChanges();
+            return Created("", gamedata);
+
+        }
+
+        //gets static object, not from databse at
+
+
+        // Adds a user by posting like this: /api/ClueGoTesting/add/?Name=test&Email=testemail
+
+       // [Route("add")]
+        [HttpPost("add")]
+        public IActionResult AddUser([FromQuery ] User user )
+        {
+            var newUser = new User
+            {
+                Email = user.Email,
+                Username = user.Username
+            };
+
+            _dbcontext.Users.Add(newUser);
+             _dbcontext.SaveChanges();
+             return Created("", newUser);
+        }
+
+
+        //Gets all Users In the Users Tabel.
+
+      //  [Route("get")] //api/ClueGoTesting/get
+        [HttpGet("get")]
+        public List<User> GetUsers()
+        {
+            var listUsers = new List<User>();
+            listUsers = _dbcontext.Users.ToList();
+            
+            return listUsers;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 }
