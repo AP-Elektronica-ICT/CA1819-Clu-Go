@@ -73,7 +73,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
-    private String url= "http://192.168.1.10:45455/api/user";
+    private String url= "http://cluegoserver.azurewebsites.net/api/user";
 
     CallbackManager callbackManager;
 
