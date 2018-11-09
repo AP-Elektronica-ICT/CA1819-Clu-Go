@@ -32,7 +32,7 @@ public class RegisterActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getName();
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
-    private String url= "http://cluegoserver.azurewebsites.net/api/user";
+    private String url= "http://192.168.1.10:45457/api/location";
 
 
 
