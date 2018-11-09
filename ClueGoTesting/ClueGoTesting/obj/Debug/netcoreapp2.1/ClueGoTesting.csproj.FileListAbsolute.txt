@@ -191,7 +191,6 @@ C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcor
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.TagHelpers.output.cache
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.RazorCoreGenerate.cache
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\Razor\Areas\Identity\Pages\_ViewStart.g.cshtml.cs
-C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\Razor\Views\Home\About.g.cshtml.cs
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\Razor\Views\Home\Contact.g.cshtml.cs
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\Razor\Views\Home\Index.g.cshtml.cs
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\Razor\Views\Home\Privacy.g.cshtml.cs
@@ -278,3 +277,4 @@ C:\Users\joppe\Downloads\ClueGoTesting\ClueGoTesting\ClueGoTesting\obj\Debug\net
 C:\Users\joppe\Downloads\ClueGoTesting\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.dll
 C:\Users\joppe\Downloads\ClueGoTesting\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.pdb
 C:\Users\joppe\Downloads\ClueGoTesting\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.csproj.CopyComplete
+C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\Razor\Views\Home\Suspects.g.cshtml.cs

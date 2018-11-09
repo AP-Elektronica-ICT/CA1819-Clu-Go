@@ -15,9 +15,9 @@ namespace ClueGoTesting.Controllers
             return View();
         }
 
-        public IActionResult About()
+        public IActionResult Suspects()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Here you can edit or add suspects.";
 
             return View();
         }

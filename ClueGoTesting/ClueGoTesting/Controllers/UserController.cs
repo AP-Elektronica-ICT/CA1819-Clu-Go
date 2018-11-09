@@ -16,10 +16,12 @@ namespace ClueGoTesting.Data
     public class UserController : ControllerBase
     {
         private readonly GameContext _context;
+        
 
         public UserController(GameContext context)
         {
             _context = context;
+            context.Database.EnsureCreated();
         }
         
 
