@@ -9,6 +9,7 @@ namespace ClueGoTesting.Data
 {
     public class DBInitializer
     {
+        
         public static void Initialize(GameContext context)
         {
             //Create the DB if not yet exists
@@ -16,30 +17,68 @@ namespace ClueGoTesting.Data
 
             //are there items present?
 
+            Case CreateCase(string name, int caseNumber)
+            {
+                var createdCase = new Case()
+                {
+                    GameInfo = "this is case number " + caseNumber + "someone was killed",
+
+                };
+
+                return createdCase;
+            }
+
             if (!context.Clues.Any())
             {
                 var clue = new Clues()
-                {
-                   // ClueId = 1,
-                    DescriptionClue = "this is a clue",
+                {                
+                    DescriptionClue = "clue1",
                     Difficulty ="really hard",
                     Distance = 15,
                     Picture ="somerandomurlyey"
 
                 };
+                var clue1 = new Clues()
+                {
+                    DescriptionClue = "clue2",
+                    Difficulty = "easy",
+                    Distance = 20,
+                    Picture = "somerandomurlyey"
+
+                };
+
                 context.Clues.Add(clue);
+                context.Clues.Add(clue1);
                 context.SaveChanges();
             }
             if(!context.Cases.Any())
-            {
+            {   var listSuspects = new List<Suspects>();
+
+                var suspect = new Suspects()
+                {
+                    Weapons = "knife",
+                    Description ="random suspect for case",
+                    Name ="sussspect"
+
+                };
+                listSuspects.Add(suspect);
+
                 var case1 = new Case()
                 {
                   //  CaseId = 1,
                     GameInfo = "here is some random info about the case",
-                    
+                    Suspects = listSuspects
 
                 };
+
+                for (int i = 0; i < 5; i++)
+                {
+                    var caseee = CreateCase("case"+i, i);
+                    context.Cases.Add(caseee);
+                }
+
                 context.Cases.Add(case1);
+
                 context.SaveChanges();
             }
             if(!context.GameDatas.Any())
@@ -49,7 +88,7 @@ namespace ClueGoTesting.Data
                   //  GameDataId = 1,
                     GamesLost = 0,
                     GamesWon = 0,
-                    CluesFound = 0,
+                    CluesFound = 5,
                     UserScore = 0,
                     UserId = 1
 
@@ -62,12 +101,20 @@ namespace ClueGoTesting.Data
             {
                 var game = new Game()
                 {
-                  CaseId = 1,
+                    CaseId = 1,
                     GameDataId = 1,
                    // GameId = 1
                   
                 };
+                var game2 = new Game()
+                {
+                    CaseId = 2,
+                    GameDataId = 1,
+                    // GameId = 1
+
+                };
                 context.Games.Add(game);
+                context.Games.Add(game2);
                 context.SaveChanges();
 
             }
