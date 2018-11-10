@@ -44,7 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MapViewFragment extends Fragment {
-
+    Marker destMarker;
     MapView mMapView;
     private GoogleMap googleMap;
     private static final int LOCATION_PERMISSION_REQUEST_CODE=1;
@@ -73,7 +73,7 @@ public class MapViewFragment extends Fragment {
                 googleMap.setMyLocationEnabled(true);
 
                 // For dropping a marker at a point on the Map
-                LatLng sydney = new LatLng(51.0262427,4.4424231);
+                LatLng sydney = new LatLng(51.030729, 4.474141);
 
                 googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
                 // For zooming automatically to the location of the marker
@@ -82,18 +82,30 @@ public class MapViewFragment extends Fragment {
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
+                        destMarker = marker;
                         String url = getRequestUrl(googleMap.getMyLocation(),marker.getPosition());
                         TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
                         taskRequestDirections.execute(url);
+
+                        if(googleMap.getMyLocation().getLatitude()<destMarker.getPosition().latitude+1&&googleMap.getMyLocation().getLatitude()>destMarker.getPosition().latitude-1){
+                            Log.e("eerste","eerste if loop");
+                            if(googleMap.getMyLocation().getLongitude()<destMarker.getPosition().longitude+1&&googleMap.getMyLocation().getLongitude()>destMarker.getPosition().longitude-1){
+                            Toast.makeText(getActivity(),"You have arrived at your destination", Toast.LENGTH_LONG).show();
+
+                            Log.e("Toast", "You have arrived at your destination");
+                            }
+                        }
                         Log.e("url", url.toString());
                         return true;
                     }
                 });
+
             }
         });
 
         return rootView;
     }
+
     private String getRequestUrl(Location origin, LatLng dest){
         String str_org = "origin=" + origin.getLatitude()+","+origin.getLongitude();
         String str_dest = "destination=" + dest.latitude+","+dest.longitude;
@@ -220,7 +232,8 @@ public class MapViewFragment extends Fragment {
             }
             if(polylineOptions!=null){
                 googleMap.addPolyline(polylineOptions);
-            }else{
+            }
+            else{
                 Log.e("TAG","Directions not found");
             }
         }
