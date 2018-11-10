@@ -115,6 +115,12 @@
                 android:textSize="12sp"
                 android:textStyle="bold|italic" />
 
+            <Button
+                android:id="@+id/btn_go_to_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="main activity dev " />
+
             <TextView
                 android:id="@+id/link_to_login"
                 android:layout_width="fill_parent"

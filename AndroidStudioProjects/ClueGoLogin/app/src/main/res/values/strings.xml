@@ -8,6 +8,7 @@
     <string name="start">A crime has been commited the king has been killed by Jopperman presumably</string>
     <string name="game">HERE COMES GAME</string>
     <string name="stats">HERE COMES STATS</string>
+    <string name ="newGame">Create Game</string>
     <string-array name="suspects_array">
         <item>John</item>
         <item>Paul</item>

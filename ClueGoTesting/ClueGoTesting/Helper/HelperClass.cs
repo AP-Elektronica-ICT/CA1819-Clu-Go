@@ -18,8 +18,5 @@ namespace ClueGoTesting.Helper
             
             return createdCase;
         }
-
-        
-
     }
 }
