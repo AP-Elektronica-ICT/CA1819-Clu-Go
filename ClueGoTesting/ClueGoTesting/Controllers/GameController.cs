@@ -94,6 +94,16 @@ namespace ClueGoTesting.Controllers
 
             return caseFromGame;
         }
+        [HttpGet("gameinfocase/{GID}")]
+        public String getGameInfoByCaseId(int GID)
+        {
+            var caseTemp = GetCase(GID);
+            var gameinfo = caseTemp.GameInfo;
+
+            return gameinfo;
+
+        }
+        
 
         [HttpGet("gameinfo/{GID}")]
         public String getGameInfoFromGame(int GID)

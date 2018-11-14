@@ -141,8 +141,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                login();
-                attemptLogin();
+               login();
+               attemptLogin();
+
             }
         });
         
@@ -150,7 +151,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         devToMain.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent mainActivity = new Intent(LoginActivity.this, StartGameFragment.class);
+                Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(mainActivity);
             }
         });
