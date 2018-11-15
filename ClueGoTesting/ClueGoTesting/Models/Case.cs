@@ -10,9 +10,9 @@ namespace ClueGoTesting.Models
     {
         [Key]
         public int CaseId { get; set; }
-        public string GameInfo { get; set; }
+        public string GameInfo { get; set; } // each case has different info
         
       //  public int SuspectId { get; set; }
-        public ICollection<Suspects> Suspects { get; set; }
+        public ICollection<Suspects> Suspects { get; set; } // each case gets a few random suspects
     }
 }

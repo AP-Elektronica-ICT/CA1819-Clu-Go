@@ -10,10 +10,10 @@ namespace ClueGoTesting.Models
         
         //PK
         [Key]
-        public int GameDataId { get; set; }
+        public int GameDataId { get; set; } // links to a game
 
         //FK
-        public int UserId { get; set; }
+        public int UserId { get; set; } // each gamedata object belongs to 1 user
 
         //attributes
         public int CluesFound { get; set; }

@@ -20,6 +20,8 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONObject;
+
 import java.util.Random;
 
 import static com.facebook.FacebookSdk.getCacheDir;
@@ -52,10 +54,10 @@ public class StartGameFragment extends Fragment {
         /* Start the queue */
         mRequestQueue.start();
 
-        String url ="http://192.168.0.225:45457/api/game/gameinfocase/"+GID;
+        String urlGameInfo ="http://172.16.211.229:45455/api/game/gameinfocase/"+GID;
 
         // Formulate the request and handle the response.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, urlGameInfo,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -76,6 +78,8 @@ public class StartGameFragment extends Fragment {
 // Add the request to the RequestQueue.
                  mRequestQueue.add(stringRequest);
     }
+
+
 
 
     final int random = new Random().nextInt(6);
