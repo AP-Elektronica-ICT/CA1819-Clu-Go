@@ -136,18 +136,36 @@ public class MapViewFragment extends Fragment {
                     }
                 };
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,locationListener);
+                GoogleMap.InfoWindowAdapter infoWindowAdapter = new GoogleMap.InfoWindowAdapter() {
+                    @Override
+                    public View getInfoWindow(Marker marker) {
+                        return null;
+                    }
 
+                    @Override
+                    public View getInfoContents(Marker marker) {
 
+                        return null;
+                    }
+                };
+                mMap.setInfoWindowAdapter(infoWindowAdapter);
                 // For dropping a marker at a point on the Map
 
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
                         destMarker = marker;
+                        marker.showInfoWindow();
+                        return true;
+                    }
+                });
+                mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
                         String url = getRequestUrl(googleMap.getMyLocation(), marker.getPosition());
                         TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
                         taskRequestDirections.execute(url);
-                        return true;
+
                     }
                 });
 
