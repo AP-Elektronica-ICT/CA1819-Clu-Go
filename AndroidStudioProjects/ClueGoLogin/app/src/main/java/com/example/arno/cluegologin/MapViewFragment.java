@@ -1,12 +1,20 @@
 package com.example.arno.cluegologin;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +24,12 @@ import android.widget.Toast;
 
 import com.facebook.places.Places;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -43,11 +53,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+
 public class MapViewFragment extends Fragment {
     Marker destMarker;
     MapView mMapView;
+    private final static int LOCATION_REQUEST_CODE = 101;
     private GoogleMap googleMap;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE=1;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,6 +68,7 @@ public class MapViewFragment extends Fragment {
 
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
+
 
         mMapView.onResume(); // needed to get the map to display immediately
 
@@ -68,42 +82,106 @@ public class MapViewFragment extends Fragment {
             @Override
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
-
+                requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_REQUEST_CODE);
                 // For showing a move to my location button
-                googleMap.setMyLocationEnabled(true);
 
-                // For dropping a marker at a point on the Map
-                LatLng sydney = new LatLng(51.030729, 4.474141);
+                LatLng sydney = new LatLng(51.030440, 4.474051);
 
                 googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
+
+
+                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                        return;
+                    }
+                    mMap.setMyLocationEnabled(true);
+
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                LocationManager locationManager= (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+                LocationListener locationListener = new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) {
+                        if(destMarker != null){
+
+                            Location markerLoc = new Location("Destination");
+                            markerLoc.setLatitude(destMarker.getPosition().latitude);
+                            markerLoc.setLongitude(destMarker.getPosition().longitude);
+                            float distance = location.distanceTo(markerLoc);
+                            Log.e("distancevalue", "Distance: "+distance);
+
+                            if(distance<20){
+                                Log.e("toast","locations are the same");
+
+                                Toast.makeText(getActivity(),"You have arrived at your destination",Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+                    }
+
+                    @Override
+                    public void onProviderEnabled(String s) {
+
+                    }
+
+                    @Override
+                    public void onProviderDisabled(String s) {
+
+                    }
+                };
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,locationListener);
+
+
+                // For dropping a marker at a point on the Map
+
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
                         destMarker = marker;
-                        String url = getRequestUrl(googleMap.getMyLocation(),marker.getPosition());
+                        String url = getRequestUrl(googleMap.getMyLocation(), marker.getPosition());
                         TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
                         taskRequestDirections.execute(url);
-
-                        if(googleMap.getMyLocation().getLatitude()<destMarker.getPosition().latitude+1&&googleMap.getMyLocation().getLatitude()>destMarker.getPosition().latitude-1){
-                            Log.e("eerste","eerste if loop");
-                            if(googleMap.getMyLocation().getLongitude()<destMarker.getPosition().longitude+1&&googleMap.getMyLocation().getLongitude()>destMarker.getPosition().longitude-1){
-                            Toast.makeText(getActivity(),"You have arrived at your destination", Toast.LENGTH_LONG).show();
-
-                            Log.e("Toast", "You have arrived at your destination");
-                            }
-                        }
-                        Log.e("url", url.toString());
                         return true;
                     }
                 });
 
             }
+
         });
 
+
         return rootView;
+    }
+
+    protected void requestPermission(String permissionType, int requestCode) {
+        int permission = ContextCompat.checkSelfPermission(getActivity(),
+                permissionType);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{permissionType}, requestCode
+            );
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case LOCATION_REQUEST_CODE: {
+
+                if (grantResults.length == 0
+                        || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getActivity(), "Unable to show location - permission required", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+        }
     }
 
     private String getRequestUrl(Location origin, LatLng dest){
