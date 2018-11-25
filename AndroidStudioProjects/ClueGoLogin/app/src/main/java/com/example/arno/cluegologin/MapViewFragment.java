@@ -42,6 +42,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -61,9 +62,8 @@ public class MapViewFragment extends Fragment {
     private GoogleMap googleMap;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_maps, container, false);
 
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
@@ -99,9 +99,9 @@ public class MapViewFragment extends Fragment {
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                LocationManager locationManager= (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+                final LocationManager locationManager= (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-                LocationListener locationListener = new LocationListener() {
+                final LocationListener locationListener = new LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) {
                         if(destMarker != null){
@@ -110,6 +110,7 @@ public class MapViewFragment extends Fragment {
                             markerLoc.setLatitude(destMarker.getPosition().latitude);
                             markerLoc.setLongitude(destMarker.getPosition().longitude);
                             float distance = location.distanceTo(markerLoc);
+
                             Log.e("distancevalue", "Distance: "+distance);
 
                             if(distance<20){
@@ -144,8 +145,16 @@ public class MapViewFragment extends Fragment {
 
                     @Override
                     public View getInfoContents(Marker marker) {
+                        Location markerLoc = new Location("Destination");
+                        markerLoc.setLatitude(destMarker.getPosition().latitude);
+                        markerLoc.setLongitude(destMarker.getPosition().longitude);
+                        float dist = googleMap.getMyLocation().distanceTo(markerLoc);
 
-                        return null;
+                       LayoutInflater layoutInflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                       View v = getLayoutInflater().inflate(R.layout.custom_window_info,null);
+                       TextView distanceText = (TextView)v.findViewById(R.id.distance);
+                       distanceText.setText(String.format("%.2f",dist)+" meters");
+                       return v;
                     }
                 };
                 mMap.setInfoWindowAdapter(infoWindowAdapter);
