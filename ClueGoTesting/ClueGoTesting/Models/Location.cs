@@ -13,6 +13,7 @@ namespace ClueGoTesting.Models
         public double LocLong { get; set; }
         public string LocDescription { get; set; }
         public string LocName { get; set; }
+        
 
         [Key]
         public int LocId { get; set; }

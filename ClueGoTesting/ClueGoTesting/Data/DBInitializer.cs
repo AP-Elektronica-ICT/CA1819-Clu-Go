@@ -103,14 +103,14 @@ namespace ClueGoTesting.Data
                 {
                     CaseId = 1,
                     GameDataId = 1,
-                   // GameId = 1
+                    GameId = 1
                   
                 };
                 var game2 = new Game()
                 {
                     CaseId = 2,
                     GameDataId = 1,
-                    // GameId = 1
+                    GameId = 1
 
                 };
                 context.Games.Add(game);

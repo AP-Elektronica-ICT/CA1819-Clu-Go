@@ -22,6 +22,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Cache;
+import com.android.volley.Network;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.StringRequest;
 import com.facebook.places.Places;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -54,10 +64,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.facebook.FacebookSdk.getAutoLogAppEventsEnabled;
+import static com.facebook.FacebookSdk.getCacheDir;
+
 
 public class MapViewFragment extends Fragment {
     Marker destMarker;
     MapView mMapView;
+    RequestQueue mRequestQueue;
+
     private final static int LOCATION_REQUEST_CODE = 101;
     private GoogleMap googleMap;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
@@ -69,7 +84,26 @@ public class MapViewFragment extends Fragment {
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
+        Cache cache = new DiskBasedCache(getCacheDir(),1024*1024);
+        Network network = new BasicNetwork(new HurlStack());
 
+        mRequestQueue = new RequestQueue(cache,network);
+        mRequestQueue.start();
+        String url ="";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,url,new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response){
+
+            }
+        },
+                new Response.ErrorListener(){
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        mRequestQueue.add(stringRequest);
         mMapView.onResume(); // needed to get the map to display immediately
 
         try {

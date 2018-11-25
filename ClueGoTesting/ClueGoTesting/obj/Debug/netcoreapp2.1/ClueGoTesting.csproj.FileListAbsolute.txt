@@ -390,7 +390,6 @@ D:\AP\AP\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\bin\Debug\netcoreapp2.1\ClueG
 D:\AP\AP\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\bin\Debug\netcoreapp2.1\ClueGoTesting.pdb
 D:\AP\AP\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\bin\Debug\netcoreapp2.1\ClueGoTesting.Views.dll
 D:\AP\AP\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\bin\Debug\netcoreapp2.1\ClueGoTesting.Views.pdb
-D:\AP\AP\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.csprojAssemblyReference.cache
 D:\AP\AP\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.csproj.CoreCompileInputs.cache
 D:\AP\AP\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.RazorAssemblyInfo.cache
 D:\AP\AP\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.RazorAssemblyInfo.cs
