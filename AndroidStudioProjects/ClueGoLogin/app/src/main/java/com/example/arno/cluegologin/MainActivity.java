@@ -1,5 +1,6 @@
 package com.example.arno.cluegologin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.Fragment;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -61,6 +63,11 @@ public class MainActivity extends AppCompatActivity {
     public void switchToStats(){
         FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction().replace(R.id.fragment_container, new StatsFragment()).addToBackStack(null).commit();
+    }
+
+    public void startPuzzle(View view) {
+        Intent intent = new Intent(this, PuzzleActivity.class );
+        startActivity(intent);
     }
 
 }

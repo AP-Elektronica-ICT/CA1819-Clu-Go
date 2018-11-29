@@ -29,6 +29,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/newGame" />
+
+        <Button
+            android:id="@+id/btn_puzzle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Puzzle"
+            android:onClick="startPuzzle"/>
     </LinearLayout>
 
 </FrameLayout>
