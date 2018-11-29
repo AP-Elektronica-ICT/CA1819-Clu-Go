@@ -417,3 +417,4 @@ D:\AP\AP\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueG
 D:\AP\AP\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.dll
 D:\AP\AP\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.pdb
 D:\AP\AP\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.csproj.CopyComplete
+D:\AP\AP\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.csprojAssemblyReference.cache

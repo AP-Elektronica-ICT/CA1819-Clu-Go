@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="ClueGoTesting20181125071114" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^D:\\AP\\AP\\CA1819-Clu-Go\\ClueGoTesting\\ClueGoTesting\\obj\\Release\\netcoreapp2\.1\\PubTmp\\Out\\$" />
+  </parameter>
+</parameters>

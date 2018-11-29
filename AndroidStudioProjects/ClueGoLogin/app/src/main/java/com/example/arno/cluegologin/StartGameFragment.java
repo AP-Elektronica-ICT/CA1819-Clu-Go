@@ -1,5 +1,6 @@
 package com.example.arno.cluegologin;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -18,10 +19,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Random;
 
 import static com.facebook.FacebookSdk.getCacheDir;
@@ -63,8 +67,9 @@ public class StartGameFragment extends Fragment {
                     public void onResponse(String response) {
                         Log.i(response,response.toString());
                         gameinfo.setText(response);
-
                     }
+
+
                 },
                 new Response.ErrorListener() {
                     @Override

@@ -31,7 +31,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.facebook.places.Places;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -50,6 +52,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -72,11 +75,14 @@ public class MapViewFragment extends Fragment {
     Marker destMarker;
     MapView mMapView;
     RequestQueue mRequestQueue;
+    StringRequest stringRequest;
+    JSONObject allLocations;
 
     private final static int LOCATION_REQUEST_CODE = 101;
     private GoogleMap googleMap;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
+    private String url ="https://cluegotesting.conveyor.cloud/api/location";
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_maps, container, false);
@@ -84,26 +90,41 @@ public class MapViewFragment extends Fragment {
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
-        Cache cache = new DiskBasedCache(getCacheDir(),1024*1024);
-        Network network = new BasicNetwork(new HurlStack());
+//        Cache cache = new DiskBasedCache(getCacheDir(),1024*1024);
+//        Network network = new BasicNetwork(new HurlStack());
+//
+//        mRequestQueue = new RequestQueue(cache,network);
+//        mRequestQueue.start();
+//        String url ="https://cluegotesting.conveyor.cloud/api/location";
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,url,null,
+//                new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        try {
+//                            Log.e("urlResponse", response.toString());
+//                            JSONArray array = response.getJSONArray("location");
+//                            Log.e("JsonArray", array.toString());
+//                            for (int i = 0; i < array.length(); i++) {
+//                                JSONObject loc = array.getJSONObject(i);
+//                                double lat = loc.getDouble("locLat");
+//                                double lon = loc.getDouble("locLong");
+//                                String locDesc = loc.getString("locDescription");
+//                                String locName = loc.getString("locName");
+//                                Log.e("JsonLoc",loc.toString());
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Log.d("jsonParser", "onErrorResponse: error");
+//                    }
+//        });
+//        mRequestQueue.add(jsonObjectRequest);
 
-        mRequestQueue = new RequestQueue(cache,network);
-        mRequestQueue.start();
-        String url ="";
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,url,new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response){
-
-            }
-        },
-                new Response.ErrorListener(){
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                });
-        mRequestQueue.add(stringRequest);
         mMapView.onResume(); // needed to get the map to display immediately
 
         try {
@@ -113,15 +134,46 @@ public class MapViewFragment extends Fragment {
         }
 
         mMapView.getMapAsync(new OnMapReadyCallback() {
+
             @Override
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
                 requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_REQUEST_CODE);
                 // For showing a move to my location button
 
-                LatLng sydney = new LatLng(51.030440, 4.474051);
+                    mRequestQueue = Volley.newRequestQueue(getActivity());
+                    stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            //Log.i(TAG,"Response: " + response.toString());
+                            try {
+                                JSONArray locationList = new JSONArray(response);
+                                for (int i = 0; i <= locationList.length(); i++)
+                                {
+                                    JSONObject singleLoc =new JSONObject(locationList.getString(i));
+                                    final String locName = singleLoc.getString("locName");
+                                    Double locLat = singleLoc.getDouble("locLat");
+                                    Double locLong = singleLoc.getDouble("locLong");
+                                    googleMap.addMarker(new MarkerOptions()
+                                            .position(new LatLng(locLat, locLong))
+                                            .title(locName));
 
-                googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
+
+                                    Log.d("String","lat: " + locLat.toString() +"long: " + locLong.toString());
+                                }
+                            } catch (JSONException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.i("yoyoyo", "Error: " + error.toString());
+                        }
+                    });
+                    mRequestQueue.add(stringRequest);
+
+
 
 
                     if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -131,8 +183,7 @@ public class MapViewFragment extends Fragment {
                     mMap.setMyLocationEnabled(true);
 
                 // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
                 final LocationManager locationManager= (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
 
                 final LocationListener locationListener = new LocationListener() {
@@ -171,6 +222,17 @@ public class MapViewFragment extends Fragment {
                     }
                 };
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,locationListener);
+
+                // For dropping a marker at a point on the Map
+
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        destMarker = marker;
+                        marker.showInfoWindow();
+                        return true;
+                    }
+                });
                 GoogleMap.InfoWindowAdapter infoWindowAdapter = new GoogleMap.InfoWindowAdapter() {
                     @Override
                     public View getInfoWindow(Marker marker) {
@@ -184,24 +246,16 @@ public class MapViewFragment extends Fragment {
                         markerLoc.setLongitude(destMarker.getPosition().longitude);
                         float dist = googleMap.getMyLocation().distanceTo(markerLoc);
 
-                       LayoutInflater layoutInflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                       View v = getLayoutInflater().inflate(R.layout.custom_window_info,null);
-                       TextView distanceText = (TextView)v.findViewById(R.id.distance);
-                       distanceText.setText(String.format("%.2f",dist)+" meters");
-                       return v;
+                        LayoutInflater layoutInflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        View v = getLayoutInflater().inflate(R.layout.custom_window_info,null);
+                        TextView distanceText = (TextView)v.findViewById(R.id.distance);
+                        TextView titleText = (TextView)v.findViewById(R.id.title);
+                        distanceText.setText(String.format("%.2f",dist)+" meters");
+                        titleText.setText(marker.getTitle());
+                        return v;
                     }
                 };
-                mMap.setInfoWindowAdapter(infoWindowAdapter);
-                // For dropping a marker at a point on the Map
-
-                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                    @Override
-                    public boolean onMarkerClick(Marker marker) {
-                        destMarker = marker;
-                        marker.showInfoWindow();
-                        return true;
-                    }
-                });
+                googleMap.setInfoWindowAdapter(infoWindowAdapter);
                 mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                     @Override
                     public void onInfoWindowClick(Marker marker) {
@@ -377,4 +431,5 @@ public class MapViewFragment extends Fragment {
             }
         }
     }
+
 }
