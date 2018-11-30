@@ -1,0 +1,43 @@
+<h1>Add a location</h1>
+<form>
+<span>Location name</span>
+<input type="text" [(ngModel)]="Name" placeholder="Naam" name=first><br>
+
+<span>Short description of location</span>
+<input type="text" [(ngModel)]="Description" placeholder="description" name=first><br>
+
+<span>Latitude of location</span>
+<input type="text" [(ngModel)]="Latitude" placeholder="latitude" name=first><br>
+
+<span>Longitude of location</span>
+<input type="text" [(ngModel)]="Longitude" placeholder="longitude" name=first><br>
+</form>
+<button (click)="postLocation()" class="btn btn-primary" type="submit">Add Location</button>
+
+
+<h1>Remove/update a location</h1>
+
+<!-- START REGISTER -->
+<div class="table-wrapper-scroll-y">
+<table class="table table-hover">
+  <thead>
+    <tr style="background-color: lightgrey">
+      <th scope="col">Id</th>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+      <th scope="col">Latitude</th>
+      <th scope="col">Longitude</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody style="cursor: pointer;">
+    <tr *ngFor="let location of data; let $index=index;" style="cursor: pointer;">
+      <td>{{location.locId}}</td>
+      <td>{{location.locName}}</td>
+      <td>{{location.locDescription}}</td>
+      <td>{{location.locLat}}</td>
+      <td>{{location.locLong}}</td>
+      <td style="width: 20px"><button (click)="DeleteLoc(location)" class="btn btn-link"><i class="fa fa-trash"></i></button></td>
+  </tbody>
+</table>
+</div>

@@ -148,18 +148,8 @@ namespace ClueGoTesting.Controllers
         {
             var newcase =  new Case();
             
-            var suspect = new Suspects()
-            {
-                //  SuspectId = 1,
-
-                Description = "Case created",
-                Name = "Mr CreateCaseTester",
-                Weapons = "fork"
-
-            };
             
             newcase.GameInfo = "this is placeholderdata, normaly there would be an introduction to a game in here.";
-            newcase.Suspects.Add(suspect);
 
             _dbcontext.Cases.Add(newcase);
             _dbcontext.SaveChanges();

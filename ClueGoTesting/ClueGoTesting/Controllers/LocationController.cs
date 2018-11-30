@@ -28,20 +28,48 @@ namespace ClueGoTesting.Data
 
         // POST: api/Location
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult CreateLoc(Location newLoc)
         {
+            _context.Locations.Add(newLoc);
+            _context.SaveChanges();
+
+            return Ok(newLoc);
         }
 
         // PUT: api/Location/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult UpdateLocation([FromBody] Location updateLoc)
         {
+                var orgLoc = _context.Locations.Find(updateLoc.LocId);
+            if (orgLoc == null)
+                return NotFound();
+            else
+            {
+                orgLoc.LocName = updateLoc.LocName;
+                orgLoc.LocLat = updateLoc.LocLat;
+                orgLoc.LocLong = updateLoc.LocLong;
+                orgLoc.LocDescription = updateLoc.LocDescription;
+
+                _context.SaveChanges();
+                return Ok(orgLoc);
+            }
+            
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            var location = _context.Locations.Find(id);
+            if (location == null)
+                return NotFound();
+            else
+            {
+                _context.Locations.Remove(location);
+                _context.SaveChanges();
+
+                return NoContent();
+            }
         }
     }
 }
