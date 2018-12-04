@@ -28,6 +28,7 @@ namespace ClueGoTesting.Data
                 return createdCase;
             }
 
+            // add clues if none exist
             if (!context.Clues.Any())
             {
                 var clue = new Clues()
@@ -51,6 +52,8 @@ namespace ClueGoTesting.Data
                 context.Clues.Add(clue1);
                 context.SaveChanges();
             }
+
+            //add cases if non exist
             if(!context.Cases.Any())
             {   var listSuspects = new List<Suspects>();
 
@@ -81,6 +84,7 @@ namespace ClueGoTesting.Data
 
                 context.SaveChanges();
             }
+            //add gamedata if none exist
             if(!context.GameDatas.Any())
             {
                 var gamedata1 = new GameData()
@@ -97,20 +101,21 @@ namespace ClueGoTesting.Data
                 context.SaveChanges();
 
             }
+            // add game if none exist
             if (!context.Games.Any())
             {
                 var game = new Game()
                 {
                     CaseId = 1,
                     GameDataId = 1,
-                    GameId = 1
+                    
                   
                 };
                 var game2 = new Game()
                 {
                     CaseId = 2,
                     GameDataId = 1,
-                    GameId = 1
+                    
 
                 };
                 context.Games.Add(game);
@@ -118,6 +123,7 @@ namespace ClueGoTesting.Data
                 context.SaveChanges();
 
             }
+            //add suspectsd if none exist
             if (!context.Suspects.Any())
             {
                 var suspect = new Suspects()
@@ -133,7 +139,7 @@ namespace ClueGoTesting.Data
                 context.SaveChanges();
 
             }
-
+            //add user if none exist
             if (!context.Users.Any())
             {
                 var admin = new User()
@@ -170,7 +176,7 @@ namespace ClueGoTesting.Data
 
                 context.SaveChanges();
             }
-            
+            //add location if none exist
             if (!context.Locations.Any())
             {
 
@@ -208,6 +214,7 @@ namespace ClueGoTesting.Data
                 context.Locations.Add(location4);
                 context.SaveChanges();
             }
+           
         }
     }
 }

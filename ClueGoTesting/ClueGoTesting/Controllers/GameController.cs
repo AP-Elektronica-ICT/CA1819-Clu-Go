@@ -20,7 +20,17 @@ namespace ClueGoTesting.Controllers
             _dbcontext = dbcontext;
 
         }
-        
+        [HttpGet]
+        public ActionResult<List<Game>> GetAll()
+        {
+            return _dbcontext.Games.ToList();
+        }
+        [HttpGet("gamelocations")]
+        public ActionResult<List<GameLocation>> GetGameLocation()
+        {
+            return _dbcontext.gameLocations.ToList();
+        }
+
         //find Game by ID
         [HttpGet("{GID}")]
         public Game getGame(int GID)
@@ -47,7 +57,7 @@ namespace ClueGoTesting.Controllers
         {
             var defCase = new Case()
             {
-                GameInfo ="default,case does not exist",
+                GameInfo = "default,case does not exist",
             };
 
             var caseById = new Case();
@@ -75,7 +85,7 @@ namespace ClueGoTesting.Controllers
 
             };
             var gameDataById = _dbcontext.GameDatas.Find(GDID);
-            if(gameDataById != null)
+            if (gameDataById != null)
             {
                 return gameDataById;
             }
@@ -84,7 +94,7 @@ namespace ClueGoTesting.Controllers
 
         //Get Data that is affiliated with a certain GameId(GID)
 
-        
+
         [HttpGet("case/{GID}")]
         public Case getCaseFromGameId(int GID)
         {
@@ -101,16 +111,14 @@ namespace ClueGoTesting.Controllers
             var gameinfo = caseTemp.GameInfo;
 
             return gameinfo;
-
         }
-        
+
 
         [HttpGet("gameinfo/{GID}")]
         public String getGameInfoFromGame(int GID)
         {
             String gameInfo;
             var caseForInfo = getCaseFromGameId(GID);
-
             gameInfo = caseForInfo.GameInfo;
 
             return gameInfo;
@@ -121,17 +129,15 @@ namespace ClueGoTesting.Controllers
         public List<Suspects> getSuspectsFromGame(int GID)
         {
             var listSuspects = new List<Suspects>();
-
             var caseFromGame = getCaseFromGameId(GID);
-
             listSuspects = caseFromGame.Suspects.ToList();
-              
+
             return listSuspects;
         }
 
         [HttpGet("gamedata/{GID}")]
 
-        public GameData getGameDataFromGameId (int GID)
+        public GameData getGameDataFromGameId(int GID)
         {
             var game = getGame(GID);
             var gameDataId = game.GameDataId;
@@ -139,11 +145,74 @@ namespace ClueGoTesting.Controllers
 
             return gameData;
         }
+        [HttpGet("usergamedata/{UID}")]
+        public GameData getGameDataFromUser(int UID)
+        {
+            var gamedata = new GameData();
+            var defGameData = new GameData()
+            {
+                UserId = 9999,
+                CluesFound = 0
+            };
 
-        
+            gamedata = _dbcontext.GameDatas.First(c => c.UserId == UID);
+            return gamedata;
+
+        }
+
+        [HttpGet("gamesofuser/{UID}")]
+        public Game getGameOfUser(int UID)
+        {
+            var gameDataUser = getGameDataFromUser(UID);
+            var gameDataID = gameDataUser.GameDataId;
+            var game = new Game();
+            game = _dbcontext.Games.First(c => c.GameDataId == gameDataID);
+
+            return game;
+        }
+        [HttpGet("getlocationslist/{UID}")]
+        public List<GameLocation> getLocationsOfGame(int UID)
+        {
+            var game = new Game();
+            game = getGameOfUser(UID);
+            var gameId = game.GameId;
+            var gamelocationList = new List<GameLocation>();
+
+            gamelocationList = _dbcontext.gameLocations.Where(x => x.GameId == gameId).ToList();
+
+            for (int i = 0; i < gamelocationList.Count; i++)
+            {
+
+                var item = gamelocationList[i].locId;
+            }
+
+            return gamelocationList;
+
+        }
+        [HttpGet("getlocation/{UID}")]
+        public ActionResult<List<GameLocation>> GetLocation(int UID)
+        {
+            var listLocation = new List<Location>();
+            var listLocId = new List<GameLocation>();
+            listLocId = getLocationsOfGame(UID);
+            var ids = new List<int>();
+            for (int i = 0; i < listLocId.Count; i++)
+            {
+                ids.Add(listLocId[i].locId);
+            }
+            for (int i = 0; i< ids.Count; i++)
+            {
+                var location = new Location();
+                location = _dbcontext.Locations.Find(ids[i]);
+
+                listLocation.Add(location);
+                
+            }
+            return listLocId;
+        }
+
 
         [HttpPost("newcase")]
-
         public Case CreateCase()
         {
             var newcase =  new Case();
@@ -168,32 +237,59 @@ namespace ClueGoTesting.Controllers
         }
 
 
-
+        //Create a new game if there are none with the same GameDataID, the games cannot have the same gamedataID because a user can only have one active game at a time.
         [HttpPost("newgame/{UID}/{CID}")]
 
-        public Game CreateNewGame(int CID,int UID)
+        public IActionResult CreateNewGame(int CID,int UID)
         {
-            int caseId = CID;
-            var newGame = new Game();
-            var newGameData = new GameData();
-            var newcase = GetCase(caseId);
             
+            var gamedata = getGameDataFromUser(UID);
+            try {
+                var games = _dbcontext.Games.First(c => c.GameDataId == gamedata.GameDataId);
+                String exists = "there is already a game entry with this gamedataid";
 
+                return Created("",exists);
 
-            newGame.CaseId = newcase.CaseId;
-            newGame.GameDataId = newGameData.GameDataId;
+            }
+            catch
+            {
 
+                var returnGame = new Game()
+                {
+                    CaseId = CID,
+                    GameDataId = gamedata.GameDataId
+                };
 
+                var location = new Location();
+                var location2 = new Location();
+                location2 = _dbcontext.Locations.Find(2);
+                location = _dbcontext.Locations.Find(1);
+                returnGame.gameLocations = new List<GameLocation>
+            {
+                new GameLocation
+                {
+                    Game = returnGame,
+                    Location = location,
+                    GameId = returnGame.GameId,
+                    locId = location.LocId
+                },
+                new GameLocation
+                {
+                    Game = returnGame,
+                    Location = location2,
+                    GameId = returnGame.GameId,
+                    locId = location2.LocId
+                }
 
-            
-            _dbcontext.Games.Add(newGame);
-            _dbcontext.SaveChanges();
+            };
 
-            
-            
-            return newGame;
+                _dbcontext.Games.Add(returnGame);
+                _dbcontext.SaveChanges();
 
+                return Created("", returnGame);
+            }
         }
+
         
         
 
@@ -211,6 +307,24 @@ namespace ClueGoTesting.Controllers
         }
 
         //gets static object, not from databse at
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         // Adds a user by posting like this: /api/ClueGoTesting/add/?Name=test&Email=testemail

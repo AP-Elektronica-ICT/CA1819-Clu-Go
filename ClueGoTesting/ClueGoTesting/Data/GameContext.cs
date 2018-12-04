@@ -23,6 +23,7 @@ namespace ClueGoTesting.Data
         public DbSet<Suspects> Suspects { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Location> Locations { get; set; }
+        public DbSet<GameLocation> gameLocations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelbuilder)
         {
@@ -32,6 +33,19 @@ namespace ClueGoTesting.Data
             modelbuilder.Entity<GameData>().ToTable("GameDatas");
             modelbuilder.Entity<Suspects>().ToTable("Suspects");
             modelbuilder.Entity<Location>().ToTable("Location");
+
+            modelbuilder.Entity<GameLocation>()
+                .HasKey(gl => new { gl.GameId, gl.locId });
+            modelbuilder.Entity<GameLocation>()
+                .HasOne(gl => gl.Game)
+                .WithMany(g => g.gameLocations)
+                .HasForeignKey(gl => gl.GameId);
+            modelbuilder.Entity<GameLocation>()
+                .HasOne(gl => gl.Location)
+                .WithMany(l => l.gameLocations)
+                .HasForeignKey(gl => gl.locId);
+
+
         }
 
     }
