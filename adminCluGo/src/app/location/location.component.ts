@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Location, LocationsService } from "../services/locations.service";
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-location',
@@ -36,12 +37,22 @@ export class LocationComponent implements OnInit {
     })
     .subscribe((data: any)=>{
     })
+    setTimeout(
+      function(){ 
+      location.reload(); 
+      }, 2000);
+
     //window.location.reload();
   }
 
   DeleteLoc = (location) =>
   {
-    this.http.delete('https://cluego.azurewebsites.net/api/location/'+location.locId)
+    this.http.delete(`https://cluego.azurewebsites.net/api/location/delete/${location.locId}`)
+    window.open(`https://cluego.azurewebsites.net/api/location/delete/${location.locId}`)
+    setTimeout(
+      function(){ 
+      window.location.reload(); 
+      }, 2000);
   }
 
   get Id() {
