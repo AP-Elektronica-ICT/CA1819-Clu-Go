@@ -16,36 +16,33 @@ namespace ClueGoTesting.Data
 
         }
 
-        public DbSet<Case> Cases { get; set; }
-        public DbSet<Clues> Clues { get; set; }
+        public DbSet<Clue> Clues { get; set; }
         public DbSet<Game> Games { get; set; }
-        public DbSet<GameData> GameDatas { get; set; }  
-        public DbSet<Suspects> Suspects { get; set; }
+        public DbSet<Suspect> Suspects { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Location> Locations { get; set; }
-        public DbSet<GameLocation> gameLocations { get; set; }
+        public DbSet<GameLocation> GameLocations { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelbuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelbuilder.Entity<Case>().ToTable("Cases");
-            modelbuilder.Entity<Clues>().ToTable("Clues");
-            modelbuilder.Entity<Game>().ToTable("Games");
-            modelbuilder.Entity<GameData>().ToTable("GameDatas");
-            modelbuilder.Entity<Suspects>().ToTable("Suspects");
-            modelbuilder.Entity<Location>().ToTable("Location");
+            modelBuilder.Entity<Clue>().ToTable("Clues");
+            modelBuilder.Entity<Game>().ToTable("Games");
+            modelBuilder.Entity<Suspect>().ToTable("Suspects");
+            modelBuilder.Entity<Location>().ToTable("Locations");
+            modelBuilder.Entity<GameLocation>().ToTable("GameLocation");
 
-            modelbuilder.Entity<GameLocation>()
-                .HasKey(gl => new { gl.GameId, gl.locId });
-            modelbuilder.Entity<GameLocation>()
-                .HasOne(gl => gl.Game)
-                .WithMany(g => g.gameLocations)
-                .HasForeignKey(gl => gl.GameId);
-            modelbuilder.Entity<GameLocation>()
-                .HasOne(gl => gl.Location)
-                .WithMany(l => l.gameLocations)
-                .HasForeignKey(gl => gl.locId);
+            modelBuilder.Entity<GameLocation>()
+                .HasKey(t => new { t.GameId, t.LocId });
 
+            modelBuilder.Entity<GameLocation>()
+                .HasOne(x => x.Game)
+                .WithMany(x => x.GameLocations)
+                .HasForeignKey(x => x.GameId);
 
+            modelBuilder.Entity<GameLocation>()
+                .HasOne(l => l.Location)
+                .WithMany(gl => gl.GameLocations)
+                .HasForeignKey(pt => pt.LocId);
         }
 
     }
