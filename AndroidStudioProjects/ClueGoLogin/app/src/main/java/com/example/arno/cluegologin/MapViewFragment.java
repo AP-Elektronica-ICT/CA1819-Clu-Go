@@ -82,7 +82,7 @@ public class MapViewFragment extends Fragment {
     private GoogleMap googleMap;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
-    private String url ="https://cluegotesting.conveyor.cloud/api/location";
+    private String url ="https://cluego.azurewebsites.net/api/location";
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_maps, container, false);
@@ -145,7 +145,7 @@ public class MapViewFragment extends Fragment {
                     stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            //Log.i(TAG,"Response: " + response.toString());
+                            Log.i("Map","Response: " + response.toString());
                             try {
                                 JSONArray locationList = new JSONArray(response);
                                 for (int i = 0; i <= locationList.length(); i++)

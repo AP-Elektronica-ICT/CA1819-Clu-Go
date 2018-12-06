@@ -1,13 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.android.support:customtabs-27.0.2">
     <CLASSES>
-<<<<<<< HEAD
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/customtabs-27.0.2.aar/b7c0a1035756efbcb2bae9cbd1b277ec/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/customtabs-27.0.2.aar/b7c0a1035756efbcb2bae9cbd1b277ec/res" />
-=======
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/customtabs-27.0.2.aar/2492edf85d5b25b6dba47ce0c8a873b8/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/customtabs-27.0.2.aar/2492edf85d5b25b6dba47ce0c8a873b8/res" />
->>>>>>> gamestart_arno
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/customtabs-27.0.2.aar/2a27da55ed3c2686384264e0cc63df84/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/customtabs-27.0.2.aar/2a27da55ed3c2686384264e0cc63df84/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

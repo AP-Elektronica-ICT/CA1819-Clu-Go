@@ -12218,39 +12218,23 @@
     ]
   },
   "packageFolders": {
-<<<<<<< HEAD
-    "C:\\Users\\Arno\\.nuget\\packages\\": {},
-=======
     "C:\\Users\\weyns\\.nuget\\packages\\": {},
->>>>>>> gamestart_arno
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-<<<<<<< HEAD
-      "projectUniqueName": "C:\\Users\\Arno\\Desktop\\CA1819-Clu-Go\\ClueGoTesting\\ClueGoTesting\\ClueGoTesting.csproj",
-      "projectName": "ClueGoTesting",
-      "projectPath": "C:\\Users\\Arno\\Desktop\\CA1819-Clu-Go\\ClueGoTesting\\ClueGoTesting\\ClueGoTesting.csproj",
-      "packagesPath": "C:\\Users\\Arno\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Arno\\Desktop\\CA1819-Clu-Go\\ClueGoTesting\\ClueGoTesting\\obj\\",
-=======
       "projectUniqueName": "C:\\Users\\weyns\\Desktop\\School\\CA1819-Clu-Go\\ClueGoTesting\\ClueGoTesting\\ClueGoTesting.csproj",
       "projectName": "ClueGoTesting",
       "projectPath": "C:\\Users\\weyns\\Desktop\\School\\CA1819-Clu-Go\\ClueGoTesting\\ClueGoTesting\\ClueGoTesting.csproj",
       "packagesPath": "C:\\Users\\weyns\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\weyns\\Desktop\\School\\CA1819-Clu-Go\\ClueGoTesting\\ClueGoTesting\\obj\\",
->>>>>>> gamestart_arno
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-<<<<<<< HEAD
-        "C:\\Users\\Arno\\AppData\\Roaming\\NuGet\\NuGet.Config",
-=======
         "C:\\Users\\weyns\\AppData\\Roaming\\NuGet\\NuGet.Config",
->>>>>>> gamestart_arno
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -12298,5 +12282,13 @@
         "warn": true
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\Users\\weyns\\Desktop\\School\\CA1819-Clu-Go\\ClueGoTesting\\ClueGoTesting\\obj\\ClueGoTesting.csproj.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }
