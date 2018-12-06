@@ -29,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_suspects:
                     switchToSuspect();
                     return true;
+                case  R.id.navigation_inventory:
+                    switchToInventory();
+                    return true;
                 case R.id.navigation_stats:
                     switchToStats();
                     return true;
@@ -58,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
     public void switchToSuspect(){
         FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction().replace(R.id.fragment_container, new SuspectFragment()).addToBackStack(null).commit();
+    }
+
+    public void switchToInventory(){
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.fragment_container, new InventoryFragment()).addToBackStack(null).commit();
     }
 
     public void switchToStats(){
