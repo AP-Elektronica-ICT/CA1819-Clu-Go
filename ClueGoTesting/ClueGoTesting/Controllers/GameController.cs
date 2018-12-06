@@ -42,21 +42,28 @@ namespace ClueGoTesting.Controllers
                             .ToList());
         }
 
-        [HttpGet("create")]
-        public ActionResult<Game> CreateGame()
+        [HttpGet("create/{amtGame}")]
+        public ActionResult<Game> CreateGame(int amtGame)
         {
             var game = new Game();
             var locations = _dbcontext.Locations.ToList();
+            game.GameLocations = new List<GameLocation>();
+
+            for (int  i = 0;  i < amtGame;  i++)
+            {
+                game.GameLocations.Add(new GameLocation
+                {
+                    Location = locations[i]
+
+            });
+
+            }
+
 
             // Get Random Location
             var r = new Random();
             var index = r.Next(0, locations.Count);
 
-            game.GameLocations = new List<GameLocation>();
-            game.GameLocations.Add(new GameLocation
-            {
-                Location = locations[index]
-            });
 
             _dbcontext.Games.Add(game);
             _dbcontext.SaveChanges();
