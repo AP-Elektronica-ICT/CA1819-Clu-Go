@@ -1,8 +1,13 @@
 <component name="libraryTable">
   <library name="Gradle: com.facebook.android:facebook-core-4.38.1">
     <CLASSES>
+<<<<<<< HEAD
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/facebook-core-4.38.1.aar/9e92d86d86bd62fdf0a021266b42928b/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/facebook-core-4.38.1.aar/9e92d86d86bd62fdf0a021266b42928b/res" />
+=======
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/facebook-core-4.38.1.aar/b5d4c0938c7b0cb0601461452ff700c6/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/facebook-core-4.38.1.aar/b5d4c0938c7b0cb0601461452ff700c6/jars/classes.jar!/" />
+>>>>>>> gamestart_arno
     </CLASSES>
     <JAVADOC />
     <SOURCES>

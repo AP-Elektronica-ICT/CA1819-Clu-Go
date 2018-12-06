@@ -1,8 +1,13 @@
 {
   "runtimeOptions": {
     "additionalProbingPaths": [
+<<<<<<< HEAD
       "C:\\Users\\Arno\\.dotnet\\store\\|arch|\\|tfm|",
       "C:\\Users\\Arno\\.nuget\\packages",
+=======
+      "C:\\Users\\weyns\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\weyns\\.nuget\\packages",
+>>>>>>> gamestart_arno
       "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
     ]
   }

@@ -9,9 +9,11 @@ namespace ClueGoTesting.Models
     {
         [Key]
         public int GameId { get; set; }    
-        public int GameDataId { get; set; } // each game is linked to gamedata of a user.
-        public int CaseId { get; set; } // each game gets a random caseId, case is the "story"
-        //public ICollection<Location> Locations { get; set; } // each game gets a list of locations depending on where you are.
+        public bool GameWon { get; set; }
+
+        public IList<GameLocation> GameLocations { get; set; }
+        //public ICollection<Suspect> GameSuspects { get; set; }
+        //public ICollection<Clue> GetClues { get; set; }
 
     }
 }

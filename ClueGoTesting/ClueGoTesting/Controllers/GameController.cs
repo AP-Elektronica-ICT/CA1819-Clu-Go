@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ClueGoTesting.Models;
 using ClueGoTesting.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClueGoTesting.Controllers
 {
@@ -20,70 +21,41 @@ namespace ClueGoTesting.Controllers
             _dbcontext = dbcontext;
 
         }
-        
-        //find Game by ID
-        [HttpGet("{GID}")]
-        public Game getGame(int GID)
+        [HttpGet]
+        public ActionResult<List<Game>> GetAll()
         {
-            var defGame = new Game()
-            {
-                CaseId = 9999,
-                GameDataId = 9999
-            };
-
-            var gameById = _dbcontext.Games.Find(GID);
-
-            if (gameById != null)
-            {
-                return gameById;
-            }
-
-            else { return defGame; }
+            return Ok(_dbcontext.Games
+                .Include(x => x.GameLocations)
+                .ThenInclude(x => x.Location)
+                .ToList());
         }
 
-        //find Case by Id
-        [HttpGet("case/{CID}")]
-        public Case GetCase(int CID)
+        [HttpGet("game/{gameId}")]
+        public ActionResult<List<Game>> GetGameById(int gameId)
         {
-            var defCase = new Case()
-            {
-                GameInfo ="default,case does not exist",
-            };
+            var item = _dbcontext.Games.Find(gameId);
 
-            var caseById = new Case();
-            int id = CID;
-
-
-            caseById = _dbcontext.Cases.Find(id);
-            if (caseById != null)
-            {
-                return caseById;
-            }
-            else { return defCase; }
+            return Ok(_dbcontext.Games
+                            .Include(x => x.GameLocations)
+                            .ThenInclude(x => x.Location)
+                            .Where(x => x.GameId == gameId)
+                            .ToList());
         }
 
-
-        [HttpGet("gamedata/{GDID}")]
-
-        public GameData getGameData(int GDID)
+        [HttpGet("create/{amtGame}")]
+        public ActionResult<Game> CreateGame(int amtGame)
         {
-            var defGameData = new GameData()
+            var game = new Game();
+            var locations = _dbcontext.Locations.ToList();
+            game.GameLocations = new List<GameLocation>();
+
+            for (int  i = 0;  i < amtGame;  i++)
             {
-                CluesFound = 9999,
-                GamesLost = 9999,
-                GamesWon = 9999,
+                game.GameLocations.Add(new GameLocation
+                {
+                    Location = locations[i]
 
-            };
-            var gameDataById = _dbcontext.GameDatas.Find(GDID);
-            if(gameDataById != null)
-            {
-                return gameDataById;
-            }
-            return defGameData;
-        }
-
-        //Get Data that is affiliated with a certain GameId(GID)
-
+<<<<<<< HEAD
         
         [HttpGet("case/{GID}")]
         public Case getCaseFromGameId(int GID)
@@ -168,93 +140,23 @@ namespace ClueGoTesting.Controllers
             var newGameData = new GameData();
             var newcase = GetCase(caseId);
             
+=======
+            });
+>>>>>>> gamestart_arno
+
+            }
 
 
-            newGame.CaseId = newcase.CaseId;
-            newGame.GameDataId = newGameData.GameDataId;
+            // Get Random Location
+            var r = new Random();
+            var index = r.Next(0, locations.Count);
 
 
-
-            
-            _dbcontext.Games.Add(newGame);
+            _dbcontext.Games.Add(game);
             _dbcontext.SaveChanges();
 
-            
-            
-            return newGame;
-
+            return Ok(game);
         }
-        
-        
-
-
-        //ADD Game data to db
-        //[Route("add/")] 
-        [HttpPost("add/")]
-        public IActionResult AddGameData([FromQuery] GameData gamedata)
-
-        {
-            _dbcontext.GameDatas.Add(gamedata);
-            _dbcontext.SaveChanges();
-            return Created("", gamedata);
-
-        }
-
-        //gets static object, not from databse at
-
-
-        // Adds a user by posting like this: /api/ClueGoTesting/add/?Name=test&Email=testemail
-
-       // [Route("add")]
-        [HttpPost("add")]
-        public IActionResult AddUser([FromQuery ] User user )
-        {
-            var newUser = new User
-            {
-                Email = user.Email,
-                Username = user.Username
-            };
-
-            _dbcontext.Users.Add(newUser);
-             _dbcontext.SaveChanges();
-             return Created("", newUser);
-        }
-
-
-        //Gets all Users In the Users Tabel.
-
-      //  [Route("get")] //api/ClueGoTesting/get
-        [HttpGet("get")]
-        public List<User> GetUsers()
-        {
-            var listUsers = new List<User>();
-            listUsers = _dbcontext.Users.ToList();
-            
-            return listUsers;
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 }

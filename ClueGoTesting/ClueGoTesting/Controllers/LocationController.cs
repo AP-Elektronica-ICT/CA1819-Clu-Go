@@ -11,7 +11,7 @@ namespace ClueGoTesting.Data
     [Route("api/[controller]")]
     [ApiController]
     public class LocationController : ControllerBase
-    { 
+    {
         private readonly GameContext _context;
 
         public LocationController(GameContext context)
@@ -40,7 +40,11 @@ namespace ClueGoTesting.Data
         [HttpPut("{id}")]
         public IActionResult UpdateLocation([FromBody] Location updateLoc)
         {
+<<<<<<< HEAD
                 var orgLoc = _context.Locations.Find(updateLoc.LocId);
+=======
+            var orgLoc = _context.Locations.Find(updateLoc.LocId);
+>>>>>>> gamestart_arno
             if (orgLoc == null)
                 return NotFound();
             else
@@ -53,7 +57,11 @@ namespace ClueGoTesting.Data
                 _context.SaveChanges();
                 return Ok(orgLoc);
             }
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> gamestart_arno
         }
 
         // DELETE: api/ApiWithActions/5

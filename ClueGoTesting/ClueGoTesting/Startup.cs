@@ -40,8 +40,14 @@ namespace ClueGoTesting
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<GameContext>();
 
+<<<<<<< HEAD
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors();
+=======
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+>>>>>>> gamestart_arno
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
