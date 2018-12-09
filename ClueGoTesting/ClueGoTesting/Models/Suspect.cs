@@ -14,5 +14,8 @@ namespace ClueGoTesting.Models
         public string SusWeapon { get; set; }
         public string SusImgUrl { get; set; }
         public bool isMurderer { get; set; }
+
+        public ICollection<GameSuspect> GameSuspects { get; set; }
+
     }
 }

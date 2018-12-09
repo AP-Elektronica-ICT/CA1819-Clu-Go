@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace ClueGoTesting.Models
 {
-    public class GameLocation
+    public class GameSuspect
     {
         public int GameId { get; set; }
-        public int LocId { get; set; }
-        public string LocName { get; set; }
+        public int SusId { get; set; }
+        public bool isMurderer { get; set; }
 
         public Game Game { get; set; }
-        public Location Location { get; set; }
+        public Suspect Suspect { get; set; }
     }
 }

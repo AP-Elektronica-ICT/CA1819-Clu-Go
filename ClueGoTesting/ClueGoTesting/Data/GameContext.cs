@@ -22,6 +22,7 @@ namespace ClueGoTesting.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<GameLocation> GameLocations { get; set; }
+        public DbSet<GameSuspect> GameSuspects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,11 +30,11 @@ namespace ClueGoTesting.Data
             modelBuilder.Entity<Game>().ToTable("Games");
             modelBuilder.Entity<Suspect>().ToTable("Suspects");
             modelBuilder.Entity<Location>().ToTable("Locations");
-            modelBuilder.Entity<GameLocation>().ToTable("GameLocation");
+            modelBuilder.Entity<GameLocation>().ToTable("GameLocations");
+            modelBuilder.Entity<GameSuspect>().ToTable("GameSuspects");
 
             modelBuilder.Entity<GameLocation>()
                 .HasKey(t => new { t.GameId, t.LocId });
-
             modelBuilder.Entity<GameLocation>()
                 .HasOne(x => x.Game)
                 .WithMany(x => x.GameLocations)
@@ -43,6 +44,19 @@ namespace ClueGoTesting.Data
                 .HasOne(l => l.Location)
                 .WithMany(gl => gl.GameLocations)
                 .HasForeignKey(pt => pt.LocId);
+
+
+            modelBuilder.Entity<GameSuspect>()
+                .HasKey(t => new { t.GameId, t.SusId });
+            modelBuilder.Entity<GameSuspect>()
+                .HasOne(x => x.Game)
+                .WithMany(x => x.GameSuspects)
+                .HasForeignKey(x => x.GameId);
+
+            modelBuilder.Entity<GameSuspect>()
+                .HasOne(s => s.Suspect)
+                .WithMany(gs => gs.GameSuspects)
+                .HasForeignKey(pt => pt.SusId);
         }
 
     }
