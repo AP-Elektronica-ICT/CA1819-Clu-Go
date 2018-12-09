@@ -85,8 +85,8 @@ public class MapViewFragment extends Fragment {
     private GoogleMap googleMap;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
-    //private String url ="https://cluego.azurewebsites.net/api/location";
-    private String url = "https://cluegotesting.conveyor.cloud/api/location";
+    private String url ="https://cluego.azurewebsites.net/api/location";
+    //private String url = "https://cluegotesting.conveyor.cloud/api/location";
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_maps, container, false);
@@ -172,12 +172,13 @@ public class MapViewFragment extends Fragment {
                             if(distance<20 && hasBeen==false){
                                 hasBeen=true;
                                 if(destMarker.getTitle().equals("Politiekantoor")){
-
                                     Intent intent = new Intent(getActivity(), GuessActivity.class);
                                     startActivity(intent);
                                 }
                                 Log.e("toast","locations are the same");
 
+                                Intent intent = new Intent(getActivity(), PuzzleActivity.class);
+                                startActivity(intent);
                                 Toast.makeText(getActivity(),"You have arrived at your destination",Toast.LENGTH_LONG).show();
                             }
                         }
@@ -227,7 +228,7 @@ public class MapViewFragment extends Fragment {
                         View v = getLayoutInflater().inflate(R.layout.custom_window_info,null);
                         TextView distanceText = (TextView)v.findViewById(R.id.distance);
                         TextView titleText = (TextView)v.findViewById(R.id.title);
-                        distanceText.setText(String.format("%.2f",dist)+" meters");
+                        distanceText.setText(String.format(Math.round(dist)+" meters"));
                         titleText.setText(marker.getTitle());
                         return v;
                     }

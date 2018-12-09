@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Cache;
@@ -49,8 +50,6 @@ public class StartGameFragment extends Fragment {
 
     private void ShowGameInfo(int GID){
 
-
-
         Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
         Network network = new BasicNetwork(new HurlStack());
         mRequestQueue = new RequestQueue(cache, network);
@@ -58,7 +57,7 @@ public class StartGameFragment extends Fragment {
         /* Start the queue */
         mRequestQueue.start();
 
-        String urlGameInfo ="https://cluego.azurewebsites.net/api/game/gameinfocase/"+GID;
+        String urlGameInfo ="https://cluego.azurewebsites.net/api/game/game/2";
 
         // Formulate the request and handle the response.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlGameInfo,
@@ -67,9 +66,9 @@ public class StartGameFragment extends Fragment {
                     public void onResponse(String response) {
                         Log.i(response,response.toString());
                         gameinfo.setText(response);
+                        ProgressBar loadCircle = getView().findViewById(R.id.progress_bar);
+                        loadCircle.setVisibility(View.GONE);
                     }
-
-
                 },
                 new Response.ErrorListener() {
                     @Override
@@ -82,6 +81,9 @@ public class StartGameFragment extends Fragment {
 
 // Add the request to the RequestQueue.
                  mRequestQueue.add(stringRequest);
+
+
+
     }
     private void StartGame(int UID,int CID){
         Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
@@ -186,17 +188,20 @@ public class StartGameFragment extends Fragment {
         serverinfo = (TextView)v.findViewById(R.id.txt_server_info);
         startButton =(Button)v.findViewById(R.id.btn_start);
         instructions =(TextView)v.findViewById(R.id.txt_view_instructions);
-        longlat = (TextView)v.findViewById(R.id.txt_long_lat);
+        //longlat = (TextView)v.findViewById(R.id.txt_long_lat);
+        final ProgressBar loadCircle = v.findViewById(R.id.progress_bar);
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                gameinfo.setText(" ");
+                loadCircle.setVisibility(View.VISIBLE);
                 randomInt = new Random().nextInt(5);
                 StartGame(2,randomInt);
                 ShowGameInfo(randomInt);
-                instructions.setVisibility(View.VISIBLE);
+                //instructions.setVisibility(View.VISIBLE);
                 //GetLocations(3);
+
             }
         });
 

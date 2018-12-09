@@ -173,18 +173,6 @@ namespace ClueGoTesting.Data
                 context.Locations.Add(PoliceOffice);
                 context.SaveChanges();
             }
-            
-            if (!context.Games.Any())
-            {
-                var game0 = new Game()
-                {
-                    GameWon = false,
-                    
-                };
-                
-                context.Games.Add(game0);
-                context.SaveChanges();
-            }
         }
     }
 }

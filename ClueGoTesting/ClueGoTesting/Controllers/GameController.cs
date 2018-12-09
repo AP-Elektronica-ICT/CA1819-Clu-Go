@@ -56,16 +56,25 @@ namespace ClueGoTesting.Controllers
         {
             var game = new Game();
 
+
             //Randomize location list
             var locations = _dbContext.Locations.OrderBy(x => Guid.NewGuid()).ToList();
             game.GameLocations = new List<GameLocation>();
-            for (int  i = 0;  i < amtGame;  i++)
+            for (int i = 0; i < amtGame; i++)
             {
-                game.GameLocations.Add(new GameLocation
+                if (locations[i].LocName != "Politiekantoor")
                 {
-                    Location = locations[i]
-                });                
+                    game.GameLocations.Add(new GameLocation
+                    {
+                        Location = locations[i]
+                    });
+                }
             }
+            var PoliceOffice = new GameLocation()
+            {
+                LocId = 5
+            };
+            game.GameLocations.Add(PoliceOffice);
 
             //Randomize Suspect list
             var suspects = _dbContext.Suspects.OrderBy(x => Guid.NewGuid()).ToList();
