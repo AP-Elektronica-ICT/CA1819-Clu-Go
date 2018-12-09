@@ -31,7 +31,7 @@ namespace ClueGoTesting.Data
                     ClueName = "ARKnife",
                     ClueDescription = "AR vision from Knife",
                     ClueImgUrl = "https://banner2.kisspng.com/20171216/9d3/sword-png-image-5a3586cb11ea93.6540765515134573550734.jpg",
-                    Found = false
+                    Found = true
                 };
                 var clue2 = new Clue()
                 {
