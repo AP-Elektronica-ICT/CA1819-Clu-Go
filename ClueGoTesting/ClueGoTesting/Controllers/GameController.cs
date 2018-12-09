@@ -13,33 +13,36 @@ namespace ClueGoTesting.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
+
     public class GameController : ControllerBase
     {
-        private GameContext _dbcontext;
+        private GameContext _dbContext;
+
 
         public GameController(GameContext dbcontext)
         {
-            _dbcontext = dbcontext;
+            _dbContext = dbcontext;
 
         }
         [HttpGet]
         public ActionResult<List<Game>> GetAll()
         {
-            return Ok(_dbcontext.Games
+            return Ok(_dbContext.Games
                 .Include(x => x.GameLocations)
-                .ThenInclude(x => x.Location)
-                //.ThenInclude(x => x.LocId)
+                .ThenInclude(x => x.GameId)
                 .ToList());
         }
 
         [HttpGet("game/{gameId}")]
         public ActionResult<List<Game>> GetGameById(int gameId)
         {
-            var item = _dbcontext.Games.Find(gameId);
+            var item = _dbContext.Games.Find(gameId);
 
-            return Ok(_dbcontext.Games
+            return Ok(_dbContext.Games
                             .Include(x => x.GameLocations)
                             .ThenInclude(x => x.Location)
+                            //.ThenInclude(x => x.LocId)
                             .Where(x => x.GameId == gameId)
 
                             .Include(x => x.GameSuspects)
@@ -52,7 +55,9 @@ namespace ClueGoTesting.Controllers
         public ActionResult<Game> CreateGame(int amtGame)
         {
             var game = new Game();
-            var locations = _dbcontext.Locations.ToList();
+
+            //Randomize location list
+            var locations = _dbContext.Locations.OrderBy(x => Guid.NewGuid()).ToList();
             game.GameLocations = new List<GameLocation>();
             for (int  i = 0;  i < amtGame;  i++)
             {
@@ -61,11 +66,9 @@ namespace ClueGoTesting.Controllers
                     Location = locations[i]
                 });                
             }
-            // Get Random Location
-            var r = new Random();
-            var index = r.Next(0, locations.Count);
 
-            var suspects = _dbcontext.Suspects.ToList();
+            //Randomize Suspect list
+            var suspects = _dbContext.Suspects.OrderBy(x => Guid.NewGuid()).ToList();
             game.GameSuspects = new List<GameSuspect>();
             for (int i = 0; i < 3; i++)
             {
@@ -76,8 +79,8 @@ namespace ClueGoTesting.Controllers
                 game.GameSuspects[0].isMurderer = true;            
             }
             
-            _dbcontext.Games.Add(game);
-            _dbcontext.SaveChanges();
+            _dbContext.Games.Add(game);
+            _dbContext.SaveChanges();
 
             return Ok(game);
         }

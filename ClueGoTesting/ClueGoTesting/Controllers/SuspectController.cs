@@ -13,16 +13,16 @@ namespace ClueGoTesting.Controllers
     [ApiController]
     public class SuspectController : ControllerBase
     {
-        private readonly GameContext _context;
+        private readonly GameContext _dbContext;
         public SuspectController(GameContext context)
         {
-            _context = context;
+            _dbContext = context;
         }
         // GET: api/Suspect
         [HttpGet]
         public ActionResult<List<Suspect>> GetAll()
         {
-            return _context.Suspects.ToList();
+            return _dbContext.Suspects.ToList();
         }
     }
 }

@@ -12,26 +12,26 @@ namespace ClueGoTesting.Data
     [ApiController]
     public class LocationController : ControllerBase
     {
-        private readonly GameContext _context;
+        private readonly GameContext _dbContext;
 
         public LocationController(GameContext context)
         {
-            _context = context;
+            _dbContext = context;
         }
 
         // GET: api/Location
         [HttpGet]
         public ActionResult<List<Location>> GetAll()
         {
-            return _context.Locations.ToList();
+            return _dbContext.Locations.ToList();
         }
 
         // POST: api/Location
         [HttpPost]
         public IActionResult CreateLoc(Location newLoc)
         {
-            _context.Locations.Add(newLoc);
-            _context.SaveChanges();
+            _dbContext.Locations.Add(newLoc);
+            _dbContext.SaveChanges();
 
             return Ok(newLoc);
         }
@@ -40,7 +40,7 @@ namespace ClueGoTesting.Data
         [HttpPut("{id}")]
         public IActionResult UpdateLocation([FromBody] Location updateLoc)
         {
-            var orgLoc = _context.Locations.Find(updateLoc.LocId);
+            var orgLoc = _dbContext.Locations.Find(updateLoc.LocId);
 
             if (orgLoc == null)
                 return NotFound();
@@ -51,7 +51,7 @@ namespace ClueGoTesting.Data
                 orgLoc.LocLong = updateLoc.LocLong;
                 orgLoc.LocDescription = updateLoc.LocDescription;
 
-                _context.SaveChanges();
+                _dbContext.SaveChanges();
                 return Ok(orgLoc);
             }
         }
@@ -60,13 +60,13 @@ namespace ClueGoTesting.Data
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var location = _context.Locations.Find(id);
+            var location = _dbContext.Locations.Find(id);
             if (location == null)
                 return NotFound();
             else
             {
-                _context.Locations.Remove(location);
-                _context.SaveChanges();
+                _dbContext.Locations.Remove(location);
+                _dbContext.SaveChanges();
 
                 return NoContent();
             }

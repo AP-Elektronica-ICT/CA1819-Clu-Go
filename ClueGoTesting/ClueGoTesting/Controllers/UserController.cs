@@ -15,25 +15,25 @@ namespace ClueGoTesting.Data
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly GameContext _context;
+        private readonly GameContext _dbContext;
 
         public UserController(GameContext context)
         {
-            _context = context;
+            _dbContext = context;
         }
         
 
         [HttpGet]
         public ActionResult<List<User>> GetAll()
         {
-            return _context.Users.ToList();
+            return _dbContext.Users.ToList();
         }
         
 
         [HttpGet("{userId}")]
         public ActionResult<User> GetById(long userId)
         {
-            var item = _context.Users.Find(userId);
+            var item = _dbContext.Users.Find(userId);
 
             return item;
         }
@@ -41,7 +41,7 @@ namespace ClueGoTesting.Data
         [HttpGet("inlog/{username}/{password}")]
         public ActionResult<User> GetByEmail(string username, string password)
         {
-            var item = _context.Users.SingleOrDefault(c => c.Username == username && (c.Password == PasswordHash(password) || c.Password == password));
+            var item = _dbContext.Users.SingleOrDefault(c => c.Username == username && (c.Password == PasswordHash(password) || c.Password == password));
 
 
             if (item == null)
@@ -61,8 +61,8 @@ namespace ClueGoTesting.Data
             //passwoord hashen
             newUser.Password = PasswordHash(newUser.Password);
 
-            bool usernameAlreadyExists = _context.Users.Any(x => x.Username == newUser.Username);
-            bool emailAlreadyExists = _context.Users.Any(x => x.Email == newUser.Email);
+            bool usernameAlreadyExists = _dbContext.Users.Any(x => x.Username == newUser.Username);
+            bool emailAlreadyExists = _dbContext.Users.Any(x => x.Email == newUser.Email);
             //==================== Pass Validation check =======================
             if (_pwd == newUser.Username)
                 serverResponse = "Password cannot match username!";
@@ -74,8 +74,8 @@ namespace ClueGoTesting.Data
                 serverResponse = "This e-mail has already been registerd!";
             else if (ModelState.IsValid)
             {
-                _context.Users.Add(newUser);
-                _context.SaveChanges();
+                _dbContext.Users.Add(newUser);
+                _dbContext.SaveChanges();
                 return Ok(newUser);
             }
             else
@@ -87,7 +87,7 @@ namespace ClueGoTesting.Data
         [HttpPut("{username}")]
         public IActionResult Update(string id, User user)
         {
-            var todo = _context.Users.Find(id);
+            var todo = _dbContext.Users.Find(id);
             if (todo == null)
             {
                 return NotFound();
@@ -96,23 +96,23 @@ namespace ClueGoTesting.Data
             todo.Password = user.Password;
             todo.Username = user.Username;
 
-            _context.Users.Update(todo);
-            _context.SaveChanges();
+            _dbContext.Users.Update(todo);
+            _dbContext.SaveChanges();
             return NoContent();
         }
 
         [HttpDelete("{userId}")]
         public IActionResult DeleteUser(int id)
         {
-            for (int _id = id; _id < _context.Users.Count(); _id++)
+            for (int _id = id; _id < _dbContext.Users.Count(); _id++)
             {
                 id = _id;
-                var user = _context.Users.SingleOrDefault(x => x.UserId == id);
+                var user = _dbContext.Users.SingleOrDefault(x => x.UserId == id);
                 if (user == null)
                     return NotFound();
 
-                _context.Users.Remove(user);
-                _context.SaveChanges();
+                _dbContext.Users.Remove(user);
+                _dbContext.SaveChanges();
             }
             return Content("Delete succes!");
         }

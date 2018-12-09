@@ -9,7 +9,6 @@ namespace ClueGoTesting.Models
     {
         public int GameId { get; set; }
         public int LocId { get; set; }
-        public string LocName { get; set; }
 
         public Game Game { get; set; }
         public Location Location { get; set; }

@@ -11,7 +11,7 @@ namespace ClueGoTesting.Models
         public int GameId { get; set; }    
         public bool GameWon { get; set; }
         
-        public IList<GameLocation> GameLocations { get; set; }
+        public ICollection<GameLocation> GameLocations { get; set; }
         public IList<GameSuspect> GameSuspects { get; set; }
         //public ICollection<Clue> GetClues { get; set; }
 

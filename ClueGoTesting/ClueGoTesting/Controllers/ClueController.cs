@@ -13,16 +13,16 @@ namespace ClueGoTesting.Controllers
     [ApiController]
     public class ClueController : ControllerBase
     {
-        private readonly GameContext _context;
+        private readonly GameContext _dbContext;
         public ClueController(GameContext context)
         {
-            _context = context;
+            _dbContext = context;
         }
         // GET: api/Clue
         [HttpGet]
         public ActionResult<List<Clue>> GetAll()
         {
-            return _context.Clues.ToList();
+            return _dbContext.Clues.ToList();
         }
 
       
