@@ -2,6 +2,7 @@ package com.example.arno.cluegologin;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,17 +74,19 @@ import static com.facebook.FacebookSdk.getCacheDir;
 
 
 public class MapViewFragment extends Fragment {
+    boolean hasBeen;
     Marker destMarker;
     MapView mMapView;
     RequestQueue mRequestQueue;
     StringRequest stringRequest;
     JSONObject allLocations;
-
+    Location policeOfficeLocation;
     private final static int LOCATION_REQUEST_CODE = 101;
     private GoogleMap googleMap;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
-    private String url ="https://cluego.azurewebsites.net/api/location";
+    //private String url ="https://cluego.azurewebsites.net/api/location";
+    private String url = "https://cluegotesting.conveyor.cloud/api/location";
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_maps, container, false);
@@ -90,40 +94,7 @@ public class MapViewFragment extends Fragment {
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
-//        Cache cache = new DiskBasedCache(getCacheDir(),1024*1024);
-//        Network network = new BasicNetwork(new HurlStack());
-//
-//        mRequestQueue = new RequestQueue(cache,network);
-//        mRequestQueue.start();
-//        String url ="https://cluegotesting.conveyor.cloud/api/location";
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,url,null,
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        try {
-//                            Log.e("urlResponse", response.toString());
-//                            JSONArray array = response.getJSONArray("location");
-//                            Log.e("JsonArray", array.toString());
-//                            for (int i = 0; i < array.length(); i++) {
-//                                JSONObject loc = array.getJSONObject(i);
-//                                double lat = loc.getDouble("locLat");
-//                                double lon = loc.getDouble("locLong");
-//                                String locDesc = loc.getString("locDescription");
-//                                String locName = loc.getString("locName");
-//                                Log.e("JsonLoc",loc.toString());
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Log.d("jsonParser", "onErrorResponse: error");
-//                    }
-//        });
-//        mRequestQueue.add(jsonObjectRequest);
+
 
         mMapView.onResume(); // needed to get the map to display immediately
 
@@ -196,9 +167,15 @@ public class MapViewFragment extends Fragment {
                             markerLoc.setLongitude(destMarker.getPosition().longitude);
                             float distance = location.distanceTo(markerLoc);
 
-                            Log.e("distancevalue", "Distance: "+distance);
+                            Log.e("distancevalue", destMarker.getTitle());
 
-                            if(distance<20){
+                            if(distance<20 && hasBeen==false){
+                                hasBeen=true;
+                                if(destMarker.getTitle().equals("Politiekantoor")){
+
+                                    Intent intent = new Intent(getActivity(), GuessActivity.class);
+                                    startActivity(intent);
+                                }
                                 Log.e("toast","locations are the same");
 
                                 Toast.makeText(getActivity(),"You have arrived at your destination",Toast.LENGTH_LONG).show();

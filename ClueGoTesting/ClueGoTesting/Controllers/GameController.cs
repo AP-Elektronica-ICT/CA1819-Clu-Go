@@ -48,19 +48,17 @@ namespace ClueGoTesting.Controllers
             var game = new Game();
             var locations = _dbcontext.Locations.ToList();
             game.GameLocations = new List<GameLocation>();
-
             for (int  i = 0;  i < amtGame;  i++)
             {
                 game.GameLocations.Add(new GameLocation
                 {
                     Location = locations[i]
-            });
-
+            });                
             }
             // Get Random Location
             var r = new Random();
             var index = r.Next(0, locations.Count);
-
+            
             _dbcontext.Games.Add(game);
             _dbcontext.SaveChanges();
 

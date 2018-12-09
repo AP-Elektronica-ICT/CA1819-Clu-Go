@@ -55,16 +55,18 @@ namespace ClueGoTesting.Data
                     SusName = "Miss Scarlett",
                     SusWeapon = "Rope",
                     SusDescription = "Femme fatale, young, cunning, and highly attractive.",
-                    SusImgUrl = "https://i.pinimg.com/originals/95/ce/3d/95ce3da06af8b1c09a4b2d4fa603b7a0.jpg"
+                    SusImgUrl = "https://i.pinimg.com/originals/95/ce/3d/95ce3da06af8b1c09a4b2d4fa603b7a0.jpg",
+                    isMurderer = true
 
 
                 };
-                var suspect1 = new Suspect()
-                {
-                    SusName = "Mr. Green",
-                    SusWeapon = "Wooden cross",
-                    SusDescription = "Bald, keeps to himself, elderly priest",
-                    SusImgUrl = "https://pbs.twimg.com/profile_images/447953368271814657/Inf33QvJ.jpeg"
+            var suspect1 = new Suspect()
+            {
+                SusName = "Mr. Green",
+                SusWeapon = "Wooden cross",
+                SusDescription = "Bald, keeps to himself, elderly priest",
+                SusImgUrl = "https://pbs.twimg.com/profile_images/447953368271814657/Inf33QvJ.jpeg",
+                isMurderer = false
 
 
                 };
@@ -73,10 +75,11 @@ namespace ClueGoTesting.Data
                     SusName = "Colonel Mustard",
                     SusWeapon = "Gun",
                     SusDescription = "A military man both dignified, dapper and dangerous",
-                    SusImgUrl = "https://pbs.twimg.com/profile_images/447953368271814657/Inf33QvJ.jpeg"
+                    SusImgUrl = "https://pbs.twimg.com/profile_images/447953368271814657/Inf33QvJ.jpeg",
+                    isMurderer = false
 
 
-                };
+    };
                 //https://pbs.twimg.com/profile_images/745749442670669824/l_6cM8YA_400x400.jpg
 
 
@@ -154,17 +157,29 @@ namespace ClueGoTesting.Data
                     LocLong = 4.401576,
                     LocDescription = "Groenplaats, standbeeld Pieter Paul Rubens."
                 };
+                var PoliceOffice = new Location()
+                {
+                    LocName = "Politiekantoor",
+                    LocLat = 51.030754,
+                    LocLong = 4.474065,
+                    LocDescription = "Politiekantoor"
+                };
+
+
                 context.Locations.Add(location1);
                 context.Locations.Add(location2);
                 context.Locations.Add(location3);
                 context.Locations.Add(location4);
+                context.Locations.Add(PoliceOffice);
                 context.SaveChanges();
             }
+            
             if (!context.Games.Any())
             {
                 var game0 = new Game()
                 {
-                    GameWon = false
+                    GameWon = false,
+                    
                 };
                 
                 context.Games.Add(game0);
