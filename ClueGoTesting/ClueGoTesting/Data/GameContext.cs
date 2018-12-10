@@ -67,6 +67,12 @@ namespace ClueGoTesting.Data
                 .HasOne(s => s.Clue)
                 .WithMany(gs => gs.GameClues)
                 .HasForeignKey(pt => pt.ClueId);
+
+
+            modelBuilder.Entity<User>()
+                .HasMany(c => c.Games)
+                .WithOne(e => e.User)
+                .IsRequired();
         }
 
     }

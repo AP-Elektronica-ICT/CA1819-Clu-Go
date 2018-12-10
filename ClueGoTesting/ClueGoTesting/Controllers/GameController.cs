@@ -52,10 +52,14 @@ namespace ClueGoTesting.Controllers
                             .Include(x=> x.GameClues)
                             .ThenInclude(x => x.Clue)
                             .Where(x => x.GameId == gameId)
+
+                            .Include(x => x.User)
                             .ToList());
+
+                            
         }
 
-        [HttpGet("create/{amtGame}")]
+        [HttpGet("create/{amtGame}/{userId}")]
         public ActionResult<Game> CreateGame(int amtGame)
         {
             var game = new Game();
