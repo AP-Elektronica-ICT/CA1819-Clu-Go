@@ -41,6 +41,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
@@ -69,6 +70,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.facebook.FacebookSdk.getAutoLogAppEventsEnabled;
 import static com.facebook.FacebookSdk.getCacheDir;
 
@@ -85,8 +87,8 @@ public class MapViewFragment extends Fragment {
     private GoogleMap googleMap;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
-    //private String url ="https://cluego.azurewebsites.net/api/location";
-    private String url = "https://cluegotesting.conveyor.cloud/api/location";
+    private String url ="https://cluego.azurewebsites.net/api/location";
+    //private String url = "https://cluegotesting.conveyor.cloud/api/location";
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_maps, container, false);
@@ -160,8 +162,10 @@ public class MapViewFragment extends Fragment {
                 final LocationListener locationListener = new LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) {
-                        if(destMarker != null){
+                        LatLng center1 = new LatLng(location.getLatitude(),location.getLongitude());
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(center1, 15));
 
+                        if(destMarker != null){
                             Location markerLoc = new Location("Destination");
                             markerLoc.setLatitude(destMarker.getPosition().latitude);
                             markerLoc.setLongitude(destMarker.getPosition().longitude);
@@ -179,8 +183,16 @@ public class MapViewFragment extends Fragment {
                                 Log.e("toast","locations are the same");
 
                                 Toast.makeText(getActivity(),"You have arrived at your destination",Toast.LENGTH_LONG).show();
+                                Intent i = new Intent(getActivity(), PuzzleActivity.class);
+
+                                startActivity(i);
                             }
-                        }
+                            if(distance>20)
+                            {
+                                Toast.makeText(getActivity(), "not at destination", Toast.LENGTH_LONG).show();
+                                Log.e("toast","locations are not the same" + distance);
+
+                            }}
                     }
 
                     @Override
@@ -370,6 +382,7 @@ public class MapViewFragment extends Fragment {
 
         @Override
         protected List<List<HashMap<String, String>>> doInBackground(String... strings) {
+
             JSONObject jsonObject = null;
             List<List<HashMap<String, String>>>routes=null;
             try{
