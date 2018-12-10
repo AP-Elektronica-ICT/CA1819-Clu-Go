@@ -64,7 +64,7 @@ namespace ClueGoTesting.Data
             {
                 SusName = "Mr. Green",
                 SusWeapon = "Wooden cross",
-                SusDescription = "Rev. Jonathan Green[2] (born June 18, 1905), is questioned by many on whether he is a saint or sinner. Known for shady dealings on the stock market, he used this money to "help" the Church of England.",
+                SusDescription = "Rev. Jonathan Green[2] (born June 18, 1905), is questioned by many on whether he is a saint or sinner. Known for shady dealings on the stock market, he used this money to help the Church of England.",
                 SusImgUrl = "https://pbs.twimg.com/profile_images/447953368271814657/Inf33QvJ.jpeg",
                 isMurderer = false
 
@@ -105,7 +105,7 @@ namespace ClueGoTesting.Data
                 {
                     SusName = "Mrs. Peacock",
                     SusWeapon = "Gun",
-                    SusDescription = "Mrs. Elizabeth Peacock[2](born January 5, 1906) is the Lady of Arlington Grange and a beautiful society hostess. She constantly tries to live up to her reputation that she would rather forget. She is nicknamed "Ma Bluebird" because of the mysterious deaths of her husbands.",
+                    SusDescription = "Mrs. Elizabeth Peacock[2](born January 5, 1906) is the Lady of Arlington Grange and a beautiful society hostess. She constantly tries to live up to her reputation that she would rather forget. She is nicknamed Ma Bluebird because of the mysterious deaths of her husbands.",
                     SusImgUrl = "https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/04/08/unspecified.jpg?width=1368&height=912&fit=bounds&format=pjpg&auto=webp&quality=70",
                     isMurderer = false
 
