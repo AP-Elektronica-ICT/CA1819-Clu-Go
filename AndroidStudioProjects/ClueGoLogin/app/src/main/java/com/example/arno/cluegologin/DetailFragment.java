@@ -1,19 +1,14 @@
 package com.example.arno.cluegologin;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-
-import org.w3c.dom.Text;
-
-import java.util.jar.Attributes;
-import java.util.zip.Inflater;
+import com.squareup.picasso.Picasso;
 
 public class DetailFragment extends Fragment {
 
@@ -22,6 +17,7 @@ public class DetailFragment extends Fragment {
 
     }
     TextView suspect_detail, suspect_name;
+    ImageView suspect_image;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -29,11 +25,14 @@ public class DetailFragment extends Fragment {
 
         String name = getArguments().getString("name");
         String detail = getArguments().getString("detail");
+        String image = getArguments().getString("image");
 
         suspect_name = (TextView)v.findViewById(R.id.suspect_name);
         suspect_detail = (TextView)v.findViewById(R.id.suspect_detail);
+        suspect_image = (ImageView)v.findViewById(R.id.suspect_image);
         SetName(name);
         SetDescription(detail);
+        Picasso.get().load(image).into(suspect_image);
         return v;
     }
 
