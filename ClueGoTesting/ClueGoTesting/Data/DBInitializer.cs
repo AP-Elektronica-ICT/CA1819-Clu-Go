@@ -54,7 +54,7 @@ namespace ClueGoTesting.Data
                     //  SuspectId = 1,
                     SusName = "Miss Scarlett",
                     SusWeapon = "Rope",
-                    SusDescription = "Femme fatale, young, cunning, and highly attractive.",
+                    SusDescription = "Ms. Vivienne Sakura Scarlet[2][3] (born July 16, 1928) is a vivacious and aspiring actress whose passion for fame, fortune, and especially men will let no one stand in her way. The glamorous daughter of Mrs. Elizabeth Peacock and beautiful girlfriend of Col. Michael Mustard, she resides at Arlington Grange with her mother and Mrs. Blanche White. Ms. Scarlet is very famous and the press in Hollywood often question her about her disastrous love life. She was the former fiancée of Mr. John Boddy, who was mysteriously murdered.",
                     SusImgUrl = "https://i.pinimg.com/originals/95/ce/3d/95ce3da06af8b1c09a4b2d4fa603b7a0.jpg",
                     isMurderer = true
 
@@ -64,28 +64,77 @@ namespace ClueGoTesting.Data
             {
                 SusName = "Mr. Green",
                 SusWeapon = "Wooden cross",
-                SusDescription = "Bald, keeps to himself, elderly priest",
+                SusDescription = "Rev. Jonathan Green[2] (born June 18, 1905), is questioned by many on whether he is a saint or sinner. Known for shady dealings on the stock market, he used this money to "help" the Church of England.",
                 SusImgUrl = "https://pbs.twimg.com/profile_images/447953368271814657/Inf33QvJ.jpeg",
                 isMurderer = false
 
 
                 };
-                var suspect2 = new Suspect()
-                {
+            var suspect2 = new Suspect()
+            {
                     SusName = "Colonel Mustard",
                     SusWeapon = "Gun",
-                    SusDescription = "A military man both dignified, dapper and dangerous",
-                    SusImgUrl = "https://pbs.twimg.com/profile_images/447953368271814657/Inf33QvJ.jpeg",
+                    SusDescription = "Col. Michael Mustard[2] (born June 29, 1924) is a gallant military hero whose glittering career hides a tarnished past. He learns from the strong and deals quickly with the weak. He believes that casualties are inevitable in war and is usually the sole survivor in battle. The colonel enjoys an adventure and must always succeed in battle, no matter what, even if it means betraying his allies to defeat the enemy. He became the boyfriend of the glamorous actress Ms. Vivienne Scarlet. He was an old friend of Mr. John Boddy from college, who was mysteriously murdered",
+                    SusImgUrl = "https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/04/08/unspecified-3.jpg?width=1368&height=912&fit=bounds&format=pjpg&auto=webp&quality=70",
                     isMurderer = false
 
 
-    };
+                };
+
+                var suspect3 = new Suspect()
+                {
+                    SusName = "Dr.Orchid",
+                    SusWeapon = "Syringe",
+                    SusDescription = "A Doctor, Elegant ",
+                    SusImgUrl = "https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/04/08/unspecified-4.jpg?width=1368&height=912&fit=bounds&format=pjpg&auto=webp&quality=70",
+                    isMurderer = false
+
+
+                };
+                var suspect4 = new Suspect()
+                {
+                    SusName = "Professor Plum",
+                    SusWeapon = "Gun",
+                    SusDescription = "Prof. Peter Plum[4] (born August 31, 1922) is a man with a degree of suspicion. Would his research methods stand the scrutiny of a microscope?",
+                    SusImgUrl = "https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/04/08/unspecified-6.jpg?width=1368&height=912&fit=bounds&format=pjpg&auto=webp&quality=70",
+                    isMurderer = false
+
+
+                };
+                var suspect5 = new Suspect()
+                {
+                    SusName = "Mrs. Peacock",
+                    SusWeapon = "Gun",
+                    SusDescription = "Mrs. Elizabeth Peacock[2](born January 5, 1906) is the Lady of Arlington Grange and a beautiful society hostess. She constantly tries to live up to her reputation that she would rather forget. She is nicknamed "Ma Bluebird" because of the mysterious deaths of her husbands.",
+                    SusImgUrl = "https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/04/08/unspecified.jpg?width=1368&height=912&fit=bounds&format=pjpg&auto=webp&quality=70",
+                    isMurderer = false
+
+
+                };
+
+                var suspect6 = new Suspect()
+                {
+                    SusName = "Mrs.White",
+                    SusWeapon = "Gun",
+                    SusDescription = "Mrs. Blanche White[2](born November 1, 1891) is the loyal housekeeper and a devoted confidant. She hides a secret indulgence. She currently lives with her employer, Mrs. Elizabeth Peacock, who is also her close friend. She knows all the news throughout Arlington, MA, some she shouldn't be aware of. She cared for Mr. John Boddy, her former employer, who was mysteriously murdered.",
+                    SusImgUrl = "https://static.giantbomb.com/uploads/scale_small/0/5768/698578-white_puzzle.jpg",
+                    isMurderer = false
+
+
+                };
+
+                
                 //https://pbs.twimg.com/profile_images/745749442670669824/l_6cM8YA_400x400.jpg
 
 
                 context.Suspects.Add(suspect0);
                 context.Suspects.Add(suspect1);
                 context.Suspects.Add(suspect2);
+                context.Suspects.Add(suspect3);
+                context.Suspects.Add(suspect4);
+                context.Suspects.Add(suspect5);
+                context.Suspects.Add(suspect6);
+               
                 context.SaveChanges();
 
             }
