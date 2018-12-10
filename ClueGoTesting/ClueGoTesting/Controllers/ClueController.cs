@@ -28,11 +28,39 @@ namespace ClueGoTesting.Controllers
       
 
         // PUT: api/Clue/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpGet("{ClueId}")]
+        public IActionResult UpdateClue(int ClueId)
         {
+
+            var orgClue = _dbContext.Clues.SingleOrDefault(x => x.ClueId == ClueId);
+
+            if (orgClue == null)
+                return NotFound("Clue does not exist");
+            else
+            {
+                orgClue.Found = true;
+
+                _dbContext.SaveChanges();
+                return Ok(orgClue);
+            }
+        }
+        [HttpPut("put/{ClueId}")]
+        public IActionResult UpdateClue1([FromBody] Clue updateClue, int ClueId)
+        {
+
+            var orgClue = _dbContext.Clues.SingleOrDefault(x => x.ClueId == ClueId);
+
+            if (orgClue == null)
+                return NotFound("Clue does not exist");
+            else
+            {
+                orgClue.Found = updateClue.Found;
+
+                _dbContext.SaveChanges();
+                return Ok(orgClue);
+            }
         }
 
-       
+
     }
 }

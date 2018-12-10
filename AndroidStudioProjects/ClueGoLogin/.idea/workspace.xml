@@ -6,7 +6,8 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="verbose" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="CMakeSettings">
     <configurations>
@@ -30,32 +31,41 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
-        <projects_view />
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="ClueGoLogin" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
       </state>
     </system>
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="StartGameFragment.java" pinned="false" current-in-tab="true">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="StartGameFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/StartGameFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
-              <caret line="135" column="65" selection-start-line="135" selection-start-column="65" selection-end-line="135" selection-end-column="65" />
+            <state relative-caret-position="1256">
+              <caret line="258" column="1" selection-start-line="258" selection-start-column="1" selection-end-line="258" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PuzzleActivity.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/PuzzleActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="396">
+              <caret line="167" column="25" selection-start-line="167" selection-start-column="25" selection-end-line="167" selection-end-column="25" />
               <folding>
-                <element signature="e#2104#2384#0" expanded="true" />
-                <element signature="e#2383#2384#0" expanded="true" />
-                <element signature="e#2402#2762#0" expanded="true" />
-                <element signature="e#2761#2762#0" expanded="true" />
-                <element signature="e#3425#3707#0" expanded="true" />
-                <element signature="e#3706#3707#0" expanded="true" />
-                <element signature="e#3725#4000#0" expanded="true" />
-                <element signature="e#3999#4000#0" expanded="true" />
-                <element signature="e#4805#8116#0" expanded="true" />
-                <element signature="e#8115#8116#0" expanded="true" />
-                <element signature="e#8135#8361#0" expanded="true" />
-                <element signature="e#8360#8361#0" expanded="true" />
-                <element signature="e#9470#9849#0" expanded="true" />
-                <element signature="e#9848#9849#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#5453#5783#0" expanded="true" />
+                <element signature="e#5782#5783#0" expanded="true" />
+                <element signature="e#5712#5985#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -63,10 +73,10 @@
       </file>
       <file leaf-file-name="fragment_start_of_game.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_start_of_game.xml">
-          <provider selected="true" editor-type-id="android-designer2">
+          <provider editor-type-id="text-editor">
             <state />
           </provider>
-          <provider editor-type-id="text-editor">
+          <provider selected="true" editor-type-id="android-designer2">
             <state />
           </provider>
         </entry>
@@ -80,11 +90,20 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="MapViewFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/MapViewFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2542">
+              <caret line="330" column="41" selection-start-line="330" selection-start-column="41" selection-end-line="330" selection-end-column="41" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="InventoryFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/InventoryFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-507">
-              <caret line="37" column="13" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
+            <state relative-caret-position="-22">
+              <caret line="45" column="34" selection-start-line="45" selection-start-column="34" selection-end-line="45" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -95,12 +114,13 @@
     <findStrings>
       <find>pos</find>
       <find>ready</find>
+      <find>puzz</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
     <option name="myGradleHomes">
       <map>
-        <entry key="$PROJECT_DIR$" value="C:\Users\Joppe\.gradle\wrapper\dists\gradle-4.6-all\bcst21l2brirad8k2ben1letg\gradle-4.6" />
+        <entry key="$PROJECT_DIR$" value="C:\Users\Arno\.gradle\wrapper\dists\gradle-4.6-all\bcst21l2brirad8k2ben1letg\gradle-4.6" />
       </map>
     </option>
     <option name="myGradleVersions">
@@ -2358,61 +2378,23 @@
       <list>
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/StartGameFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_start_of_game.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/InventoryFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/PuzzleActivity.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
+    <option name="x" value="-2148" />
     <option name="y" value="-8" />
-    <option name="width" value="1696" />
-    <option name="height" value="1026" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane" />
       <pane id="Scope" />
-      <pane id="AndroidView">
-        <subPane>
-          <expand>
-            <path>
-              <item name="ClueGoLogin" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-            </path>
-            <path>
-              <item name="ClueGoLogin" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-            </path>
-            <path>
-              <item name="ClueGoLogin" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="cluegologin" type="cbb59c9e:AndroidPsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ClueGoLogin" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="cluegologin" type="cbb59c9e:AndroidPsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ClueGoLogin" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-            </path>
-            <path>
-              <item name="ClueGoLogin" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="layout" type="ddeffd01:AndroidResFolderTypeNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
@@ -2430,13 +2412,55 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="AndroidView">
+        <subPane>
+          <expand>
+            <path>
+              <item name="ClueGoLogin" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+            </path>
+            <path>
+              <item name="ClueGoLogin" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="manifests" type="f94875db:AndroidManifestsGroupNode" />
+            </path>
+            <path>
+              <item name="ClueGoLogin" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+            </path>
+            <path>
+              <item name="ClueGoLogin" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="cluegologin" type="cbb59c9e:AndroidPsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ClueGoLogin" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="res" type="d4f16f75:AndroidResFolderNode" />
+            </path>
+            <path>
+              <item name="ClueGoLogin" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="res" type="d4f16f75:AndroidResFolderNode" />
+              <item name="drawable" type="ddeffd01:AndroidResFolderTypeNode" />
+            </path>
+            <path>
+              <item name="ClueGoLogin" type="1abcf292:AndroidViewProjectNode" />
+              <item name="Gradle Scripts" type="ae0cef3a:AndroidBuildScriptsGroupNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="gnsslocation&#9;null&#9;null" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="device.picker.selection" value="CB512FETHK" />
+    <property name="device.picker.selection" value="ad0617020cc5acd24f" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/main/res/drawable" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
   </component>
@@ -2595,49 +2619,62 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1696" height="1026" extended-state="6" />
+    <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
+      <window_info anchor="bottom" id="Android Profiler" order="7" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Android Profiler" />
-      <window_info anchor="right" id="Palette&#9;" />
-      <window_info id="Image Layers" />
-      <window_info id="Build Variants" side_tool="true" />
-      <window_info anchor="right" id="Capture Analysis" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="right" id="Palette&#9;" order="3" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Build Variants" order="2" side_tool="true" />
+      <window_info anchor="right" id="Capture Analysis" order="3" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5008" side_tool="true" weight="0.3578838" />
+      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
+      <window_info anchor="right" id="Viewer" order="4" side_tool="true" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Logcat" visible="true" weight="0.29472476" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.32987553" />
+      <window_info active="true" anchor="bottom" id="Logcat" order="7" visible="true" weight="0.30627707" />
       <window_info id="Captures" order="2" weight="0.25" />
-      <window_info id="Capture Tool" />
-      <window_info id="Designer" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
-      <window_info anchor="bottom" id="Build" weight="0.3440367" />
-      <window_info anchor="right" id="Gradle" />
+      <window_info id="Capture Tool" order="2" />
+      <window_info id="Designer" order="2" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2528" />
+      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.4992" weight="0.3578838" />
+      <window_info anchor="right" id="Gradle" order="3" weight="0.3296" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="right" id="Theme Preview" />
+      <window_info anchor="right" id="Device File Explorer" order="3" side_tool="true" />
+      <window_info anchor="right" id="Theme Preview" order="3" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info id="Favorites" side_tool="true" />
-      <window_info anchor="right" id="Device File Explorer" side_tool="true" />
-      <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
+  </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/StartGameFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4386">
+          <caret line="258" column="1" selection-start-line="258" selection-start-column="1" selection-end-line="258" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_start_of_game.xml">
-      <provider selected="true" editor-type-id="android-designer2">
+      <provider editor-type-id="text-editor">
         <state />
       </provider>
-      <provider editor-type-id="text-editor">
+      <provider selected="true" editor-type-id="android-designer2">
         <state />
       </provider>
     </entry>
@@ -2648,6 +2685,79 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/InventoryFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="37" column="13" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/StartGameFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4386">
+          <caret line="258" column="1" lean-forward="true" selection-start-line="258" selection-start-column="1" selection-end-line="258" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_start_of_game.xml">
+      <provider editor-type-id="text-editor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/ItemAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/InventoryFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="37" column="13" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/StartGameFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2295">
+          <caret line="135" column="65" selection-start-line="135" selection-start-column="65" selection-end-line="135" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_start_of_game.xml">
+      <provider editor-type-id="text-editor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/ItemAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/InventoryFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="37" column="13" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_start_of_game.xml">
+      <provider editor-type-id="text-editor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/GestureDetectGridView.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1216">
@@ -2655,40 +2765,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/InventoryFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-507">
-          <caret line="37" column="13" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/StartGameFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="504">
           <caret line="135" column="65" selection-start-line="135" selection-start-column="65" selection-end-line="135" selection-end-column="65" />
-          <folding>
-            <element signature="e#2104#2384#0" expanded="true" />
-            <element signature="e#2383#2384#0" expanded="true" />
-            <element signature="e#2402#2762#0" expanded="true" />
-            <element signature="e#2761#2762#0" expanded="true" />
-            <element signature="e#3425#3707#0" expanded="true" />
-            <element signature="e#3706#3707#0" expanded="true" />
-            <element signature="e#3725#4000#0" expanded="true" />
-            <element signature="e#3999#4000#0" expanded="true" />
-            <element signature="e#4805#8116#0" expanded="true" />
-            <element signature="e#8115#8116#0" expanded="true" />
-            <element signature="e#8135#8361#0" expanded="true" />
-            <element signature="e#8360#8361#0" expanded="true" />
-            <element signature="e#9470#9849#0" expanded="true" />
-            <element signature="e#9848#9849#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/StartGameFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-527">
-          <caret line="33" column="13" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="13" />
+        <state relative-caret-position="1256">
+          <caret line="258" column="1" selection-start-line="258" selection-start-column="1" selection-end-line="258" selection-end-column="1" />
         </state>
       </provider>
     </entry>
@@ -2706,19 +2793,41 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/ItemAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/puzzleclue1.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/MapViewFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="330" column="41" lean-forward="true" selection-start-line="330" selection-start-column="41" selection-end-line="330" selection-end-column="41" />
+        <state relative-caret-position="2542">
+          <caret line="330" column="41" selection-start-line="330" selection-start-column="41" selection-end-line="330" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/InventoryFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-22">
+          <caret line="45" column="34" selection-start-line="45" selection-start-column="34" selection-end-line="45" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/PuzzleActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="167" column="25" selection-start-line="167" selection-start-column="25" selection-end-line="167" selection-end-column="25" />
           <folding>
-            <element signature="e#3997#11702#0" expanded="true" />
-            <element signature="e#9507#9813#0" expanded="true" />
-            <element signature="e#9812#9813#0" expanded="true" />
-            <element signature="e#10007#10008#0" expanded="true" />
-            <element signature="e#10066#10067#0" expanded="true" />
-            <element signature="e#11233#11674#0" expanded="true" />
-            <element signature="e#11673#11674#0" expanded="true" />
-            <element signature="e#11701#11702#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#5453#5783#0" expanded="true" />
+            <element signature="e#5782#5783#0" expanded="true" />
+            <element signature="e#5712#5985#0" expanded="true" />
           </folding>
         </state>
       </provider>
