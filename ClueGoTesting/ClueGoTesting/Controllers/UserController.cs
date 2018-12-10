@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using ClueGoTesting.Models;
 using System.Text;
 using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClueGoTesting.Data
 {
@@ -26,7 +27,9 @@ namespace ClueGoTesting.Data
         [HttpGet]
         public ActionResult<List<User>> GetAll()
         {
-            return _dbContext.Users.ToList();
+            return _dbContext.Users
+                .Include(x => x.Games)
+                .ToList();
         }
         
 

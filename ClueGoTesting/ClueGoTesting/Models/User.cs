@@ -15,7 +15,7 @@ namespace ClueGoTesting.Models
         public ICollection<Game> Games { get; set; }
         //PK
         [Key]
-        public long UserId { get; set; }
+        public int UserId { get; set; }
 
     }
 }
