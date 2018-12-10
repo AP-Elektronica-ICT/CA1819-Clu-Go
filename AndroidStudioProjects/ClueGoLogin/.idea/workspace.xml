@@ -59,13 +59,14 @@
       <file leaf-file-name="PuzzleActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/PuzzleActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="167" column="25" selection-start-line="167" selection-start-column="25" selection-end-line="167" selection-end-column="25" />
+            <state relative-caret-position="2113">
+              <caret line="148" column="22" selection-start-line="148" selection-start-column="22" selection-end-line="148" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#5453#5783#0" expanded="true" />
                 <element signature="e#5782#5783#0" expanded="true" />
                 <element signature="e#5712#5985#0" expanded="true" />
+                <element signature="e#5984#5985#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -2384,10 +2385,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-2148" />
+    <option name="x" value="197" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
-    <option name="height" value="1056" />
+    <option name="height" value="1017" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -2619,7 +2620,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="Android Profiler" order="7" />
@@ -2633,7 +2634,7 @@
       <window_info anchor="right" id="Viewer" order="4" side_tool="true" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32987553" />
-      <window_info active="true" anchor="bottom" id="Logcat" order="7" visible="true" weight="0.30627707" />
+      <window_info active="true" anchor="bottom" id="Logcat" order="7" visible="true" weight="0.29356846" />
       <window_info id="Captures" order="2" weight="0.25" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
@@ -2821,13 +2822,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/arno/cluegologin/PuzzleActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="167" column="25" selection-start-line="167" selection-start-column="25" selection-end-line="167" selection-end-column="25" />
+        <state relative-caret-position="2113">
+          <caret line="148" column="22" selection-start-line="148" selection-start-column="22" selection-end-line="148" selection-end-column="22" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#5453#5783#0" expanded="true" />
             <element signature="e#5782#5783#0" expanded="true" />
             <element signature="e#5712#5985#0" expanded="true" />
+            <element signature="e#5984#5985#0" expanded="true" />
           </folding>
         </state>
       </provider>

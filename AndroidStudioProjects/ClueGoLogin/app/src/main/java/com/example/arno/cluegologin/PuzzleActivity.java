@@ -146,7 +146,7 @@ public class PuzzleActivity extends AppCompatActivity {
         tileList[currentPosition] = newPosition;
         display(context);
 
-        if (1==1) {
+        if (isSolved()) {
             Toast.makeText(context, "Found new clue, added ransom note to your inventory!", Toast.LENGTH_SHORT).show();
             int clueId = 1;
             String url = "https://cluego.azurewebsites.net/api/clue/"+ clueId;

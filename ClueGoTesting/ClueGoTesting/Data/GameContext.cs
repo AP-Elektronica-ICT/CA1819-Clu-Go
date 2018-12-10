@@ -39,7 +39,6 @@ namespace ClueGoTesting.Data
                 .HasOne(x => x.Game)
                 .WithMany(x => x.GameLocations)
                 .HasForeignKey(x => x.GameId);
-
             modelBuilder.Entity<GameLocation>()
                 .HasOne(l => l.Location)
                 .WithMany(gl => gl.GameLocations)
@@ -57,6 +56,17 @@ namespace ClueGoTesting.Data
                 .HasOne(s => s.Suspect)
                 .WithMany(gs => gs.GameSuspects)
                 .HasForeignKey(pt => pt.SusId);
+
+            modelBuilder.Entity<GameClue>()
+                .HasKey(t => new { t.GameId, t.ClueId });
+            modelBuilder.Entity<GameClue>()
+                .HasOne(x => x.Game)
+                .WithMany(x => x.GameClues)
+                .HasForeignKey(x => x.GameId);
+            modelBuilder.Entity<GameClue>()
+                .HasOne(s => s.Clue)
+                .WithMany(gs => gs.GameClues)
+                .HasForeignKey(pt => pt.ClueId);
         }
 
     }

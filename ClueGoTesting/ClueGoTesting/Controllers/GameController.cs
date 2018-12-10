@@ -48,6 +48,10 @@ namespace ClueGoTesting.Controllers
                             .Include(x => x.GameSuspects)
                             .ThenInclude(x => x.Suspect)
                             .Where(x => x.GameId == gameId)
+
+                            .Include(x=> x.GameClues)
+                            .ThenInclude(x => x.Clue)
+                            .Where(x => x.GameId == gameId)
                             .ToList());
         }
 
@@ -77,6 +81,17 @@ namespace ClueGoTesting.Controllers
                     Suspect = suspects[i]                    
                 });
                 game.GameSuspects[0].isMurderer = true;            
+            }
+
+            //Random Clues
+            var clues = _dbContext.Clues.ToList();
+            game.GameClues = new List<GameClue>();
+            for (int i = 0; i < amtGame; i++)
+            {
+                game.GameClues.Add(new GameClue
+                {
+                    Clue = clues[i]
+                });
             }
             
             _dbContext.Games.Add(game);

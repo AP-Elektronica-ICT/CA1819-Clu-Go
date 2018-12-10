@@ -11,10 +11,13 @@ namespace ClueGoTesting.Models
     {
         
         [Key]
-        public long ClueId { get; set; }
+        public int ClueId { get; set; }
         public string ClueName { get; set; }
         public string ClueDescription { get; set; }
         public string ClueImgUrl { get; set; }
         public bool Found { set; get; }
+
+        public ICollection<GameClue> GameClues { get; set; }
+
     }
 }
