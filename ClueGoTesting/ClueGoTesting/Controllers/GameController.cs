@@ -55,8 +55,8 @@ namespace ClueGoTesting.Controllers
                             .ToList());
         }
 
-        [HttpGet("create/{amtGame}")]
-        public ActionResult<Game> CreateGame(int amtGame)
+        [HttpGet("create/{amtGame}/{userId}")]
+        public ActionResult<Game> CreateGame(int amtGame, int userId)
         {
             var game = new Game();
 
@@ -102,7 +102,10 @@ namespace ClueGoTesting.Controllers
                     Clue = clues[i]
                 });
             }
-            
+
+            var user = _dbContext.Users.SingleOrDefault(x => x.UserId == userId);
+            game.User = user;
+
             _dbContext.Games.Add(game);
             _dbContext.SaveChanges();
 

@@ -33,6 +33,7 @@ namespace ClueGoTesting.Data
             modelBuilder.Entity<GameLocation>().ToTable("GameLocations");
             modelBuilder.Entity<GameSuspect>().ToTable("GameSuspects");
 
+            //Games and Location Many - Many
             modelBuilder.Entity<GameLocation>()
                 .HasKey(t => new { t.GameId, t.LocId });
             modelBuilder.Entity<GameLocation>()
@@ -44,19 +45,19 @@ namespace ClueGoTesting.Data
                 .WithMany(gl => gl.GameLocations)
                 .HasForeignKey(pt => pt.LocId);
 
-
+            //Games and Suspects Many - Many
             modelBuilder.Entity<GameSuspect>()
                 .HasKey(t => new { t.GameId, t.SusId });
             modelBuilder.Entity<GameSuspect>()
                 .HasOne(x => x.Game)
                 .WithMany(x => x.GameSuspects)
                 .HasForeignKey(x => x.GameId);
-
             modelBuilder.Entity<GameSuspect>()
                 .HasOne(s => s.Suspect)
                 .WithMany(gs => gs.GameSuspects)
                 .HasForeignKey(pt => pt.SusId);
 
+            //Clues and Games Many - Many
             modelBuilder.Entity<GameClue>()
                 .HasKey(t => new { t.GameId, t.ClueId });
             modelBuilder.Entity<GameClue>()
@@ -67,6 +68,13 @@ namespace ClueGoTesting.Data
                 .HasOne(s => s.Clue)
                 .WithMany(gs => gs.GameClues)
                 .HasForeignKey(pt => pt.ClueId);
+
+            //User Many games, game has 1 user
+            modelBuilder.Entity<User>()
+                .HasMany(c => c.Games)
+                .WithOne(e => e.User)
+                .HasForeignKey(c => c.GameId)
+                .IsRequired();
         }
 
     }

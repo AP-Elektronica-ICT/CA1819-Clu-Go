@@ -15,5 +15,8 @@ namespace ClueGoTesting.Models
         public IList<GameSuspect> GameSuspects { get; set; }
         public ICollection<GameClue> GameClues { get; set; }
 
+        public User User { get; set; }
+        public int UserId { get; set; }
+
     }
 }

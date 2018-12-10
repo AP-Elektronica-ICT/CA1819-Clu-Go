@@ -13,10 +13,10 @@ namespace ClueGoTesting.Models
         public string Password { get; set; }
         public string Email { get; set; }
 
-        List<Game> GameList = new List<Game>();
+        public ICollection<Game> Games { get; set; }
         //PK
         [Key]
-        public long UserId { get; set; }
+        public int UserId { get; set; }
 
     }
 }

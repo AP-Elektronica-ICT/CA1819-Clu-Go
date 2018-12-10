@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using ClueGoTesting.Models;
 using System.Text;
 using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClueGoTesting.Data
 {
@@ -26,16 +27,21 @@ namespace ClueGoTesting.Data
         [HttpGet]
         public ActionResult<List<User>> GetAll()
         {
-            return _dbContext.Users.ToList();
+            return _dbContext.Users
+                        .Include(x => x.Games)
+                        .ToList();
         }
         
 
         [HttpGet("{userId}")]
-        public ActionResult<User> GetById(long userId)
+        public ActionResult<User> GetById(int userId)
         {
             var item = _dbContext.Users.Find(userId);
 
-            return item;
+            return Ok(_dbContext.Users
+                .Include(x => x.Games)
+                .Where(x => x.UserId == userId)
+                .ToList());
         }
 
         [HttpGet("inlog/{username}/{password}")]
