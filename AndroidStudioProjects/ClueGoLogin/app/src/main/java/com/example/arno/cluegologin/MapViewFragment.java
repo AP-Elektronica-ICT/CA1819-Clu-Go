@@ -176,12 +176,13 @@ public class MapViewFragment extends Fragment {
                             if(distance<20 && hasBeen==false){
                                 hasBeen=true;
                                 if(destMarker.getTitle().equals("Politiekantoor")){
-
                                     Intent intent = new Intent(getActivity(), GuessActivity.class);
                                     startActivity(intent);
                                 }
                                 Log.e("toast","locations are the same");
 
+                                Intent intent = new Intent(getActivity(), PuzzleActivity.class);
+                                startActivity(intent);
                                 Toast.makeText(getActivity(),"You have arrived at your destination",Toast.LENGTH_LONG).show();
                                 Intent i = new Intent(getActivity(), PuzzleActivity.class);
 
@@ -239,7 +240,7 @@ public class MapViewFragment extends Fragment {
                         View v = getLayoutInflater().inflate(R.layout.custom_window_info,null);
                         TextView distanceText = (TextView)v.findViewById(R.id.distance);
                         TextView titleText = (TextView)v.findViewById(R.id.title);
-                        distanceText.setText(String.format("%.2f",dist)+" meters");
+                        distanceText.setText(String.format(Math.round(dist)+" meters"));
                         titleText.setText(marker.getTitle());
                         return v;
                     }

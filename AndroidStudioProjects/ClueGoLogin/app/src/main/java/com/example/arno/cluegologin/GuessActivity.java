@@ -32,7 +32,7 @@ public class GuessActivity extends AppCompatActivity {
     String suspectGuess;
     ListView listview;
     String murderer;
-    private String url = "https://cluegotesting.conveyor.cloud/api/suspect";
+    private String url = "https://cluego.azurewebsites.net/api/suspect";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
