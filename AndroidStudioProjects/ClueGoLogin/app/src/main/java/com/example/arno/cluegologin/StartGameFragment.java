@@ -19,7 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -42,6 +42,7 @@ public class StartGameFragment extends Fragment {
     TextView gameinfo,serverinfo,instructions,longlat;
     Button startButton;
     RequestQueue mRequestQueue;
+    private String jsonResponse;
 
 
 
@@ -123,49 +124,94 @@ public class StartGameFragment extends Fragment {
 
 
     }
-    private void GetLocations(int UID){
+    
+    private void GetGame(int GID){
         Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
         Network network = new BasicNetwork(new HurlStack());
         mRequestQueue = new RequestQueue(cache, network);
-
         mRequestQueue.start();
-        String locationurl ="http://172.16.222.154:45455/api/game/getlocation/"+ UID;
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+
+        String gameurl ="https://cluego.azurewebsites.net/api/game/game/"+ GID;
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                locationurl, null,
-                new Response.Listener<JSONObject>() {
+                gameurl, null,
+
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(JSONArray response) {
+                        Log.d("tag",response.toString());
 
                         try{
-                            JSONArray array = response.getJSONArray("locations");
+                            JSONObject game = response.getJSONObject(0);
+                            int gameId = game.getInt("gameId");
+                            boolean gamewon = game.getBoolean("gameWon");
 
-                            for (int i =0;i<array.length();i++){
-                                JSONObject location = array.getJSONObject(i);
-                                String latitude = location.getString("loclat");
-                                String longtitude = location.getString("locLong");
-                                String Description = location.getString("locDescription");
+                            jsonResponse ="";
+                            jsonResponse += "gameId: " +gameId +"\n";
+                            jsonResponse += "gameWon: " + gamewon +"\n";
 
-                                longlat.setText(latitude+ " " + longtitude + "  " + Description);
-                            }
+                            JSONArray gameLocations = game.getJSONArray("gameLocations");
 
+                                    for (int i = 0; i <gameLocations.length() ; i++) {
+                                        JSONObject gameLocation = (JSONObject) gameLocations.get(i);
+
+                                            // int gameIdGameLoc = gameLocation.getInt("gameId");
+                                            int locId = gameLocation.getInt("locId");
+                                            jsonResponse += "locId: "+ locId + "\n";
+                                        JSONObject location =  gameLocation.getJSONObject("location");
+
+                                            double latitude = location.getDouble("locLat");
+                                            double longtitude = location.getDouble("locLong");
+                                            String desciption = location.getString("locDescription");
+                                            String name = location.getString("locName");
+
+                                        jsonResponse += "name: "+name +" lat: "  + latitude + " long: " +longtitude +"\n";
+
+                                    }
+
+                            JSONArray gameSuspects = game.getJSONArray("gameSuspects");
+                                    for (int i = 0; i <gameSuspects.length() ; i++) {
+                                        JSONObject gamesuspect = (JSONObject) gameSuspects.get(i);
+
+                                            //  int gameIdSuspect = gamesuspect.getInt("gameId");
+                                            int susId = gamesuspect.getInt("susId");
+                                            Boolean isMurderer = gamesuspect.getBoolean("isMurderer");
+
+                                            JSONObject suspect = gamesuspect.getJSONObject("suspect");
+
+                                            String suspectname = suspect.getString("susName");
+                                            String susdescription = suspect.getString("susDescription");
+                                            String susWeapon = suspect.getString("susWeapon");
+                                            String susImgUrl = suspect.getString("susImgUrl");
+                                        jsonResponse += "name:  "  + suspectname + " description: " + susdescription+ " weapon: "+ susWeapon + "\n";
+
+                                    }
+
+                            serverinfo.setText(jsonResponse);
                         }
                         catch(JSONException e){
                             e.printStackTrace();
                         }
-
-
                     }
                 },
+
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Log.d("error",error.toString());
                     }
                 }
         );
+        jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        mRequestQueue.add(jsonArrayRequest);
 
     }
+    
 
 
 
@@ -193,10 +239,11 @@ public class StartGameFragment extends Fragment {
             public void onClick(View view) {
 
                 randomInt = new Random().nextInt(5);
-                StartGame(2,randomInt);
-                ShowGameInfo(randomInt);
+                //StartGame(2,randomInt);
+                //ShowGameInfo(randomInt);
                 instructions.setVisibility(View.VISIBLE);
                 //GetLocations(3);
+                GetGame(1);
             }
         });
 
