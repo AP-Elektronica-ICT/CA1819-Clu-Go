@@ -55,7 +55,7 @@ namespace ClueGoTesting.Data
                 return Content("Email does not match password");
             }
 
-            return Ok("Log in succesful");
+            return Ok(item.UserId.ToString());
         }
 
 

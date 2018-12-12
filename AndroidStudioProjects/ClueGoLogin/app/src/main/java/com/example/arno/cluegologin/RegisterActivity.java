@@ -32,7 +32,7 @@ public class RegisterActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getName();
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
-    private String url= "https://cluego.azurewebsites.net/api/user/register";
+    private String url= "https://cluego.azurewebsites.net/api/user";
 
 
 
@@ -82,18 +82,18 @@ public class RegisterActivity extends Activity {
     }
 
     public void RegisterNewUser(View view) {
-        //ValidatingUserInput(view);
-        //PostRequest();
-        //hideKeyBoard();
+        ValidatingUserInput(view);
+        PostRequest();
+        hideKeyBoard();
         getUserList();
     }
 
 
     private void PostRequest() {
-        EditText _username = (EditText) findViewById(R.id.reg_username);
-        EditText _password = (EditText) findViewById(R.id.reg_password);
-        EditText _dupPassword = (EditText) findViewById(R.id.dup_password);
-        EditText _email = (EditText) findViewById(R.id.reg_email);
+        EditText _username = findViewById(R.id.reg_username);
+        EditText _password = findViewById(R.id.reg_password);
+        EditText _dupPassword = findViewById(R.id.dup_password);
+        EditText _email = findViewById(R.id.reg_email);
         String username = _username.getText().toString().trim();
         String password = _password.getText().toString().trim();
         String dupPassword = _dupPassword.getText().toString().trim();
@@ -109,8 +109,10 @@ public class RegisterActivity extends Activity {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d("response", response.toString());
-                TextView tv = (TextView)findViewById(R.id.link_to_login);
-                Toast.makeText(getApplicationContext(), "Register successful!", Toast.LENGTH_SHORT).show();
+                TextView tv = findViewById(R.id.link_to_login);
+                String tekst = response.toString();
+                tv.setText(tekst);
+                //Toast.makeText(getApplicationContext(), "Register successful!", Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -128,7 +130,7 @@ public class RegisterActivity extends Activity {
             @Override
             public void onResponse(String response) {
                 Log.i(TAG,"Response: " + response.toString());
-                TextView tv = (TextView)findViewById(R.id.link_to_login);
+                TextView tv = findViewById(R.id.link_to_login);
                 tv.setText(response.toString());
             }
         }, new Response.ErrorListener() {

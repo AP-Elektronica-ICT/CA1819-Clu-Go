@@ -7,12 +7,15 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,9 +59,11 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
-    private String url= "http://192.168.1.10:45455/api/user";
-
+    private String url= "https://cluego.azurewebsites.net/api/user";
     CallbackManager callbackManager;
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -90,8 +96,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //progressBar.setVisibility(View.VISIBLE);
+
         //===============Facebook Login====================================
         callbackManager = CallbackManager.Factory.create();
 
@@ -141,9 +151,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-               login();
                attemptLogin();
-
+                final ProgressBar progressBar = findViewById(R.id.progress_bar);
+                //progressBar.setVisibility(View.VISIBLE);
             }
         });
         
@@ -155,21 +165,48 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 startActivity(mainActivity);
             }
         });
-
-
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
-    private void login(){
-        String email = mEmailView.getText().toString();
-        Intent intent = new Intent(this, StartGameFragment.class);
 
-        if (email == "Admin") {
-            this.startActivity(intent);
-            Toast toast = Toast.makeText(this, "test", Toast.LENGTH_SHORT);
-            toast.show();
-        }
+    private void attemptLogin() {
+
+        TextView tv = findViewById(R.id.logging);
+        tv.setText("Logging in...");
+        String email = mEmailView.getText().toString().trim();
+        String password = mPasswordView.getText().toString();
+
+        mRequestQueue = Volley.newRequestQueue(this);
+        String url= "https://cluego.azurewebsites.net/api/user/inlog/"+email+"/"+password;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor editor = preferences.edit();
+
+        stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("LoginActivity", response);
+                TextView tv = findViewById(R.id.logging);
+                tv.setText(response);
+                String value = response;
+                editor.putString("UID", value);
+                editor.apply();
+
+                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(i);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("Error.response", error.toString());
+                TextView tv = (TextView)findViewById(R.id.logging);
+                tv.setText("Username or pasword incorrect!");
+            }
+        });
+        mRequestQueue.add(stringRequest);
+        hideKeyBoard();
     }
+
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
@@ -219,34 +256,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
 
-        mRequestQueue = Volley.newRequestQueue(this);
-        String url= "http://192.168.1.10:45455/api/user/inlog/"+email+"/"+password;
-
-        stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.i(response, response.toString());
-                TextView tv = (TextView)findViewById(R.id.link_to_login);
-                tv.setText(response);
-                String value = response;
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("Error.response", error.toString());
-                TextView tv = (TextView)findViewById(R.id.link_to_login);
-                tv.setText("Username or pasword incorrect!");
-            }
-        });
-        mRequestQueue.add(stringRequest);
-        hideKeyBoard();
-        Toast toast = Toast.makeText(this, email, Toast.LENGTH_SHORT);
-        toast.show();
-    }
 
     public void hideKeyBoard(){
         try  {
@@ -255,51 +265,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } catch (Exception e) {
         }
     }
-      /*  if (mAuthTask != null) {
-            return;
-        }
 
-        // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
-
-        // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
-
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
-        }
-    }*/
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic

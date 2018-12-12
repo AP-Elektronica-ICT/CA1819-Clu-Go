@@ -1,6 +1,8 @@
 package com.example.arno.cluegologin;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,10 +31,12 @@ import org.json.JSONObject;
 
 import java.util.Random;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.facebook.FacebookSdk.getCacheDir;
 
 
 public class StartGameFragment extends Fragment {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public StartGameFragment() {
@@ -58,7 +62,7 @@ public class StartGameFragment extends Fragment {
         /* Start the queue */
         mRequestQueue.start();
 
-        String urlGameInfo ="https://cluego.azurewebsites.net/api/game/game/2";
+        String urlGameInfo ="https://cluego.azurewebsites.net/api/game/game/"+GID;
 
         // Formulate the request and handle the response.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlGameInfo,
@@ -127,13 +131,13 @@ public class StartGameFragment extends Fragment {
 
     }
     
-    private void GetGame(int GID){
+    private void GetGame(String GID){
         Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
         Network network = new BasicNetwork(new HurlStack());
         mRequestQueue = new RequestQueue(cache, network);
         mRequestQueue.start();
-
         String gameurl ="https://cluego.azurewebsites.net/api/game/game/"+ GID;
+
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
@@ -144,6 +148,8 @@ public class StartGameFragment extends Fragment {
                     public void onResponse(JSONArray response) {
                         Log.d("tag",response.toString());
 
+                        ProgressBar loadCircle = getView().findViewById(R.id.progress_bar);
+                        loadCircle.setVisibility(View.GONE);
                         try{
                             JSONObject game = response.getJSONObject(0);
                             int gameId = game.getInt("gameId");
@@ -223,6 +229,7 @@ public class StartGameFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         // Inflate the layout for this fragment
 
@@ -240,6 +247,7 @@ public class StartGameFragment extends Fragment {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 gameinfo.setText(" ");
                 loadCircle.setVisibility(View.VISIBLE);
                 randomInt = new Random().nextInt(5);
@@ -247,7 +255,8 @@ public class StartGameFragment extends Fragment {
                 //ShowGameInfo(randomInt);
                 instructions.setVisibility(View.VISIBLE);
                 //GetLocations(3);
-                GetGame(1);
+                String UID = preferences.getString("UID", "");
+                GetGame(UID);
 
             }
         });
