@@ -243,19 +243,12 @@ public class StartGameFragment extends Fragment {
                 gameinfo.setText(" ");
                 loadCircle.setVisibility(View.VISIBLE);
                 randomInt = new Random().nextInt(5);
-<<<<<<< HEAD
                 //StartGame(2,randomInt);
                 //ShowGameInfo(randomInt);
                 instructions.setVisibility(View.VISIBLE);
                 //GetLocations(3);
                 GetGame(1);
-=======
-                StartGame(2,randomInt);
-                ShowGameInfo(randomInt);
-                //instructions.setVisibility(View.VISIBLE);
-                //GetLocations(3);
 
->>>>>>> creategame
             }
         });
 
