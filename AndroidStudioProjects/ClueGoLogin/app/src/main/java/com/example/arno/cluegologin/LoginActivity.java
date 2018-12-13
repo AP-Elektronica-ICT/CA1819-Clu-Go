@@ -47,6 +47,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.facebook.share.Share;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -256,7 +257,41 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
+    private void attemptLogin() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor editor = preferences.edit();
 
+        String email = mEmailView.getText().toString();
+        String password = mPasswordView.getText().toString();
+
+        mRequestQueue = Volley.newRequestQueue(this);
+        String url= "https://cluego.azurewebsites.net/api/user/inlog/"+email+"/"+password;
+
+        stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i(response, response.toString());
+                TextView tv = (TextView)findViewById(R.id.link_to_login);
+                tv.setText(response);
+                editor.putString("UID", response);
+                editor.apply();
+
+                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(i);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("Error.response", error.toString());
+                TextView tv = (TextView)findViewById(R.id.link_to_login);
+                tv.setText("Username or pasword incorrect!");
+            }
+        });
+        mRequestQueue.add(stringRequest);
+        hideKeyBoard();
+        Toast toast = Toast.makeText(this, email, Toast.LENGTH_SHORT);
+        toast.show();
+    }
 
     public void hideKeyBoard(){
         try  {
