@@ -1,7 +1,9 @@
 package com.example.arno.cluegologin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -44,12 +46,9 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-
                     switchToGame();
-
                     return true;
                 case R.id.navigation_suspects:
-
                     switchToSuspect();
                     return true;
                 case  R.id.navigation_inventory:
@@ -78,11 +77,13 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String UID = preferences.getString("UID", "");
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        GetGame(UID);
+
         startOfGame();
-        GetGame(3);
     }
 
     @Override
@@ -95,8 +96,8 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
     public void onInputMapSent(JSONObject game) {
 
     }
-    public void GetGame(int GID) {
-        GID=3;
+    public void GetGame(String GID) {
+
         Log.e("GetGameMain", "GetGame: in de mainact" );
             Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
             Network network = new BasicNetwork(new HurlStack());
@@ -208,13 +209,7 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
 
 
                                     gameFromDatabase.setClues(clueFromDatabase);
-
-
                                 }
-
-                                //serverinfo.setText(jsonResponse);
-
-
                                 bundle = new Bundle();
                                 bundle.putSerializable("game", gameFromDatabase);
                                 Log.e("bundleOpvragen", "onResponse: " + bundle);
@@ -246,7 +241,6 @@ public void sendBunble(Fragment _fragmap, Bundle _bundle){
     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
     Fragment fragmap = _fragmap;
 
-
     fragmap.setArguments(_bundle);
 
     ft.replace(R.id.fragment_container, fragmap);
@@ -254,31 +248,20 @@ public void sendBunble(Fragment _fragmap, Bundle _bundle){
     ft.commit();
 }
     public void startOfGame() {
-
-         FragmentManager manager = getSupportFragmentManager();
+        FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction().replace(R.id.fragment_container, new StartGameFragment()).addToBackStack(null).commit();
-
-
     }
     public void switchToGame() {
         sendBunble(mapViewFragment,bundle);
-        //GetGame(3,mapViewFragment);
-      //  FragmentManager manager = getSupportFragmentManager();
-       // manager.beginTransaction().replace(R.id.fragment_container, new MapViewFragment()).addToBackStack(null).commit();
-
     }
 
     public void switchToSuspect(){
-        //GetGame(3,suspectFragment);
         sendBunble(suspectFragment,bundle);
-       // FragmentManager manager = getSupportFragmentManager();
-       // manager.beginTransaction().replace(R.id.fragment_container, new SuspectFragment()).addToBackStack(null).commit();
+
     }
 
     public void switchToInventory(){
-       // GetGame(3,inventoryFragment);
-      //  FragmentManager manager = getSupportFragmentManager();
-      //  manager.beginTransaction().replace(R.id.fragment_container, new InventoryFragment()).addToBackStack(null).commit();
+       sendBunble(inventoryFragment, bundle);
     }
 
     public void switchToStats(){
@@ -290,7 +273,4 @@ public void sendBunble(Fragment _fragmap, Bundle _bundle){
         Intent intent = new Intent(this, PuzzleActivity.class );
         startActivity(intent);
     }
-
-
-
 }

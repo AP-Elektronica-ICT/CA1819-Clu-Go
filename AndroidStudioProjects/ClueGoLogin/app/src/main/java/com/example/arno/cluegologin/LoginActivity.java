@@ -7,12 +7,14 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -43,6 +45,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.facebook.share.Share;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -220,11 +223,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor editor = preferences.edit();
+
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         mRequestQueue = Volley.newRequestQueue(this);
-        String url= "http://192.168.1.10:45455/api/user/inlog/"+email+"/"+password;
+        String url= "https://cluego.azurewebsites.net/api/user/inlog/"+email+"/"+password;
 
         stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -232,7 +238,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Log.i(response, response.toString());
                 TextView tv = (TextView)findViewById(R.id.link_to_login);
                 tv.setText(response);
-                String value = response;
+                editor.putString("UID", response);
+                editor.apply();
+
+                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(i);
             }
         }, new Response.ErrorListener() {
             @Override
