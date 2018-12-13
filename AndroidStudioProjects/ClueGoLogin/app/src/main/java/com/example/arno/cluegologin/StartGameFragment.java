@@ -141,6 +141,7 @@ public class StartGameFragment extends Fragment {
     }
     
     private void GetGame(int GID){
+        Log.e("GetGameStart", "GetGame: in de startgamefragment" );
         Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
         Network network = new BasicNetwork(new HurlStack());
         mRequestQueue = new RequestQueue(cache, network);
@@ -329,7 +330,7 @@ public class StartGameFragment extends Fragment {
                 //ShowGameInfo(randomInt);
                 instructions.setVisibility(View.VISIBLE);
                 //GetLocations(3);
-                GetGame(3);
+                //GetGame(3);
 
                // StartGame(2,randomInt);
                 ShowGameInfo(randomInt);

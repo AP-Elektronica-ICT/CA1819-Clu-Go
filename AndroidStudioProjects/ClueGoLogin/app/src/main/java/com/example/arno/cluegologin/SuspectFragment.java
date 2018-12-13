@@ -3,6 +3,7 @@ package com.example.arno.cluegologin;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ public class SuspectFragment extends Fragment {
 
  @Override
  public  View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-
+     
   final View view = inflater.inflate(R.layout.suspect_list, container, false);
      final ListView listView = (ListView) view.findViewById(R.id.suspect_list_view);
      final ArrayList<String> Suspect_Names = new ArrayList<String>();
