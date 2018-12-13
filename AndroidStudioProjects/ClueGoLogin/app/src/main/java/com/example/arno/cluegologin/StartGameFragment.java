@@ -1,7 +1,9 @@
 package com.example.arno.cluegologin;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,10 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.example.arno.cluegologin.Objects.Clue;
+import com.example.arno.cluegologin.Objects.Game;
+import com.example.arno.cluegologin.Objects.Location;
+import com.example.arno.cluegologin.Objects.Suspect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +39,12 @@ import static com.facebook.FacebookSdk.getCacheDir;
 
 
 public class StartGameFragment extends Fragment {
+    private StartGameFragmentListener listener;
+
+    public interface StartGameFragmentListener{
+        void onInputGameSent(JSONObject game);
+    }
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public StartGameFragment() {
@@ -44,6 +56,7 @@ public class StartGameFragment extends Fragment {
     Button startButton;
     RequestQueue mRequestQueue;
     private String jsonResponse;
+    Game gameFromDatabase =new Game();
 
 
 
@@ -145,13 +158,20 @@ public class StartGameFragment extends Fragment {
                         Log.d("tag",response.toString());
 
                         try{
+
                             JSONObject game = response.getJSONObject(0);
-                            int gameId = game.getInt("gameId");
-                            boolean gamewon = game.getBoolean("gameWon");
+                            //Save game across fragments in bundle.
+
+
+
+
+
+                            gameFromDatabase.setGameId(game.getInt("gameId"));
+                            gameFromDatabase.setGameWon(game.getBoolean("gameWon"));
 
                             jsonResponse ="";
-                            jsonResponse += "gameId: " +gameId +"\n";
-                            jsonResponse += "gameWon: " + gamewon +"\n";
+                            jsonResponse += "gameId: " +gameFromDatabase.getGameId() +"\n";
+                            jsonResponse += "gameWon: " + gameFromDatabase.getGameWon() +"\n";
 
                             JSONArray gameLocations = game.getJSONArray("gameLocations");
 
@@ -160,7 +180,9 @@ public class StartGameFragment extends Fragment {
 
                                             // int gameIdGameLoc = gameLocation.getInt("gameId");
                                             int locId = gameLocation.getInt("locId");
+
                                             jsonResponse += "locId: "+ locId + "\n";
+
                                         JSONObject location =  gameLocation.getJSONObject("location");
 
                                             double latitude = location.getDouble("locLat");
@@ -168,29 +190,88 @@ public class StartGameFragment extends Fragment {
                                             String desciption = location.getString("locDescription");
                                             String name = location.getString("locName");
 
-                                        jsonResponse += "name: "+name +" lat: "  + latitude + " long: " +longtitude +"\n";
+                                        Location locationFromDatabase = new Location();
+                                        locationFromDatabase.setLocDescription(location.getString("locDescription"));
+                                        locationFromDatabase.setLocName(location.getString("locName"));
+                                        locationFromDatabase.setLocLat(location.getDouble("locLat"));
+                                        locationFromDatabase.setLoclong(location.getDouble("locLong"));
+
+
+                                        gameFromDatabase.setLocations(locationFromDatabase);
+                                        jsonResponse += "name: "+locationFromDatabase.getLocName() +" lat: "  + locationFromDatabase.getLocLat() + " long: " +locationFromDatabase.getLoclong() +"\n";
 
                                     }
 
-                            JSONArray gameSuspects = game.getJSONArray("gameSuspects");
+
+                        JSONArray gameSuspects = game.getJSONArray("gameSuspects");
+
                                     for (int i = 0; i <gameSuspects.length() ; i++) {
                                         JSONObject gamesuspect = (JSONObject) gameSuspects.get(i);
 
-                                            //  int gameIdSuspect = gamesuspect.getInt("gameId");
-                                            int susId = gamesuspect.getInt("susId");
-                                            Boolean isMurderer = gamesuspect.getBoolean("isMurderer");
+                                        //  int gameIdSuspect = gamesuspect.getInt("gameId");
+                                        int susId = gamesuspect.getInt("susId");
+                                        Boolean isMurderer = gamesuspect.getBoolean("isMurderer");
 
-                                            JSONObject suspect = gamesuspect.getJSONObject("suspect");
+                                        JSONObject suspect = gamesuspect.getJSONObject("suspect");
 
-                                            String suspectname = suspect.getString("susName");
-                                            String susdescription = suspect.getString("susDescription");
-                                            String susWeapon = suspect.getString("susWeapon");
-                                            String susImgUrl = suspect.getString("susImgUrl");
-                                        jsonResponse += "name:  "  + suspectname + " description: " + susdescription+ " weapon: "+ susWeapon + "\n";
+                                        String suspectname = suspect.getString("susName");
+                                        String susdescription = suspect.getString("susDescription");
+                                        String susWeapon = suspect.getString("susWeapon");
+                                        String susImgUrl = suspect.getString("susImgUrl");
+
+                                        Suspect suspectFromDatabase = new Suspect();
+                                        suspectFromDatabase.setMurderer(gamesuspect.getBoolean("isMurderer"));
+                                        suspectFromDatabase.setSusDescription(suspect.getString("susDescription"));
+                                        suspectFromDatabase.setSusWeapon(suspect.getString("susWeapon"));
+                                        suspectFromDatabase.setSusImgUrl(suspect.getString("susImgUrl"));
+                                        suspectFromDatabase.setSusName(suspect.getString("susName"));
+
+                                        gameFromDatabase.setSuspects(suspectFromDatabase);
+
+                                        jsonResponse += "name:  " + suspectname + " description: " + susdescription + " weapon: " + susWeapon + "\n";
 
                                     }
 
+                        JSONArray gameClues = game.getJSONArray("gameClues");
+
+                                    for (int i = 0; i <gameClues.length(); i++) {
+
+                                            JSONObject gameClue = (JSONObject) gameClues.get(i);
+                                            int clueId = gameClue.getInt("clueId");
+
+                                            JSONObject clue = gameClue.getJSONObject("clue");
+                                            String clueName = clue.getString("clueName");
+                                            String clueDescription = clue.getString("clueDescription");
+                                            String clueImgUrl = clue.getString("clueImgUrl");
+                                            Boolean found = clue.getBoolean("found");
+
+                                             Clue clueFromDatabase = new Clue();
+
+                                             clueFromDatabase.setClueDescription(clue.getString("clueDescription"));
+                                            clueFromDatabase.setClueId(clue.getInt("clueId"));
+                                            clueFromDatabase.setClueImgUrl(clue.getString("clueImgUrl"));
+                                            clueFromDatabase.setClueName(clue.getString("clueName"));
+                                            clueFromDatabase.setFound(clue.getBoolean("found"));
+
+
+                                            gameFromDatabase.setClues(clueFromDatabase);
+
+
+                                            }
+
                             serverinfo.setText(jsonResponse);
+
+                            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                            MapViewFragment fragmap = new MapViewFragment();
+
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("game",gameFromDatabase);
+                            fragmap.setArguments(bundle);
+                           // ft.replace(R.id.fragment_container,fragmap);
+                            ft.addToBackStack(null);
+                            ft.commit();
+
                         }
                         catch(JSONException e){
                             e.printStackTrace();
@@ -243,19 +324,19 @@ public class StartGameFragment extends Fragment {
                 gameinfo.setText(" ");
                 loadCircle.setVisibility(View.VISIBLE);
                 randomInt = new Random().nextInt(5);
-<<<<<<< HEAD
+
                 //StartGame(2,randomInt);
                 //ShowGameInfo(randomInt);
                 instructions.setVisibility(View.VISIBLE);
                 //GetLocations(3);
-                GetGame(1);
-=======
-                StartGame(2,randomInt);
+                GetGame(3);
+
+               // StartGame(2,randomInt);
                 ShowGameInfo(randomInt);
                 //instructions.setVisibility(View.VISIBLE);
                 //GetLocations(3);
 
->>>>>>> creategame
+
             }
         });
 
@@ -264,6 +345,26 @@ public class StartGameFragment extends Fragment {
 
     }
 
+    public void updateGame(JSONObject newGame){
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(context instanceof StartGameFragmentListener){
+            listener =(StartGameFragmentListener) context;
+        }else{
+            throw new RuntimeException(context.toString()
+                    +"mustimplement StartGameFragmentListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener =null;
+    }
     ///////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////
 

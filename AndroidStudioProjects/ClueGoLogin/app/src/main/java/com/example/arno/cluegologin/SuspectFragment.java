@@ -3,26 +3,17 @@ package com.example.arno.cluegologin;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.arno.cluegologin.Objects.Game;
+import com.example.arno.cluegologin.Objects.Suspect;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SuspectFragment extends Fragment {
 
@@ -45,7 +36,36 @@ public class SuspectFragment extends Fragment {
  public  View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
   final View view = inflater.inflate(R.layout.suspect_list, container, false);
-  final ArrayList<String> Suspect_Names = new ArrayList<String>();
+     final ListView listView = (ListView) view.findViewById(R.id.suspect_list_view);
+     final ArrayList<String> Suspect_Names = new ArrayList<String>();
+
+     Bundle bundle = getArguments();
+     Game currentGame = (Game) bundle.getSerializable("game");
+
+    List<Suspect> suspects = currentGame.getSuspects();
+
+
+     for (int i = 0; i <suspects.size() ; i++) {
+
+         Suspect suspect = suspects.get(i);
+         String name = suspect.getSusName();
+         String weapon = suspect.getSusWeapon();
+         String description = suspect.getSusDescription();
+         Suspect_Names.add(name);
+
+
+     }
+     ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
+             getActivity(),
+             android.R.layout.simple_list_item_1,
+             Suspect_Names);
+     listView.setAdapter(listViewAdapter);
+
+
+
+
+
+  /*final ArrayList<String> Suspect_Names = new ArrayList<String>();
 
   final ArrayList<String> Suspect_Descriptions = new ArrayList<String>();
 
@@ -95,7 +115,7 @@ public class SuspectFragment extends Fragment {
                              view.setBackgroundColor(Color.GRAY);
                              return true;
                          }
-                     });*/
+                     });
                  }
 
              } catch (JSONException e){
@@ -109,7 +129,7 @@ public class SuspectFragment extends Fragment {
          }
      });
      mRequestQueue.add(stringRequest);
-
+*/
 
   return view;
  }

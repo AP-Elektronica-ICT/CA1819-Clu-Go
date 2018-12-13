@@ -8,14 +8,10 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,41 +20,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Cache;
-import com.android.volley.Network;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.facebook.places.Places;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationAvailability;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
+import com.example.arno.cluegologin.Objects.Game;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -70,12 +46,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-import static com.facebook.FacebookSdk.getAutoLogAppEventsEnabled;
-import static com.facebook.FacebookSdk.getCacheDir;
-
 
 public class MapViewFragment extends Fragment {
+    private MapFragmentListener listener;
+    public interface MapFragmentListener{
+        void onInputMapSent(JSONObject game);
+    }
+
+
     boolean hasBeen;
     Marker destMarker;
     MapView mMapView;
@@ -86,12 +64,15 @@ public class MapViewFragment extends Fragment {
     private final static int LOCATION_REQUEST_CODE = 101;
     private GoogleMap googleMap;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    public JSONObject gameFromStartGameFragment;
 
     private String url ="https://cluego.azurewebsites.net/api/location";
     //private String url = "https://cluegotesting.conveyor.cloud/api/location";
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_maps, container, false);
+
+
 
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
@@ -105,6 +86,13 @@ public class MapViewFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+/*
+        String game = getArguments().toString();
+        try{JSONObject gameObject = new JSONObject(game);
+        Log.d("game",gameObject.toString());}
+        catch(JSONException e){
+
+        }*/
 
         mMapView.getMapAsync(new OnMapReadyCallback() {
 
@@ -114,37 +102,26 @@ public class MapViewFragment extends Fragment {
                 requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_REQUEST_CODE);
                 // For showing a move to my location button
 
-                    mRequestQueue = Volley.newRequestQueue(getActivity());
-                    stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.i("Map","Response: " + response.toString());
-                            try {
-                                JSONArray locationList = new JSONArray(response);
-                                for (int i = 0; i <= locationList.length(); i++)
-                                {
-                                    JSONObject singleLoc =new JSONObject(locationList.getString(i));
-                                    final String locName = singleLoc.getString("locName");
-                                    Double locLat = singleLoc.getDouble("locLat");
-                                    Double locLong = singleLoc.getDouble("locLong");
-                                    googleMap.addMarker(new MarkerOptions()
-                                            .position(new LatLng(locLat, locLong))
-                                            .title(locName));
+                Bundle bundle = getArguments();
+                Game gameFromStart = (Game) bundle.getSerializable("game");
 
+                List<com.example.arno.cluegologin.Objects.Location> locationsFromGame = gameFromStart.getLocations();
 
-                                    Log.d("String","lat: " + locLat.toString() +"long: " + locLong.toString());
-                                }
-                            } catch (JSONException e){
-                                e.printStackTrace();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.i("yoyoyo", "Error: " + error.toString());
-                        }
-                    });
-                    mRequestQueue.add(stringRequest);
+                for (int i = 0; i <locationsFromGame.size() ; i++) {
+
+                    com.example.arno.cluegologin.Objects.Location loc = locationsFromGame.get(i);
+
+                    double locLat = loc.getLocLat();
+                    double locLng = loc.getLoclong();
+                    String locName = loc.getLocName();
+
+;
+
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(locLat, locLng))
+                            .title(locName));
+                }
+
 
 
 
@@ -262,6 +239,25 @@ public class MapViewFragment extends Fragment {
 
 
         return rootView;
+    }
+    public void updateGame(JSONObject newGame){
+        gameFromStartGameFragment = newGame;
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(context instanceof MapFragmentListener){
+            listener =(MapFragmentListener) context;
+        }else{
+            throw new RuntimeException(context.toString()
+                    +"mustimplement MapFragmentListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener =null;
     }
 
     protected void requestPermission(String permissionType, int requestCode) {
