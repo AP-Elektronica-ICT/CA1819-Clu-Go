@@ -12218,23 +12218,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Joppe\\.nuget\\packages\\": {},
+    "C:\\Users\\Arno\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Joppe\\Desktop\\cluegoffs\\CA1819-Clu-Go\\ClueGoTesting\\ClueGoTesting\\ClueGoTesting.csproj",
+      "projectUniqueName": "C:\\Users\\Arno\\Desktop\\CA1819-Clu-Go\\ClueGoTesting\\ClueGoTesting\\ClueGoTesting.csproj",
       "projectName": "ClueGoTesting",
-      "projectPath": "C:\\Users\\Joppe\\Desktop\\cluegoffs\\CA1819-Clu-Go\\ClueGoTesting\\ClueGoTesting\\ClueGoTesting.csproj",
-      "packagesPath": "C:\\Users\\Joppe\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Joppe\\Desktop\\cluegoffs\\CA1819-Clu-Go\\ClueGoTesting\\ClueGoTesting\\obj\\",
+      "projectPath": "C:\\Users\\Arno\\Desktop\\CA1819-Clu-Go\\ClueGoTesting\\ClueGoTesting\\ClueGoTesting.csproj",
+      "packagesPath": "C:\\Users\\Arno\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Arno\\Desktop\\CA1819-Clu-Go\\ClueGoTesting\\ClueGoTesting\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Joppe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Arno\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

@@ -1,6 +1,9 @@
 package com.example.arno.cluegologin;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,13 +35,17 @@ public class GuessActivity extends AppCompatActivity {
     String suspectGuess;
     ListView listview;
     String murderer;
-    private String url = "https://cluego.azurewebsites.net/api/suspect";
+    private String url = "https://clugo.azurewebsites.net/api/suspect";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guess);
         suspectList = new ArrayList<String>();
         mRequestQueue = Volley.newRequestQueue(this);
+
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final String UID = preferences.getString("UID","");
+
         stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -77,6 +84,9 @@ public class GuessActivity extends AppCompatActivity {
                 Log.d("suspectGuess", "onItemClick: " + suspectGuess);
                 if(suspectGuess.equals(murderer)){
                     Toast.makeText(getApplicationContext(),"you have quessed correctly",Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(GuessActivity.this, EndActivity.class);
+                    i.putExtra("UIDcurrent", UID);
+                    startActivity(i);
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"you have guessed incorrectly",Toast.LENGTH_LONG).show();

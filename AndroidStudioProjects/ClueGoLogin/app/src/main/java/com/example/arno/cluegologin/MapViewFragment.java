@@ -66,18 +66,13 @@ public class MapViewFragment extends Fragment {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     public JSONObject gameFromStartGameFragment;
 
-    private String url ="https://cluego.azurewebsites.net/api/location";
-    //private String url = "https://cluegotesting.conveyor.cloud/api/location";
+    private String url ="https://clugo.azurewebsites.net/api/location";
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_maps, container, false);
 
-
-
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
-
-
 
         mMapView.onResume(); // needed to get the map to display immediately
 
@@ -86,13 +81,6 @@ public class MapViewFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-/*
-        String game = getArguments().toString();
-        try{JSONObject gameObject = new JSONObject(game);
-        Log.d("game",gameObject.toString());}
-        catch(JSONException e){
-
-        }*/
 
         mMapView.getMapAsync(new OnMapReadyCallback() {
 
@@ -109,22 +97,17 @@ public class MapViewFragment extends Fragment {
 
                 for (int i = 0; i <locationsFromGame.size() ; i++) {
 
-                    com.example.arno.cluegologin.Objects.Location loc = locationsFromGame.get(i);
-
-                    double locLat = loc.getLocLat();
-                    double locLng = loc.getLoclong();
-                    String locName = loc.getLocName();
-
-;
+                    double locLat = locationsFromGame.get(i).getLocLat();
+                    double locLng = locationsFromGame.get(i).getLoclong();
+                    String locName = locationsFromGame.get(i).getLocName();
 
                     googleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(locLat, locLng))
                             .title(locName));
                 }
 
-
-
-
+                LatLng center1 = new LatLng(locationsFromGame.get(1).getLocLat(),locationsFromGame.get(1).getLoclong());
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(center1, 15));
 
                     if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -139,8 +122,7 @@ public class MapViewFragment extends Fragment {
                 final LocationListener locationListener = new LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) {
-                        LatLng center1 = new LatLng(location.getLatitude(),location.getLongitude());
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(center1, 15));
+
 
                         if(destMarker != null){
                             Location markerLoc = new Location("Destination");

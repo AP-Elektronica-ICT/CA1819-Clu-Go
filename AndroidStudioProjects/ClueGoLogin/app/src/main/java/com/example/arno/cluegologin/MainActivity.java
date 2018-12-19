@@ -35,7 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class MainActivity extends AppCompatActivity implements MapViewFragment.MapFragmentListener,StartGameFragment.StartGameFragmentListener {
+public class MainActivity extends AppCompatActivity implements MapViewFragment.MapFragmentListener {
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -82,19 +82,12 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         GetGame(UID);
-
-        startOfGame();
     }
 
-    @Override
-    public void onInputGameSent(JSONObject game) {
-
-        mapViewFragment.updateGame(game);
-    }
 
     @Override
     public void onInputMapSent(JSONObject game) {
-
+        mapViewFragment.updateGame(game);
     }
     public void GetGame(String GID) {
 
@@ -103,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
             Network network = new BasicNetwork(new HurlStack());
             mRequestQueue = new RequestQueue(cache, network);
             mRequestQueue.start();
-            String gameurl = "https://cluego.azurewebsites.net/api/game/game/" + GID;
+            String gameurl = "https://clugo.azurewebsites.net/api/game/" + GID;
 
             JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                     Request.Method.GET,
@@ -207,7 +200,6 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
                                     clueFromDatabase.setClueName(clue.getString("clueName"));
                                     clueFromDatabase.setFound(clue.getBoolean("found"));
 
-
                                     gameFromDatabase.setClues(clueFromDatabase);
                                 }
                                 bundle = new Bundle();
@@ -247,17 +239,13 @@ public void sendBunble(Fragment _fragmap, Bundle _bundle){
     ft.addToBackStack(null);
     ft.commit();
 }
-    public void startOfGame() {
-        FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.fragment_container, new StartGameFragment()).addToBackStack(null).commit();
-    }
+
     public void switchToGame() {
         sendBunble(mapViewFragment,bundle);
     }
 
     public void switchToSuspect(){
         sendBunble(suspectFragment,bundle);
-
     }
 
     public void switchToInventory(){

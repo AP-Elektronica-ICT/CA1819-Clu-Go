@@ -1,7 +1,9 @@
 package com.example.arno.cluegologin;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -42,19 +44,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.facebook.FacebookSdk.getCacheDir;
 
 
-public class StartGameFragment extends Fragment {
-    private StartGameFragmentListener listener;
-
-    public interface StartGameFragmentListener{
-        void onInputGameSent(JSONObject game);
-    }
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    public StartGameFragment() {
-        // Required empty public constructor
-    }
-
+public class StartGameFragment extends Activity {
     TextView gameinfo,serverinfo,instructions;
     Button startButton, continueBtn;
     RequestQueue mRequestQueue;
@@ -62,59 +52,50 @@ public class StartGameFragment extends Fragment {
     Game gameFromDatabase = new Game();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_start_of_game);
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // Inflate the layout for this fragment
+        gameinfo = findViewById(R.id.txt_info);
+        serverinfo = findViewById(R.id.txt_server_info);
+        startButton = findViewById(R.id.btn_start);
+        instructions = findViewById(R.id.txt_view_instructions);
+        final ProgressBar loadCircle = findViewById(R.id.progress_bar);
+        continueBtn = findViewById(R.id.btn_continue);
+        final String UID = preferences.getString("UID","");
 
-        View v =  inflater.inflate(R.layout.fragment_start_of_game, container, false);
-
-        gameinfo = v.findViewById(R.id.txt_info);
-        serverinfo = v.findViewById(R.id.txt_server_info);
-        startButton = v.findViewById(R.id.btn_start);
-        instructions = v.findViewById(R.id.txt_view_instructions);
-        final ProgressBar loadCircle = v.findViewById(R.id.progress_bar);
-        continueBtn = v.findViewById(R.id.btn_continue);
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String UID = preferences.getString("UID","");
                 gameinfo.setText(" ");
                 loadCircle.setVisibility(View.VISIBLE);
                 StartGame(UID);
-                //LoadGame(UID);
+
             }
         });
 
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String UID = preferences.getString("UID","");
                 gameinfo.setText(" ");
                 loadCircle.setVisibility(View.VISIBLE);
                 LoadGame(UID);
             }
         });
-
-
-        return v;
     }
-
-
-    // TODO: Rename and change types and number of parameters
 
     private void StartGame(final String UID){
         Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
         Network network = new BasicNetwork(new HurlStack());
         mRequestQueue = new RequestQueue(cache, network);
-        final ProgressBar loadCircle = getView().findViewById(R.id.progress_bar);
+        final ProgressBar loadCircle = findViewById(R.id.progress_bar);
 
         /* Start the queue */
         mRequestQueue.start();
 
-        String urlGameInfo ="https://cluego.azurewebsites.net/api/game/create/3/" + UID;
+        String urlGameInfo ="https://clugo.azurewebsites.net/api/game/create/3/" + UID;
 
         // Formulate the request and handle the response.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlGameInfo,
@@ -123,8 +104,10 @@ public class StartGameFragment extends Fragment {
                     public void onResponse(String response) {
                         Log.i(response,response.toString());
                         gameinfo.setText(response);
-
                         loadCircle.setVisibility(View.GONE);
+
+                        Intent i = new Intent(StartGameFragment.this, MainActivity.class);
+                        startActivity(i);
                     }
                 },
                 new Response.ErrorListener() {
@@ -146,22 +129,24 @@ public class StartGameFragment extends Fragment {
         Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
         Network network = new BasicNetwork(new HurlStack());
         mRequestQueue = new RequestQueue(cache, network);
-        final ProgressBar loadCircle = getView().findViewById(R.id.progress_bar);
+        final ProgressBar loadCircle = findViewById(R.id.progress_bar);
 
         /* Start the queue */
         mRequestQueue.start();
 
-        String urlGameInfo ="https://cluego.azurewebsites.net/api/game/game/" + UID;
+        String urlGameInfo ="https://clugo.azurewebsites.net/api/game/" + UID;
 
-        // Formulate the request and handle the response.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlGameInfo,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.i(response,response.toString());
+                        Log.i(response,response);
                         gameinfo.setText(response);
 
                         loadCircle.setVisibility(View.GONE);
+
+                        Intent i = new Intent(StartGameFragment.this, MainActivity.class);
+                        startActivity(i);
                     }
                 },
                 new Response.ErrorListener() {
@@ -177,25 +162,5 @@ public class StartGameFragment extends Fragment {
 
                 });
         mRequestQueue.add(stringRequest);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if(context instanceof StartGameFragmentListener){
-            listener =(StartGameFragmentListener) context;
-        }else{
-            throw new RuntimeException(context.toString()
-                    +"mustimplement StartGameFragmentListener");
-        }
-    }
-
-
-
-
-    public void onDetach() {
-        super.onDetach();
-        listener =null;
-
     }
 }

@@ -43,7 +43,7 @@ public class InventoryFragment extends Fragment {
     ArrayList<String> foundClueList;
     ListView listView;
 
-    private String url = "https://cluego.azurewebsites.net/api/clue";
+    private String url = "https://clugo.azurewebsites.net/api/clue";
     public InventoryFragment() {
         // Required empty public constructor
     }

@@ -40,38 +40,42 @@
             <!-- Full Name Label -->
             <EditText
                 android:id="@+id/reg_username"
-                android:hint="@string/prompt_username"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
-                android:singleLine="true" />
+                android:hint="@string/prompt_username"
+                android:singleLine="true"
+                android:text="test" />
             <!--  Email Label -->
             <EditText
                 android:id="@+id/reg_email"
-                android:hint="@string/prompt_email"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
-                android:singleLine="true" />
+                android:hint="@string/prompt_email"
+                android:singleLine="true"
+                android:text="test" />
             <!-- Password Label -->
 
             <EditText
                 android:id="@+id/reg_password"
-                android:hint="@string/prompt_password"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
+                android:hint="@string/prompt_password"
                 android:inputType="textPassword"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="123456" />
 
             <EditText
                 android:id="@+id/dup_password"
-                android:hint="@string/prompt_re_enter_password"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
+                android:hint="@string/prompt_re_enter_password"
                 android:inputType="textPassword"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="123456" />
             <!-- Register Button -->
             <!-- Register Button -->
             <!-- Link to Login Screen -->

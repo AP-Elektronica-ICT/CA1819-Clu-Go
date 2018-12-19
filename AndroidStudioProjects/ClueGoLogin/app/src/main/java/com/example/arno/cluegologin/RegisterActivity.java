@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -26,14 +27,16 @@ import org.json.JSONObject;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
+import java.util.regex.Pattern;
 
 public class RegisterActivity extends Activity {
 
     private static final String TAG = RegisterActivity.class.getName();
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
-    private String url= "https://cluego.azurewebsites.net/api/user";
-
+   // private String url= "https://azurewebsites.net/api/user";
+private String url ="https://clugo.azurewebsites.net/api/user";
 
 
     @Override
@@ -44,50 +47,56 @@ public class RegisterActivity extends Activity {
 
         TextView loginScreen = (TextView) findViewById(R.id.link_to_login);
 
-
         loginScreen.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                // Closing registration screen
-                // Switching to Login Screen/closing register screen
                 finish();
             }
         });
     }
 
-    public void ValidatingUserInput(View view){
-        EditText _username = (EditText) findViewById(R.id.reg_username);
-        EditText _password = (EditText) findViewById(R.id.reg_password);
-        EditText _dupPassword = (EditText) findViewById(R.id.dup_password);
-        EditText _email = (EditText) findViewById(R.id.reg_email);
+    public static boolean containsOnlyNumbers(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            if (!Character.isDigit(str.charAt(i)))
+                return false;
+        }
+        return true;
+    }
+    public String ValidatingUserInput(View view){
+        EditText _username = findViewById(R.id.reg_username);
+        EditText _password = findViewById(R.id.reg_password);
+        EditText _dupPassword = findViewById(R.id.dup_password);
+        EditText _email = findViewById(R.id.reg_email);
         String username = _username.getText().toString().trim();
         String password = _password.getText().toString().trim();
         String dupPassword = _dupPassword.getText().toString().trim();
         String email = _email.getText().toString().trim();
         String value;
 
-        if (password.equals(dupPassword) && !TextUtils.isEmpty(username) && !TextUtils.isEmpty(password))
-            value = "Register successful";
-        else if (TextUtils.isEmpty(username) || TextUtils.isEmpty(email))
-            value = "One or more fields are empty";
-
+        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(email))
+            return  "One or more fields are empty";
+        else if (containsOnlyNumbers(username)){
+            Log.d(TAG, "ValidatingUserInput: " + containsOnlyNumbers(username));
+            return "Username must contain letter"; }
+        else if (password.equals(dupPassword) && !TextUtils.isEmpty(username) && !TextUtils.isEmpty(password))
+            return "Validate successful";
         else {
-            value = "Passwords don't match!";
             _password.setText(null);
             _dupPassword.setText(null);
+            return  "Passwords don't match!";
         }
-
-        Toast toast = Toast.makeText(this, value, Toast.LENGTH_SHORT);
-        toast.show();
     }
 
     public void RegisterNewUser(View view) {
-        ValidatingUserInput(view);
-        PostRequest();
+        TextView tv = findViewById(R.id.link_to_login);
+        if(ValidatingUserInput(view) == "Validate successful") {
+            PostRequest();
+            tv.setText("Validate successful, trying to register.");
+        }
+        else
+            tv.setText(ValidatingUserInput(view));
         hideKeyBoard();
-        getUserList();
     }
-
 
     private void PostRequest() {
         EditText _username = findViewById(R.id.reg_username);
@@ -105,42 +114,27 @@ public class RegisterActivity extends Activity {
         params.put("email", email);
         JSONObject jsonObj = new JSONObject(params);
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, url, jsonObj, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, url, jsonObj,
+                new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d("response", response.toString());
-                TextView tv = findViewById(R.id.link_to_login);
-                String tekst = response.toString();
-                tv.setText(tekst);
-                //Toast.makeText(getApplicationContext(), "Register successful!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "Register successful", Toast.LENGTH_SHORT).show();
+                finish();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "User already exists", Toast.LENGTH_SHORT).show();
+                TextView tv = findViewById(R.id.link_to_login);
+                if (error instanceof TimeoutError) {
+                    tv.setText("Request timed out, plz try again.");
+                }else {
+                    tv.setText("Username and/or Email already in use!");
+                }
+                tv.setTextColor(getResources().getColor(R.color.warningText));
             }
         });
         Volley.newRequestQueue(this).add(jsonObjReq);
-    }
-
-    public void getUserList(){
-        mRequestQueue = Volley.newRequestQueue(this);
-
-        stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.i(TAG,"Response: " + response.toString());
-                TextView tv = findViewById(R.id.link_to_login);
-                tv.setText(response.toString());
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i(TAG, "Error: " + error.toString());
-            }
-        });
-
-        mRequestQueue.add(stringRequest);
     }
 
     public void hideKeyBoard(){

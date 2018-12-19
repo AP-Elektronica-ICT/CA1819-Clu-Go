@@ -23,9 +23,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
-        >
-
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name">
@@ -35,9 +33,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".RegisterActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".StartGameFragment"
             android:label="@string/app_name" />
 
         <meta-data
@@ -46,7 +46,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
         <activity android:name=".PuzzleActivity" />
 
         <meta-data
@@ -77,7 +77,8 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".GuessActivity"></activity>
+        <activity android:name=".GuessActivity" />
+        <activity android:name=".EndActivity"></activity>
     </application>
 
 </manifest>

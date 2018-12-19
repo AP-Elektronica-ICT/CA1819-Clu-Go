@@ -149,7 +149,7 @@ public class PuzzleActivity extends AppCompatActivity {
         if (isSolved()) {
             Toast.makeText(context, "Found new clue, added ransom note to your inventory!", Toast.LENGTH_SHORT).show();
             int clueId = 1;
-            String url = "https://cluego.azurewebsites.net/api/clue/"+ clueId;
+            String url = "https://clugo.azurewebsites.net/api/clue/"+ clueId;
 
             JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                     new Response.Listener<JSONObject>()

@@ -180,7 +180,6 @@ C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\bin\Debug\netcor
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\bin\Debug\netcoreapp2.1\ClueGoTesting.pdb
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\bin\Debug\netcoreapp2.1\ClueGoTesting.Views.dll
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\bin\Debug\netcoreapp2.1\ClueGoTesting.Views.pdb
-C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.csprojAssemblyReference.cache
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.csproj.CoreCompileInputs.cache
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.RazorAssemblyInfo.cache
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.RazorAssemblyInfo.cs
@@ -663,3 +662,4 @@ C:\Users\weyns\Desktop\School\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debu
 C:\Users\weyns\Desktop\School\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.dll
 C:\Users\weyns\Desktop\School\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.pdb
 C:\Users\weyns\Desktop\School\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.csproj.CopyComplete
+C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoTesting\ClueGoTesting\obj\Debug\netcoreapp2.1\ClueGoTesting.csprojAssemblyReference.cache

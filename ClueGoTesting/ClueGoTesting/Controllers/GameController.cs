@@ -34,7 +34,18 @@ namespace ClueGoTesting.Controllers
                 .ToList());
         }
 
-        [HttpGet("game/{gameId}")]
+        [HttpGet("delete/{gameId}")]
+        public ActionResult Delete(int gameId)
+        {
+            var item = _dbContext.Games.Find(gameId);
+
+            _dbContext.Games.Remove(item);
+            _dbContext.SaveChanges();
+
+            return Ok("Game from user: " + gameId + "removed");
+        }
+
+        [HttpGet("{gameId}")]
         public ActionResult<List<Game>> GetGameById(int gameId)
         {
             var item = _dbContext.Games.Find(gameId);
@@ -42,14 +53,13 @@ namespace ClueGoTesting.Controllers
             return Ok(_dbContext.Games
                             .Include(x => x.GameLocations)
                             .ThenInclude(x => x.Location)
-                            //.ThenInclude(x => x.LocId)
                             .Where(x => x.GameId == gameId)
 
                             .Include(x => x.GameSuspects)
                             .ThenInclude(x => x.Suspect)
                             .Where(x => x.GameId == gameId)
 
-                            .Include(x=> x.GameClues)
+                            .Include(x => x.GameClues)
                             .ThenInclude(x => x.Clue)
                             .Where(x => x.GameId == gameId)
                             .ToList());
@@ -59,7 +69,6 @@ namespace ClueGoTesting.Controllers
         public ActionResult<Game> CreateGame(int amtGame, int userId)
         {
             var game = new Game();
-
 
             //Randomize location list
             var locations = _dbContext.Locations.OrderBy(x => Guid.NewGuid()).ToList();
@@ -87,9 +96,9 @@ namespace ClueGoTesting.Controllers
             {
                 game.GameSuspects.Add(new GameSuspect
                 {
-                    Suspect = suspects[i]                    
+                    Suspect = suspects[i]
                 });
-                game.GameSuspects[0].isMurderer = true;            
+                game.GameSuspects[0].isMurderer = true;
             }
 
             //Random Clues
@@ -111,6 +120,7 @@ namespace ClueGoTesting.Controllers
 
             return Ok(game);
         }
+
 
     }
 }
