@@ -2,6 +2,8 @@ package com.example.arno.cluegologin;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,6 +47,7 @@ public class PuzzleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_puzzle);
         mContext = this;
+        //public static ArrayList<Bitmap> noice = getIntent().getExtras().getParcelableArrayList("imagechunks");
 
         init();
 
@@ -96,6 +99,16 @@ public class PuzzleActivity extends AppCompatActivity {
         });
     }
 
+    public ArrayList<BitmapDrawable> makeDrawables(ArrayList<Bitmap> noice){
+        ArrayList<BitmapDrawable> drawables = new ArrayList<BitmapDrawable>();
+        for (Bitmap p: noice){
+            BitmapDrawable item = new BitmapDrawable(getResources(),p);
+            drawables.add(item);
+
+        }
+        return drawables;
+    }
+
     private int getStatusBarHeight(Context context) {
         int result = 0;
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen",
@@ -111,6 +124,7 @@ public class PuzzleActivity extends AppCompatActivity {
     private static void display(Context context) {
         ArrayList<Button> buttons = new ArrayList<>();
         Button button;
+        //ArrayList<BitmapDrawable> drawables =;
 
         for (int i = 0; i < tileList.length; i++) {
             button = new Button(context);
