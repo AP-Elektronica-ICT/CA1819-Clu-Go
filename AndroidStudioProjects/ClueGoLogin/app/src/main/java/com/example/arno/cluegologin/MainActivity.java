@@ -36,7 +36,17 @@ import org.json.JSONObject;
 
 
 public class MainActivity extends AppCompatActivity implements MapViewFragment.MapFragmentListener {
+    private MapViewFragment mapViewFragment = new MapViewFragment();
+    private SuspectFragment suspectFragment= new SuspectFragment();
+    private InventoryFragment inventoryFragment= new InventoryFragment();
+    private StatsFragment statsFragment = new StatsFragment();
+    private StartGameFragment startGameFragment;
+    private String jsonResponse;
+    private boolean hasRequestsed;
+    RequestQueue mRequestQueue;
+    Bundle bundle;
 
+    Game gameFromDatabase =new Game();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -62,17 +72,6 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
         }
     };
 
-    private MapViewFragment mapViewFragment = new MapViewFragment();
-    private SuspectFragment suspectFragment= new SuspectFragment();
-    private InventoryFragment inventoryFragment= new InventoryFragment();
-    private StatsFragment statsFragment = new StatsFragment();
-    private StartGameFragment startGameFragment;
-    private String jsonResponse;
-    private boolean hasRequestsed;
-    RequestQueue mRequestQueue;
-    Bundle bundle;
-
-    Game gameFromDatabase =new Game();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         GetGame(UID);
     }
-
 
     @Override
     public void onInputMapSent(JSONObject game) {
@@ -225,9 +223,8 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
             mRequestQueue.add(jsonArrayRequest);
-
-
     }
+
 public void sendBunble(Fragment _fragmap, Bundle _bundle){
     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -238,7 +235,7 @@ public void sendBunble(Fragment _fragmap, Bundle _bundle){
     ft.replace(R.id.fragment_container, fragmap);
     ft.addToBackStack(null);
     ft.commit();
-}
+    }
 
     public void switchToGame() {
         sendBunble(mapViewFragment,bundle);

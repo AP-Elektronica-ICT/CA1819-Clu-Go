@@ -103,27 +103,26 @@ public class MapViewFragment extends Fragment {
 
                     googleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(locLat, locLng))
-                            .title(locName));
+                            .title(locName)
+                            .draggable(true));
                 }
 
                 LatLng center1 = new LatLng(locationsFromGame.get(1).getLocLat(),locationsFromGame.get(1).getLoclong());
+
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(center1, 15));
 
-                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-                        return;
-                    }
-                    mMap.setMyLocationEnabled(true);
+                    return;
+                }
+                googleMap.setMyLocationEnabled(true);
 
-                // For zooming automatically to the location of the marker
 
                 final LocationManager locationManager= (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
 
                 final LocationListener locationListener = new LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) {
-
-
                         if(destMarker != null){
                             Location markerLoc = new Location("Destination");
                             markerLoc.setLatitude(destMarker.getPosition().latitude);
@@ -142,18 +141,13 @@ public class MapViewFragment extends Fragment {
 
                                 Intent intent = new Intent(getActivity(), PuzzleActivity.class);
                                 startActivity(intent);
-                                Toast.makeText(getActivity(),"You have arrived at your destination",Toast.LENGTH_LONG).show();
                                 Intent i = new Intent(getActivity(), PuzzleActivity.class);
 
                                 startActivity(i);
                             }
-                            if(distance>20)
-                            {
-                                Toast.makeText(getActivity(), "not at destination", Toast.LENGTH_LONG).show();
-                                Log.e("toast","locations are not the same" + distance);
-
-                            }}
+                        }
                     }
+
 
                     @Override
                     public void onStatusChanged(String s, int i, Bundle bundle) {
@@ -173,6 +167,23 @@ public class MapViewFragment extends Fragment {
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,locationListener);
 
                 // For dropping a marker at a point on the Map
+
+                mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                    @Override
+                    public void onMarkerDragStart(Marker marker) {
+
+                    }
+
+                    @Override
+                    public void onMarkerDrag(Marker marker) {
+
+                    }
+
+                    @Override
+                    public void onMarkerDragEnd(Marker marker) {
+
+                    }
+                });
 
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override

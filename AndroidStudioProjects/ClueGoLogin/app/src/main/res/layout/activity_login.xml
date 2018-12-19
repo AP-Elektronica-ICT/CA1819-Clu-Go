@@ -14,14 +14,6 @@
     tools:context=".LoginActivity">
 
     <!-- Login progress -->
-    <ProgressBar
-        android:id="@+id/login_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="284dp"
@@ -123,21 +115,22 @@
                 android:layout_height="wrap_content"
                 android:text="main activity dev " />
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
             <TextView
                 android:id="@+id/logging"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dip"
-                android:layout_marginBottom="40dip"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
                 android:gravity="center"
                 android:textColor="#098e38"
                 android:textSize="16dip"/>
+
+            <ProgressBar
+                android:id="@+id/progressBarLogin"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"/>
         </LinearLayout>
     </ScrollView>
 

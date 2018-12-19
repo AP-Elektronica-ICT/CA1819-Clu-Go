@@ -39,27 +39,90 @@ public class LoginActivity extends AppCompatActivity{
     private String url= "https://clugo.azurewebsites.net/api/user";
     CallbackManager callbackManager;
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-    }
-
     // UI references.
+    private Button btnSignIn, btnDev;
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
+
+    public ProgressBar spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //progressBar.setVisibility(View.VISIBLE);
+        btnSignIn = findViewById(R.id.email_sign_in_button);
+        btnDev = findViewById(R.id.btn_go_to_main);
+        spinner = findViewById(R.id.progressBarLogin);
+        mEmailView = findViewById(R.id.email);
+        mPasswordView = findViewById(R.id.password);
 
-        //===============Facebook Login====================================
+        btnSignIn.setOnClickListener(Login);
+        btnDev.setOnClickListener(DevMove);
+    }
+    
+    private View.OnClickListener Login = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            attemptLogin();
+            spinner.setVisibility(View.VISIBLE);
+            hideKeyBoard();
+        }
+    };
+
+    private View.OnClickListener DevMove = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent mainActivity = new Intent(LoginActivity.this, GuessActivity.class);
+            startActivity(mainActivity);
+        }
+    };
+
+    private void attemptLogin() {
+        TextView tv = findViewById(R.id.logging);
+        tv.setText("Logging in...");
+        String email = mEmailView.getText().toString().trim();
+        String password = mPasswordView.getText().toString();
+
+        mRequestQueue = Volley.newRequestQueue(this);
+        String url= "https://clugo.azurewebsites.net/api/user/inlog/"+email+"/"+password;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor editor = preferences.edit();
+
+        stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("LoginActivity", response);
+
+                TextView tv = findViewById(R.id.logging);
+                tv.setText(response);
+                String value = response;
+
+                editor.putString("UID", value);
+                editor.apply();
+
+                spinner.setVisibility(View.INVISIBLE);
+
+                Intent i = new Intent(LoginActivity.this, StartGameFragment.class);
+                startActivity(i);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                TextView tv = findViewById(R.id.logging);
+                if (error instanceof TimeoutError)
+                    tv.setText("Login timed out, please try again.");
+                else
+                    tv.setText("Username or pasword incorrect!");
+
+                Log.i("Error.response", error.toString());
+                spinner.setVisibility(View.INVISIBLE);
+            }
+        });
+        mRequestQueue.add(stringRequest);
+    }
+
+    public void facebookLogic(){
         callbackManager = CallbackManager.Factory.create();
 
         LoginManager.getInstance().registerCallback(callbackManager,
@@ -87,84 +150,6 @@ public class LoginActivity extends AppCompatActivity{
             Intent mainActivity = new Intent(LoginActivity.this, StartGameFragment.class);
             startActivity(mainActivity);
         }
-        //====================================================================
-        // Set up the login form.
-        mEmailView = findViewById(R.id.email);
-
-        mPasswordView = findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        Button mEmailSignInButton = findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               attemptLogin();
-                final ProgressBar progressBar = findViewById(R.id.progress_bar);
-                //progressBar.setVisibility(View.VISIBLE);
-            }
-        });
-        
-        Button devToMain = findViewById(R.id.btn_go_to_main);
-        devToMain.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent mainActivity = new Intent(LoginActivity.this, GuessActivity.class);
-                startActivity(mainActivity);
-            }
-        });
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-    }
-
-    private void attemptLogin() {
-
-        TextView tv = findViewById(R.id.logging);
-        tv.setText("Logging in...");
-        String email = mEmailView.getText().toString().trim();
-        String password = mPasswordView.getText().toString();
-
-        mRequestQueue = Volley.newRequestQueue(this);
-        String url= "https://clugo.azurewebsites.net/api/user/inlog/"+email+"/"+password;
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        final SharedPreferences.Editor editor = preferences.edit();
-
-        stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.i("LoginActivity", response);
-                TextView tv = findViewById(R.id.logging);
-                tv.setText(response);
-                String value = response;
-                editor.putString("UID", value);
-                editor.apply();
-
-                Intent i = new Intent(LoginActivity.this, StartGameFragment.class);
-                startActivity(i);
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                TextView tv = findViewById(R.id.logging);
-                if (error instanceof TimeoutError)
-                    tv.setText("Login timed out, please try again.");
-                else
-                    tv.setText("Username or pasword incorrect!");
-
-                Log.i("Error.response", error.toString());
-            }
-        });
-        mRequestQueue.add(stringRequest);
-        hideKeyBoard();
     }
 
     public void hideKeyBoard(){
