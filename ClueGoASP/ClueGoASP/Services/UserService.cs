@@ -16,8 +16,8 @@ namespace ClueGoASP.Services
         User GetUserById(int id);
         User Login(string username, string password);
         User CreateUser(User newUser);
-
         User Deleteuser(int id);
+        User UpdateUser(User updateUser, string username);
     }
     public class UserService : IUserService
     {
@@ -26,6 +26,7 @@ namespace ClueGoASP.Services
         {
             _dbContext = context;
         }
+
         public User GetUserById(int id)
         {
             return _dbContext.Users.Find(id);
@@ -46,15 +47,20 @@ namespace ClueGoASP.Services
         public User CreateUser(User newUser)
         {
             string _pwd = newUser.Password;
+            string username = newUser.Username;
             //passwoord hashen
             newUser.Password = PasswordHash(newUser.Password);
+
+
 
             bool usernameAlreadyExists = _dbContext.Users.Any(x => x.Username == newUser.Username);
             bool emailAlreadyExists = _dbContext.Users.Any(x => x.Email == newUser.Email);
 
             //Validation check
-            if (_pwd == newUser.Username)
+            if (_pwd == username)
                 throw new AppException("Password cannot match username!");
+            else if (username == null || username.Length < 4)
+                throw new AppException("Username must be atleast 4 characters long!");
             else if (_pwd.Length < 6)
                 throw new AppException("Password must be atleast 6 characters long!");
             else if (usernameAlreadyExists)
@@ -98,6 +104,22 @@ namespace ClueGoASP.Services
             return Content("Delete succes!");
         }*/
 
+        public User UpdateUser(User updateUser, string username)
+        {
+            var orgUser = _dbContext.Users.SingleOrDefault(x => x.Username == username);
+            if (orgUser == null)
+            {
+                throw new AppException("User does not exist.");                
+            }
+
+            orgUser.Password = updateUser.Password;
+            orgUser.Username = updateUser.Username;
+            orgUser.Email = updateUser.Email;
+
+            _dbContext.Users.Update(orgUser);
+            _dbContext.SaveChanges();
+            return orgUser;
+        }
         public string PasswordHash(string pwdHash)
         {
             MD5 mD5 = MD5.Create();
@@ -111,7 +133,6 @@ namespace ClueGoASP.Services
 
             return sb.ToString();
         }
-
 
     }
 }
