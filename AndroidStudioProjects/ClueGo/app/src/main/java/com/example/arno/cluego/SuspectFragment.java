@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -42,7 +43,7 @@ public class SuspectFragment extends Fragment {
      Bundle bundle = getArguments();
      Game currentGame = (Game) bundle.getSerializable("game");
 
-    List<Suspect> suspects = currentGame.getSuspects();
+    final List<Suspect> suspects = currentGame.getSuspects();
 
 
      for (int i = 0; i <suspects.size() ; i++) {
@@ -60,6 +61,14 @@ public class SuspectFragment extends Fragment {
              android.R.layout.simple_list_item_1,
              Suspect_Names);
      listView.setAdapter(listViewAdapter);
+     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+         @Override
+         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+             GoingInDetail(suspects.get(position).getSusDescription(), suspects.get(position).getSusName() ,suspects.get(position).getSusImgUrl() );
+
+         }
+     });
 
 
   return view;
