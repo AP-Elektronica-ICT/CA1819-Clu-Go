@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ClueGoTesting.Models;
 using System.Text;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
+
+using ClueGoTesting.Models;
+using ClueGoTesting.Services;
+using ClueGoTesting.Helper;
 
 namespace ClueGoTesting.Data
 {
@@ -17,10 +20,12 @@ namespace ClueGoTesting.Data
     public class UserController : ControllerBase
     {
         private readonly GameContext _dbContext;
+        private IUserService _userService;
 
-        public UserController(GameContext context)
+        public UserController(GameContext context, IUserService userService)
         {
             _dbContext = context;
+            _userService = userService;
         }
         
 
@@ -34,60 +39,43 @@ namespace ClueGoTesting.Data
         
 
         [HttpGet("{userId}")]
-        public ActionResult<User> GetById(int userId)
+        public ActionResult<List<User>> GetById(int userId)
         {
-            var item = _dbContext.Users.Find(userId);
+            var user = _userService.GetUserById(userId);
 
-            return Ok(_dbContext.Users
-                .Include(x => x.Games)
-                .Where(x => x.UserId == userId)
-                .ToList());
+            return _dbContext.Users
+                        .Include(x => x.Games)
+                        .Where(x => x.UserId == userId)
+                        .ToList();
         }
 
         [HttpGet("inlog/{username}/{password}")]
-        public ActionResult<User> GetByEmail(string username, string password)
+        public IActionResult GetByEmail(string username, string password)
         {
-            var item = _dbContext.Users.SingleOrDefault(c => c.Username == username && (c.Password == PasswordHash(password) || c.Password == password));
-
-
-            if (item == null)
+            try
             {
-                return Content("Email does not match password");
+                var user = _userService.Login(username, password);
+                return Ok(user);
             }
-
-            return Ok(item.UserId.ToString());
+            catch(AppException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
 
         [HttpPost]
         public IActionResult Create(User newUser)
         {
-            string serverResponse;
-            string _pwd = newUser.Password;
-            //passwoord hashen
-            newUser.Password = PasswordHash(newUser.Password);
-
-            bool usernameAlreadyExists = _dbContext.Users.Any(x => x.Username == newUser.Username);
-            bool emailAlreadyExists = _dbContext.Users.Any(x => x.Email == newUser.Email);
-            //==================== Pass Validation check =======================
-            if (_pwd == newUser.Username)
-                serverResponse = "Password cannot match username!";
-            else if (_pwd.Length < 6)
-                serverResponse = "Password must be atleast 6 characters long!";
-            else if (usernameAlreadyExists)
-                serverResponse = "This username is already registerd!";
-            else if (emailAlreadyExists)
-                serverResponse = "This e-mail has already been registerd!";
-            else if (ModelState.IsValid)
+            try
             {
-                _dbContext.Users.Add(newUser);
-                _dbContext.SaveChanges();
+                var user = _userService.CreateUser(newUser);
                 return Ok(newUser);
             }
-            else
-                serverResponse = "Action not allowed";
-
-            return Ok(serverResponse);
+            catch(AppException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPut("{username}")]
@@ -108,34 +96,17 @@ namespace ClueGoTesting.Data
         }
 
         [HttpDelete("{userId}")]
-        public IActionResult DeleteUser(int id)
+        public IActionResult DeleteUser(int userId)
         {
-            for (int _id = id; _id < _dbContext.Users.Count(); _id++)
+            try
             {
-                id = _id;
-                var user = _dbContext.Users.SingleOrDefault(x => x.UserId == id);
-                if (user == null)
-                    return NotFound();
-
-                _dbContext.Users.Remove(user);
-                _dbContext.SaveChanges();
+                var user = _userService.Deleteuser(userId);
+                return Ok("User deleted.");
             }
-            return Content("Delete succes!");
+            catch (AppException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
-
-        public string PasswordHash(string pwdHash)
-        {
-            MD5 mD5 = MD5.Create();
-            string stringToHash = pwdHash;
-            byte[] tmpHash = Encoding.ASCII.GetBytes(stringToHash);
-            byte[] hash = mD5.ComputeHash(tmpHash);
-
-            StringBuilder sb = new StringBuilder();
-            foreach (var a in hash)
-                sb.Append(a.ToString("X2"));
-
-            return sb.ToString();
-        }
-
     }
 }
