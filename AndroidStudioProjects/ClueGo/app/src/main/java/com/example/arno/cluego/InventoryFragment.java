@@ -70,16 +70,14 @@ public class InventoryFragment extends Fragment {
                         if (foundClue == true) {
                             foundClueList.add(clue);
                             foundClueImageList.add(clueimage);
+                            inventory.setAdapter(new ItemAdapter(getActivity(),foundClueImageList));
+                            inventory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                public void onItemClick(AdapterView<?> parent, View v,
+                                                        int position, long id) {
+                                    Picasso.get().load(foundClueImageList.get(position)).into(selecteditem);
+                                    selecteditemdes.setText(foundClueList.get(position));
+                                }});
                         }
-                        inventory.setAdapter(new ItemAdapter(getActivity(),foundClueImageList));
-                        inventory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            public void onItemClick(AdapterView<?> parent, View v,
-                                                    int position, long id) {
-                                Picasso.get().load(foundClueImageList.get(position)).into(selecteditem);
-                                selecteditemdes.setText(foundClueList.get(position));
-                            }});
-
-
 
                     }
 
