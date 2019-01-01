@@ -5,7 +5,6 @@ C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoASP\ClueGoASP\bin\Debug\netcoreapp2.1\
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoASP\ClueGoASP\bin\Debug\netcoreapp2.1\ClueGoASP.pdb
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoASP\ClueGoASP\bin\Debug\netcoreapp2.1\ClueGoASP.Views.dll
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoASP\ClueGoASP\bin\Debug\netcoreapp2.1\ClueGoASP.Views.pdb
-C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoASP\ClueGoASP\obj\Debug\netcoreapp2.1\ClueGoASP.csprojAssemblyReference.cache
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoASP\ClueGoASP\obj\Debug\netcoreapp2.1\ClueGoASP.csproj.CoreCompileInputs.cache
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoASP\ClueGoASP\obj\Debug\netcoreapp2.1\ClueGoASP.RazorAssemblyInfo.cache
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoASP\ClueGoASP\obj\Debug\netcoreapp2.1\ClueGoASP.RazorAssemblyInfo.cs
@@ -33,3 +32,4 @@ C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoASP\ClueGoASP\obj\Debug\netcoreapp2.1\
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoASP\ClueGoASP\obj\Debug\netcoreapp2.1\ClueGoASP.dll
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoASP\ClueGoASP\obj\Debug\netcoreapp2.1\ClueGoASP.pdb
 C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoASP\ClueGoASP\obj\Debug\netcoreapp2.1\ClueGoASP.csproj.CopyComplete
+C:\Users\Arno\Desktop\CA1819-Clu-Go\ClueGoASP\ClueGoASP\obj\Debug\netcoreapp2.1\ClueGoASP.csprojAssemblyReference.cache

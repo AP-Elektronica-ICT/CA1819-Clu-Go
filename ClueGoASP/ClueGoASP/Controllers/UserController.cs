@@ -79,20 +79,16 @@ namespace ClueGoASP.Data
         }
 
         [HttpPut("{username}")]
-        public IActionResult Update(string id, User user)
+        public IActionResult Update(User updateUser, string username)
         {
-            var todo = _dbContext.Users.Find(id);
-            if (todo == null)
+            try
             {
-                return NotFound();
+                return Ok(_userService.UpdateUser(updateUser, username));
             }
-
-            todo.Password = user.Password;
-            todo.Username = user.Username;
-
-            _dbContext.Users.Update(todo);
-            _dbContext.SaveChanges();
-            return NoContent();
+            catch (AppException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpDelete("{userId}")]
