@@ -43,10 +43,11 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
     private StartGameFragment startGameFragment;
     private String jsonResponse;
     private boolean hasRequestsed;
+    private int gameId;
+
     RequestQueue mRequestQueue;
     Bundle bundle;
 
-    private int gameId;
     Game gameFromDatabase = new Game();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -69,7 +70,9 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
                     switchToStats();
                     return true;
                 case R.id.test:
-                    Intent intent = new Intent(MainActivity.this,SplitImage.class);
+                    Intent intent = new Intent(MainActivity.this,GuessActivity.class);
+                    intent.putExtra("gameData", gameFromDatabase);
+                    intent.putExtra("userId", gameId);
                     startActivity(intent);
                     return true;
             }

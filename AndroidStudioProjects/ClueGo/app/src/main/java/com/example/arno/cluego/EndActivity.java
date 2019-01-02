@@ -1,10 +1,12 @@
 package com.example.arno.cluego;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -13,12 +15,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.arno.cluego.Objects.User;
 
 public class EndActivity extends AppCompatActivity {
     Button btnEnd, btnDev;
+    TextView tvTest;
+    User usr = new User();
+
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
     private String url= "https://clugo.azurewebsites.net/api/user";
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +33,11 @@ public class EndActivity extends AppCompatActivity {
         setContentView(R.layout.activity_end);
 
         btnEnd = findViewById(R.id.btnEnd);
+        tvTest = findViewById(R.id.tv_test2);
+
+        userId = getIntent().getIntExtra("userId", 0);
+
+        tvTest.setText(String.valueOf(userId));
 
         btnEnd.setOnClickListener(EndGame);
     }
@@ -35,14 +47,16 @@ public class EndActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             mRequestQueue = Volley.newRequestQueue(EndActivity.this);
-            String UID = getIntent().getExtras().getString("UIDcurrent");
-            String url= "https://clugo.azurewebsites.net/api/game/delete/"+ UID;
+            String url= "https://clugo.azurewebsites.net/api/game/" + userId;
 
-            stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            stringRequest = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     Log.i("EndActivity", response);
                     Toast.makeText(EndActivity.this, response, Toast.LENGTH_SHORT).show();
+
+                    Intent i = new Intent(EndActivity.this, StartGameFragment.class);
+                    startActivity(i);
                 }
             }, new Response.ErrorListener() {
                 @Override

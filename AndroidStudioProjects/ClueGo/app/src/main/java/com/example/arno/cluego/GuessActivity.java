@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -18,12 +19,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.arno.cluego.Objects.Game;
+import com.example.arno.cluego.Objects.Suspect;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GuessActivity extends AppCompatActivity {
     ArrayList<String>suspectList;
@@ -32,6 +37,12 @@ public class GuessActivity extends AppCompatActivity {
     String suspectGuess;
     ListView listview;
     String murderer;
+    TextView tvTest;
+    int userId;
+
+    Game game = new Game();
+    final ArrayList<String> suspectNames = new ArrayList<String>();
+
     private String url = "https://clugo.azurewebsites.net/api/suspect";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,49 +51,40 @@ public class GuessActivity extends AppCompatActivity {
         suspectList = new ArrayList<String>();
         mRequestQueue = Volley.newRequestQueue(this);
 
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        final String UID = preferences.getString("UID","");
+        tvTest = findViewById(R.id.tv_test);
+        listview = findViewById(R.id.ListView_guess);
 
-        stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONArray suspectArray = new JSONArray(response);
-                    for (int i = 0; i <= suspectArray.length(); i++)
-                    {
-                        JSONObject singleSuspect =new JSONObject(suspectArray.getString(i));
-                        final String suspect = singleSuspect.getString("susName");
-                        boolean isMurderer = singleSuspect.getBoolean("isMurderer");
-                        if(isMurderer==true)
-                            murderer = suspect;
-                        suspectList.add(suspect);
+        userId = getIntent().getIntExtra("userId", 0);
+        game = (Game)getIntent().getSerializableExtra("gameData");
 
-                        if(suspectList.size()==3)
-                            makeListViewAdapter();
+        tvTest.setText(game.getMurderer());
 
-                    }
-                } catch (JSONException e){
-                    e.printStackTrace();
-                }
+        try{
+            final List<Suspect> suspects = game.getSuspects();
+            for (int i = 0; i <suspects.size() ; i++) {
+                Suspect suspect = suspects.get(i);
+                suspectNames.add(suspect.getSusName());
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("yoyoyo", "Error: " + error.toString());
-            }
-        });
-        mRequestQueue.add(stringRequest);
-        listview=(ListView)findViewById(R.id.ListView_guess);
+        }
+        catch (NullPointerException ex)
+        {
+            Toast.makeText(this, "List not loaded.", Toast.LENGTH_SHORT).show();;
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                suspectNames);
+        listview.setAdapter(arrayAdapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 suspectGuess = (String)parent.getItemAtPosition(position);
                 Log.d("suspectGuess", "onItemClick: " + suspectGuess);
-                if(suspectGuess.equals(murderer)){
-                    Toast.makeText(getApplicationContext(),"you have quessed correctly",Toast.LENGTH_LONG).show();
+                if(suspectGuess.equals(game.getMurderer())){;
                     Intent i = new Intent(GuessActivity.this, EndActivity.class);
-                    i.putExtra("UIDcurrent", UID);
+                    i.putExtra("userId", userId);
                     startActivity(i);
                 }
                 else{

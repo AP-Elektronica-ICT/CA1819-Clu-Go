@@ -38,7 +38,7 @@ import java.util.concurrent.TimeoutException;
 
 
 public class StartGameFragment extends Activity implements Serializable {
-    TextView gameinfo,serverinfo,instructions;
+    TextView gameinfo,serverinfo,instructions, tvWelcomeMsg;
     Button startButton, continueBtn, testBtn;
     RequestQueue mRequestQueue;
     private String jsonResponse;
@@ -53,6 +53,7 @@ public class StartGameFragment extends Activity implements Serializable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_start_of_game);
 
+
         final User usr = (User)getIntent().getSerializableExtra("UserPackage");
 
         UID = usr.getUserId();
@@ -60,10 +61,13 @@ public class StartGameFragment extends Activity implements Serializable {
         gameinfo = findViewById(R.id.txt_info);
         serverinfo = findViewById(R.id.txt_server_info);
         startButton = findViewById(R.id.btn_start);
+        tvWelcomeMsg = findViewById(R.id.tv_welcome);
         instructions = findViewById(R.id.txt_view_instructions);
         final ProgressBar loadCircle = findViewById(R.id.progress_bar);
         continueBtn = findViewById(R.id.btn_continue);
         testBtn = findViewById(R.id.btn_test);
+
+        tvWelcomeMsg.setText("Welcome back " + usr.getUsername() + "!");
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -6,9 +6,9 @@ import java.util.List;
 
 
 public class Game implements Serializable {
-    private int gameId;
+    private int gameId, userId;
     private Boolean gameWon;
-    private int userId;
+    private String murderer;
     private ArrayList<Clue> clues = new ArrayList<Clue>();
 
     private ArrayList<Location> locations = new ArrayList<Location>();
@@ -44,6 +44,7 @@ public class Game implements Serializable {
 
     public void setSuspects(Suspect suspect) {
         this.suspects.add(suspect);
+        setMurderer(suspect);
     }
 
     public List<Suspect> getSuspects() {
@@ -54,6 +55,14 @@ public class Game implements Serializable {
         return locations;
     }
 
+    public void setMurderer(Suspect suspect){
+           if (suspect.getMurderer())
+               this.murderer = suspect.getSusName();
+    }
+
+   public String getMurderer(){
+        return this.murderer;
+    }
     public List<Clue> getClues() {
         return clues;
     }
