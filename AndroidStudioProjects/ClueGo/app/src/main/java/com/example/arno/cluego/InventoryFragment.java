@@ -6,8 +6,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +34,7 @@ public class InventoryFragment extends Fragment {
     RequestQueue mRequestQueue;
     StringRequest stringRequest;
     ArrayList<String> foundClueList;
+    ArrayList<String> foundClueImageList;
     ListView listView;
 
     private String url = "https://clugo.azurewebsites.net/api/clue";
@@ -40,8 +46,12 @@ public class InventoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_guess, container, false);
+        View v = inflater.inflate(R.layout.fragment_inventory, container, false);
+        final GridView inventory = (GridView) v.findViewById(R.id.inventory);
+        final ImageView selecteditem = (ImageView) v.findViewById(R.id.item_picture);
+        final TextView selecteditemdes = (TextView) v.findViewById(R.id.item_description);
         foundClueList = new ArrayList<String>();
+        foundClueImageList = new ArrayList<String>();
         mRequestQueue = Volley.newRequestQueue(getActivity());
         stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
 
@@ -50,17 +60,27 @@ public class InventoryFragment extends Fragment {
                 Log.e("responseJson", "onResponse: " + response );
                 try {
                     JSONArray clueArray = new JSONArray(response);
-                    for (int i = 0; i <= clueArray.length(); i++)
-                    {
-                        JSONObject singleClue =new JSONObject(clueArray.getString(i));
+                    for (int i = 0; i <= clueArray.length(); i++) {
+                        JSONObject singleClue = new JSONObject(clueArray.getString(i));
                         final String clue = singleClue.getString("clueName");
                         boolean foundClue = singleClue.getBoolean("found");
+                        final String clueimage = singleClue.getString("clueImgUrl");
                         Log.e("SingleClue", "onResponse: " + singleClue.toString());
-                        Log.e("clueclue", "onResponse: " + clue );
-                        if(foundClue==true)
+                        Log.e("clueclue", "onResponse: " + clue);
+                        if (foundClue == true) {
                             foundClueList.add(clue);
-                        makeListViewAdapter();
+                            foundClueImageList.add(clueimage);
+                            inventory.setAdapter(new ItemAdapter(getActivity(),foundClueImageList));
+                            inventory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                public void onItemClick(AdapterView<?> parent, View v,
+                                                        int position, long id) {
+                                    Picasso.get().load(foundClueImageList.get(position)).into(selecteditem);
+                                    selecteditemdes.setText(foundClueList.get(position));
+                                }});
+                        }
+
                     }
+
                 } catch (JSONException e){
                     e.printStackTrace();
                 }
@@ -76,15 +96,10 @@ public class InventoryFragment extends Fragment {
 
         return v;
     }
-    public void makeListViewAdapter(){
-        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
-                getActivity(),
-                android.R.layout.simple_list_item_1,
-                foundClueList
 
-        );
-        listView.setAdapter(listViewAdapter);
-    }
+    //public void makeListViewAdapter(){
+
+
     // TODO: Rename method, update argument and hook method into UI event
 
 }

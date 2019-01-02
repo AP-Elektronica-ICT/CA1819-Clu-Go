@@ -67,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
                 case R.id.navigation_stats:
                     switchToStats();
                     return true;
+                case R.id.test:
+                    Intent intent = new Intent(MainActivity.this,SplitImage.class);
+                    startActivity(intent);
+                    return true;
             }
             return false;
         }
