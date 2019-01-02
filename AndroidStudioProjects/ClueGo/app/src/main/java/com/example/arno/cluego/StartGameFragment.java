@@ -2,44 +2,60 @@ package com.example.arno.cluego;
 
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Cache;
 import com.android.volley.Network;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
+import com.example.arno.cluego.Helpers.ErrorCatcher;
 import com.example.arno.cluego.Objects.Game;
+import com.example.arno.cluego.Objects.User;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-import static com.facebook.FacebookSdk.getCacheDir;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.Serializable;
+import java.util.concurrent.TimeoutException;
 
 
-public class StartGameFragment extends Activity {
+public class StartGameFragment extends Activity implements Serializable {
     TextView gameinfo,serverinfo,instructions;
-    Button startButton, continueBtn;
+    Button startButton, continueBtn, testBtn;
     RequestQueue mRequestQueue;
     private String jsonResponse;
     Game gameFromDatabase = new Game();
+
+    ErrorCatcher errorCatcher = new ErrorCatcher();
+
+    public int UID;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_start_of_game);
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        final User usr = (User)getIntent().getSerializableExtra("UserPackage");
+
+        UID = usr.getUserId();
 
         gameinfo = findViewById(R.id.txt_info);
         serverinfo = findViewById(R.id.txt_server_info);
@@ -47,16 +63,14 @@ public class StartGameFragment extends Activity {
         instructions = findViewById(R.id.txt_view_instructions);
         final ProgressBar loadCircle = findViewById(R.id.progress_bar);
         continueBtn = findViewById(R.id.btn_continue);
-        final String UID = preferences.getString("UID","");
-
+        testBtn = findViewById(R.id.btn_test);
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 gameinfo.setText(" ");
                 loadCircle.setVisibility(View.VISIBLE);
-                StartGame(UID);
-
+                StartGame(UID, 3);
             }
         });
 
@@ -68,53 +82,57 @@ public class StartGameFragment extends Activity {
                 LoadGame(UID);
             }
         });
+        
+        testBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(StartGameFragment.this, "Not in use for the moment", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    private void StartGame(final String UID){
+    private void StartGame(final int UID, int amtItems){
         Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
         Network network = new BasicNetwork(new HurlStack());
         mRequestQueue = new RequestQueue(cache, network);
         final ProgressBar loadCircle = findViewById(R.id.progress_bar);
-
         /* Start the queue */
         mRequestQueue.start();
 
-        String urlGameInfo ="https://clugo.azurewebsites.net/api/game/create/3/" + UID;
+        String urlGameInfo ="https://clugo.azurewebsites.net/api/game/create/" + UID + "/" + amtItems;
 
         // Formulate the request and handle the response.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlGameInfo,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.i(response,response.toString());
-                        gameinfo.setText(response);
-                        loadCircle.setVisibility(View.GONE);
+                            Log.i(response,response);
+                            gameinfo.setText(response);
+                            loadCircle.setVisibility(View.GONE);
 
-                        Intent i = new Intent(StartGameFragment.this, MainActivity.class);
-                        startActivity(i);
+                            Intent i = new Intent(StartGameFragment.this, MainActivity.class);
+                            startActivity(i);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         loadCircle.setVisibility(View.GONE);
-                        Log.i("error.reponse",error.toString());
-                        if (UID == "0")
-                            gameinfo.setText("Are you logged in?");
-                        else
-                            gameinfo.setText("Server is not responding try again later");
-                    }
+                        String errorMessage = errorCatcher.ParseError(error);
+                        gameinfo.setText(errorMessage);
 
+                        if (errorMessage.contains("already"))
+                            ConfirmRemoveGame();
+                    }
                 });
-                 mRequestQueue.add(stringRequest);
+        mRequestQueue.add(stringRequest);
     }
 
-    private void LoadGame(final String UID){
+    private void LoadGame(final int UID){
         Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
         Network network = new BasicNetwork(new HurlStack());
         mRequestQueue = new RequestQueue(cache, network);
         final ProgressBar loadCircle = findViewById(R.id.progress_bar);
-
         /* Start the queue */
         mRequestQueue.start();
 
@@ -130,6 +148,7 @@ public class StartGameFragment extends Activity {
                         loadCircle.setVisibility(View.GONE);
 
                         Intent i = new Intent(StartGameFragment.this, MainActivity.class);
+                        i.putExtra("userId", UID);
                         startActivity(i);
                     }
                 },
@@ -137,14 +156,44 @@ public class StartGameFragment extends Activity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         loadCircle.setVisibility(View.GONE);
-                        Log.i("error.reponse",error.toString());
-                        if (UID == "0")
-                            gameinfo.setText("Are you logged in?");
-                        else
-                            gameinfo.setText("Server is not responding try again later");
+                        String errorMessage = errorCatcher.ParseError(error);
+                        Log.d("ErrCatcherStartGameFrag", errorMessage);
                     }
-
                 });
         mRequestQueue.add(stringRequest);
     }
+
+    private void ConfirmRemoveGame(){
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(StartGameFragment.this);
+        builder1.setMessage("You have an unfinished game, do you wish to continue this game?");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "Continue",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        LoadGame(UID);
+                    }
+                });
+
+        builder1.setNeutralButton(
+                "Start new game",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
+
 }

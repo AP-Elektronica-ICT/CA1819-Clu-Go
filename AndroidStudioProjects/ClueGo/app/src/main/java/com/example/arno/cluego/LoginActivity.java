@@ -2,6 +2,7 @@ package com.example.arno.cluego;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,6 +24,8 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.arno.cluego.Helpers.ErrorCatcher;
+import com.example.arno.cluego.Objects.User;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -29,17 +33,27 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class LoginActivity extends AppCompatActivity{
+import java.io.Serializable;
+
+
+public class LoginActivity extends AppCompatActivity implements Serializable {
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
     private String url= "https://clugo.azurewebsites.net/api/user";
+
     CallbackManager callbackManager;
+    ErrorCatcher errorCatcher = new ErrorCatcher();
+
+    public User user = new User();
 
     // UI references.
     private Button btnSignIn, btnDev;
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+    private TextView tv;
 
     public ProgressBar spinner;
 
@@ -53,6 +67,7 @@ public class LoginActivity extends AppCompatActivity{
         spinner = findViewById(R.id.progressBarLogin);
         mEmailView = findViewById(R.id.email);
         mPasswordView = findViewById(R.id.password);
+        tv = findViewById(R.id.logging);
 
         btnSignIn.setOnClickListener(Login);
         btnDev.setOnClickListener(DevMove);
@@ -76,7 +91,6 @@ public class LoginActivity extends AppCompatActivity{
     };
 
     private void attemptLogin() {
-        TextView tv = findViewById(R.id.logging);
         tv.setText("Logging in...");
         String email = mEmailView.getText().toString().trim();
         String password = mPasswordView.getText().toString();
@@ -90,29 +104,38 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onResponse(String response) {
                 Log.i("LoginActivity", response);
+                tv.setTextColor(Color.GREEN);
 
-                TextView tv = findViewById(R.id.logging);
-                tv.setText(response);
-                String value = response;
+                try{
+                    JSONObject userObj = new JSONObject(response);
 
-                editor.putString("UID", value);
-                editor.apply();
+                    user.setUserId(userObj.getInt("userId"));
+                    user.setEmail(userObj.getString("email"));
+                    user.setUsername(userObj.getString("username"));
+                    user.setCluesFound(userObj.getInt("cluesFound"));
+                    user.setDistanceWalked(userObj.getInt("distanceWalked"));
+                    user.setGamesPlayed(userObj.getInt("gamesPlayed"));
 
-                spinner.setVisibility(View.INVISIBLE);
+                    /*TextView tv = findViewById(R.id.logging);
+                    tv.setText(response);
+                    String value = response;*/
 
-                Intent i = new Intent(LoginActivity.this, StartGameFragment.class);
-                startActivity(i);
+                    spinner.setVisibility(View.INVISIBLE);
+
+                    Intent i = new Intent(LoginActivity.this, StartGameFragment.class);
+                    i.putExtra("UserPackage",user);
+                    startActivity(i);
+                }catch(JSONException e)
+                {
+                    Log.d("JSonErr", e.getMessage());
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                TextView tv = findViewById(R.id.logging);
-                if (error instanceof TimeoutError)
-                    tv.setText("Login timed out, please try again.");
-                else
-                    tv.setText("Username or pasword incorrect!");
+                tv.setTextColor(Color.RED);
+                tv.setText(errorCatcher.ParseError(error));
 
-                Log.i("Error.response", error.toString());
                 spinner.setVisibility(View.INVISIBLE);
             }
         });
@@ -160,7 +183,7 @@ public class LoginActivity extends AppCompatActivity{
     public void signInFacebook(View view) {
         Intent i = new Intent(LoginActivity.this, StartGameFragment.class);
         startActivity(i);
-        //login();
+        //login(); //TODO UNCOMMENT IF YOU WANT TO BE AUTO LOGGED IN THROUGH FACEBOOK. (DOES NOT WORK, UNABLE TO GET USERNAME THIS WAY)
     }
 
     public void openRegisterForm(View view) {

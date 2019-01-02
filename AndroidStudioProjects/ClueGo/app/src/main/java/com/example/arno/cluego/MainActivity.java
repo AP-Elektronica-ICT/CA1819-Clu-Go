@@ -46,7 +46,8 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
     RequestQueue mRequestQueue;
     Bundle bundle;
 
-    Game gameFromDatabase =new Game();
+    private int gameId;
+    Game gameFromDatabase = new Game();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -80,18 +81,20 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String UID = preferences.getString("UID", "");
+        gameId = getIntent().getIntExtra("userId", 0);
+
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        GetGame(UID);
+        GetGame(gameId);
     }
 
     @Override
     public void onInputMapSent(JSONObject game) {
         mapViewFragment.updateGame(game);
     }
-    public void GetGame(String GID) {
+    public void GetGame(int GID) {
 
         Log.e("GetGameMain", "GetGame: in de mainact" );
             Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
@@ -218,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Log.d("error", error.toString());
+
                         }
                     }
             );
