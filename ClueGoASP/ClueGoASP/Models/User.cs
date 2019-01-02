@@ -7,7 +7,9 @@ namespace ClueGoASP.Models
 {
     public class User
     {
-
+        //PK
+        [Key]
+        public int UserId { get; set; }
         //attributes
         public string Username { get; set; }
         public string Password { get; set; }
@@ -15,11 +17,10 @@ namespace ClueGoASP.Models
         public int GamesPlayed { get; set; }
         public int cluesFound { get; set; }
         public int distanceWalked { get; set; }
+        //public bool hasGame { get; set; }
 
         public virtual ICollection<Game> Games { get; set; }
-        //PK
-        [Key]
-        public int UserId { get; set; }
+
 
     }
 }

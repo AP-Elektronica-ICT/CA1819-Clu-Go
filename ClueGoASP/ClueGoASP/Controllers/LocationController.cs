@@ -37,11 +37,9 @@ namespace ClueGoASP.Data
             try
             {
                 return Ok(_locationService.CreateLocation(newLoc));
-
             }
             catch (AppException ex)
             {
-
                 return BadRequest(new { message = ex.Message });
             }            
         }

@@ -16,6 +16,5 @@ namespace ClueGoASP.Models
         public bool isMurderer { get; set; }
 
         public ICollection<GameSuspect> GameSuspects { get; set; }
-
     }
 }

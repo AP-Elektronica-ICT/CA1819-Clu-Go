@@ -14,6 +14,7 @@ namespace ClueGoASP.Services
     public interface IUserService
     {
         User GetUserById(int id);
+        List<User> GetAllUsers();
         User Login(string username, string password);
         User CreateUser(User newUser);
         User Deleteuser(int id);
@@ -51,8 +52,6 @@ namespace ClueGoASP.Services
             //passwoord hashen
             newUser.Password = PasswordHash(newUser.Password);
 
-
-
             bool usernameAlreadyExists = _dbContext.Users.Any(x => x.Username == newUser.Username);
             bool emailAlreadyExists = _dbContext.Users.Any(x => x.Email == newUser.Email);
 
@@ -89,21 +88,6 @@ namespace ClueGoASP.Services
             }
         }
 
-       /* public User ClearUsers(int id)
-        {
-            for (int _id = id; _id < _dbContext.Users.Count(); _id++)
-            {
-                id = _id;
-                var user = _dbContext.Users.SingleOrDefault(x => x.UserId == id);
-                if (user == null)
-                    return NotFound();
-
-                _dbContext.Users.Remove(user);
-                _dbContext.SaveChanges();
-            }
-            return Content("Delete succes!");
-        }*/
-
         public User UpdateUser(User updateUser, string username)
         {
             var orgUser = _dbContext.Users.SingleOrDefault(x => x.Username == username);
@@ -120,6 +104,12 @@ namespace ClueGoASP.Services
             _dbContext.SaveChanges();
             return orgUser;
         }
+
+        public List<User> GetAllUsers()
+        {
+            return _dbContext.Users.ToList();
+        }
+
         public string PasswordHash(string pwdHash)
         {
             MD5 mD5 = MD5.Create();
@@ -134,5 +124,19 @@ namespace ClueGoASP.Services
             return sb.ToString();
         }
 
+        /* public User ClearUsers(int id)
+         {
+             for (int _id = id; _id < _dbContext.Users.Count(); _id++)
+             {
+                 id = _id;
+                 var user = _dbContext.Users.SingleOrDefault(x => x.UserId == id);
+                 if (user == null)
+                     return NotFound();
+
+                 _dbContext.Users.Remove(user);
+                 _dbContext.SaveChanges();
+             }
+             return Content("Delete succes!");
+         }*/
     }
 }
