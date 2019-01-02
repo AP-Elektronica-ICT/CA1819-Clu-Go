@@ -82,7 +82,7 @@ namespace ClueGoASP.Services
 
                 game.User = user;                                                                 //Setting params for readability in requests.
                 game.UserId = userId;
-                //game.Username = user.Username;
+                game.Username = user.Username;
 
                 _dbContext.Games.Add(game);
                 _dbContext.SaveChanges();

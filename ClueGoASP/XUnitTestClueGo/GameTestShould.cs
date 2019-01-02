@@ -22,6 +22,7 @@ namespace XUnitTestClueGo
 
         public GameTestShould()
         {
+     
             //Arrange For the all tests
             options = new DbContextOptionsBuilder<GameContext>().UseInMemoryDatabase(databaseName: "GameTestDB").Options;
             //arrange
@@ -32,7 +33,6 @@ namespace XUnitTestClueGo
 
                 var testUser = new User()
                 {
-                    //UserId = 1,
                     Username = "tempUser",
                     Password = "123456"
                 };
@@ -145,6 +145,8 @@ namespace XUnitTestClueGo
                 globalContext.Clues.Add(clue1);
                 globalContext.Clues.Add(clue2);
                 globalContext.SaveChanges();
+
+
             }
         }
 
@@ -197,25 +199,15 @@ namespace XUnitTestClueGo
         public void Pass_CreateGame()
         {
             //Arrange
-            //var options = new DbContextOptionsBuilder<GameContext>().UseInMemoryDatabase(databaseName: "DBtest3").Options;
+            //var options = new DbContextOptionsBuilder<GameContext>().UseInMemoryDatabase(databaseName: "CreateGame").Options;
 
             using (var globalContext = new GameContext(options))
             {
                 gameService = new GameService(globalContext);
-                userService = new UserService(globalContext);
-                var fakeUser = new User()
-                {
-                    UserId = 999,
-                    Username = "fakeUser2",
-                    Password ="123456",
-                    Email = "email@gmail.com"
-
-                };
-                userService.CreateUser(fakeUser);
                 //act
-                var result = gameService.CreateGame(999, 3);
+                var result = gameService.CreateGame(1, 3);
                 //Assert
-                Assert.Equal(999, result.GameId);
+                Assert.Equal("tempUser", result.User.Username);
             }            
         }
     }

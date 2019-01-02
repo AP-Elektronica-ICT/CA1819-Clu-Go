@@ -9,7 +9,7 @@ namespace ClueGoASP.Models
     {
         public User User { get; set; }
         public int UserId { get; set; }
-        //public string Username { get; set; }
+        public string Username { get; set; }
         [Key]
         public int GameId { get; set; }    
         public bool GameWon { get; set; }

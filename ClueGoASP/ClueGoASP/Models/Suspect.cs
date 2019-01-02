@@ -13,7 +13,7 @@ namespace ClueGoASP.Models
         public string SusDescription { get; set; }
         public string SusWeapon { get; set; }
         public string SusImgUrl { get; set; }
-        public bool isMurderer { get; set; }
+        //public bool isMurderer { get; set; }
 
         public ICollection<GameSuspect> GameSuspects { get; set; }
     }
