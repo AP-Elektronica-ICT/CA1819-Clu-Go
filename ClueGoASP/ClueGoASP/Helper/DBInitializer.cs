@@ -71,7 +71,6 @@ namespace ClueGoASP.Data
                     SusDescription = "Col. Michael Mustard[2] (born June 29, 1924) is a gallant military hero whose glittering career hides a tarnished past. He learns from the strong and deals quickly with the weak. He believes that casualties are inevitable in war and is usually the sole survivor in battle. The colonel enjoys an adventure and must always succeed in battle, no matter what, even if it means betraying his allies to defeat the enemy. He became the boyfriend of the glamorous actress Ms. Vivienne Scarlet. He was an old friend of Mr. John Boddy from college, who was mysteriously murdered",
                     SusImgUrl = "https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/04/08/unspecified-3.jpg?width=1368&height=912&fit=bounds&format=pjpg&auto=webp&quality=70",
                 };
-
                 var suspect3 = new Suspect()
                 {
                     SusName = "Dr.Orchid",
@@ -95,7 +94,6 @@ namespace ClueGoASP.Data
                     SusImgUrl = "https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/04/08/unspecified.jpg?width=1368&height=912&fit=bounds&format=pjpg&auto=webp&quality=70",
 
                 };
-
                 var suspect6 = new Suspect()
                 {
                     SusName = "Mrs.White",
@@ -104,10 +102,6 @@ namespace ClueGoASP.Data
                     SusImgUrl = "https://static.giantbomb.com/uploads/scale_small/0/5768/698578-white_puzzle.jpg",
 
                 };
-
-                
-                //https://pbs.twimg.com/profile_images/745749442670669824/l_6cM8YA_400x400.jpg
-
 
                 context.Suspects.Add(suspect0);
                 context.Suspects.Add(suspect1);
@@ -129,31 +123,35 @@ namespace ClueGoASP.Data
                     Email = "weyns.arno@gmail.com",
                     Password = "123456"
                 };
-
                 var admin1 = new User()
                 {
                     Username = "MassureA",
                     Email = "s091998@ap.be",
-                    Password = "3D9188577CC9BFE9291AC66B5CC872B7"
+                    Password = "123456"
                 };
-
                 var admin2 = new User()
                 {
                     Username = "JoppeM",
                     Email = "joppe.mertens@gmail.com",
-                    Password = "3D9188577CC9BFE9291AC66B5CC872B7"
+                    Password = "123456"
                 };
-
                 var admin3 = new User()
                 {
                     Username = "AlIbra",
                     Email = "s091997@ap.be",
-                    Password = "azerty"
+                    Password = "123456"
+                };
+                var admin4 = new User()
+                {
+                    Username = "Test",
+                    Email = "Test@ap.be",
+                    Password = "123456"
                 };
                 context.Users.Add(admin);
                 context.Users.Add(admin1);
                 context.Users.Add(admin2);
                 context.Users.Add(admin3);
+                context.Users.Add(admin4);
 
                 context.SaveChanges();
             }
@@ -188,6 +186,83 @@ namespace ClueGoASP.Data
                     LocLong = 4.401576,
                     LocDescription = "Groenplaats, standbeeld Pieter Paul Rubens."
                 };
+                var location5 = new Location()
+                {
+                    LocName = "MAS",
+                    LocLat = 51.228989,
+                    LocLong = 4.40816,
+                    LocDescription = "Museum aan de stroom"
+                };
+                var location6 = new Location()
+                {
+                    LocName = "Stadswaag",
+                    LocLat = 51.223877,
+                    LocLong = 4.407136,
+                    LocDescription = "Studentencafés."
+                };
+                var location7 = new Location()
+                {
+                    LocName = "De Zoo",
+                    LocLat = 51.217834,
+                    LocLong = 4.423122,
+                    LocDescription = "Zoo van Antwerpen."
+                };
+                var location8 = new Location()
+                {
+                    LocName = "Centraal Station",
+                    LocLat = 51.217433,
+                    LocLong = 4.420821,
+                    LocDescription = "Centraal station van Antwerpen"
+                };
+                var location9 = new Location()
+                {
+                    LocName = "Stadspark",
+                    LocLat = 51.21243,
+                    LocLong = 4.414481,
+                    LocDescription = "Grootste park in centrum Antwerpen"
+                };
+                var location10 = new Location()
+                {
+                    LocName = "Stadsschouwburg",
+                    LocLat = 51.213204,
+                    LocLong = 4.406471,
+                    LocDescription = "Stadsschouwburg Antwerpen"
+                };
+                var location11 = new Location()
+                {
+                    LocName = "Vrijdagmarkt",
+                    LocLat = 51.218377,
+                    LocLong = 4.399065,
+                    LocDescription = "Rustig pleintje om iets te drinken."
+                };
+                var location12 = new Location()
+                {
+                    LocName = "GroenPlaats",
+                    LocLat = 51.219237,
+                    LocLong = 4.401694,
+                    LocDescription = "Groenplaats van Antwerpen"
+                };
+                var location13 = new Location()
+                {
+                    LocName = "Rockoxhuis",
+                    LocLat = 51.221717,
+                    LocLong = 4.406205,
+                    LocDescription = "Rockoxhuis"
+                };
+                var location15 = new Location()
+                {
+                    LocName = "Fakkeltheater",
+                    LocLat = 51.220467,
+                    LocLong = 4.398943,
+                    LocDescription = "Bekend theaterhuis."
+                };
+                var location14 = new Location()
+                {
+                    LocName = "Oudste huis Antwerpen",
+                    LocLat = 51.222929,
+                    LocLong = 4.401768,
+                    LocDescription = "Oudste huis Antwerpen"
+                };
                 var PoliceOffice = new Location()
                 {
                     LocName = "Politiekantoor",
@@ -196,11 +271,21 @@ namespace ClueGoASP.Data
                     LocDescription = "Politiekantoor"
                 };
 
-
                 context.Locations.Add(location1);
                 context.Locations.Add(location2);
                 context.Locations.Add(location3);
                 context.Locations.Add(location4);
+                context.Locations.Add(location5);
+                context.Locations.Add(location6);
+                context.Locations.Add(location7);
+                context.Locations.Add(location8);
+                context.Locations.Add(location9);
+                context.Locations.Add(location10);
+                context.Locations.Add(location11);
+                context.Locations.Add(location12);
+                context.Locations.Add(location13);
+                context.Locations.Add(location14);
+                context.Locations.Add(location15);
                 context.Locations.Add(PoliceOffice);
                 context.SaveChanges();
             }
