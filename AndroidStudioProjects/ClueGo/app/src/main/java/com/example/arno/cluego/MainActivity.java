@@ -194,20 +194,22 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
 
                                 JSONArray gameClues = game.getJSONArray("gameClues");
 
+
                                 for (int i = 0; i < gameClues.length(); i++) {
 
                                     JSONObject gameClue = (JSONObject) gameClues.get(i);
+                                    //JSONObject singleClue = gameClue.getJSONObject("clue");
                                     int clueId = gameClue.getInt("clueId");
 
                                     JSONObject clue = gameClue.getJSONObject("clue");
                                     String clueName = clue.getString("clueName");
-                                    String clueDescription = clue.getString("clueDescription");
+                                    //String clueDescription = clue.getString("clueDescription");
                                     String clueImgUrl = clue.getString("clueImgUrl");
                                     Boolean found = clue.getBoolean("found");
 
                                     Clue clueFromDatabase = new Clue();
 
-                                    clueFromDatabase.setClueDescription(clue.getString("clueDescription"));
+                                    //clueFromDatabase.setClueDescription(clue.getString("clueDescription"));
                                     clueFromDatabase.setClueId(clue.getInt("clueId"));
                                     clueFromDatabase.setClueImgUrl(clue.getString("clueImgUrl"));
                                     clueFromDatabase.setClueName(clue.getString("clueName"));

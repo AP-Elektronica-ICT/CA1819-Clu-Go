@@ -26,6 +26,7 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.arno.cluego.Helpers.ErrorCatcher;
 import com.example.arno.cluego.Objects.Game;
 import com.example.arno.cluego.Objects.User;
@@ -42,6 +43,8 @@ public class StartGameFragment extends Activity implements Serializable {
     TextView gameinfo,serverinfo,instructions, tvWelcomeMsg;
     Button startButton, continueBtn, testBtn;
     RequestQueue mRequestQueue;
+    private StringRequest stringRequest;
+
     private String jsonResponse;
     Game gameFromDatabase = new Game();
 
@@ -92,18 +95,17 @@ public class StartGameFragment extends Activity implements Serializable {
         testBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(StartGameFragment.this, "Not in use for the moment", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(StartGameFragment.this, MainActivity.class);
+                startActivity(i);
             }
         });
     }
 
     private void StartGame(final int UID, int amtItems){
-        Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
-        Network network = new BasicNetwork(new HurlStack());
-        mRequestQueue = new RequestQueue(cache, network);
+
         final ProgressBar loadCircle = findViewById(R.id.progress_bar);
-        /* Start the queue */
-        mRequestQueue.start();
+
+        mRequestQueue = Volley.newRequestQueue(this);
 
         String urlGameInfo ="https://clugo.azurewebsites.net/api/game/create/" + UID + "/" + amtItems;
 
@@ -134,14 +136,17 @@ public class StartGameFragment extends Activity implements Serializable {
     }
 
     private void LoadGame(final int UID){
-        Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
-        Network network = new BasicNetwork(new HurlStack());
-        mRequestQueue = new RequestQueue(cache, network);
-        final ProgressBar loadCircle = findViewById(R.id.progress_bar);
-        /* Start the queue */
-        mRequestQueue.start();
+        Intent i = new Intent(StartGameFragment.this, MainActivity.class);
+        i.putExtra("userId", UID);
+        i.putExtra("userDataPackage", usr);
+        startActivity(i);
 
-        String urlGameInfo ="https://clugo.azurewebsites.net/api/game/" + UID;
+        final ProgressBar loadCircle = findViewById(R.id.progress_bar);
+        //Start the queue
+        //mRequestQueue.start();
+        mRequestQueue = Volley.newRequestQueue(this);
+
+        String urlGameInfo ="https://clugo.azurewebsites.net/api/game/brief/" + UID;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlGameInfo,
                 new Response.Listener<String>() {

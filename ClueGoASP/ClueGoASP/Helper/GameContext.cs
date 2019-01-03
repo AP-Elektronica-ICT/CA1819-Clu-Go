@@ -75,6 +75,13 @@ namespace ClueGoASP.Data
                 .WithOne(e => e.User)
                 .HasForeignKey(c => c.GameId)
                 .IsRequired();
+
+            //Suspect has many clues, clue has 1 suspect
+            modelBuilder.Entity<Clue>()
+                .HasOne(c => c.Suspect)
+                .WithMany(e => e.Clues)
+                .HasForeignKey(c => c.SusForeignKey)
+                .IsRequired();
         }
 
     }

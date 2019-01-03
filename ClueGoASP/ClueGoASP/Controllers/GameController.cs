@@ -34,9 +34,17 @@ namespace ClueGoASP.Controllers
         {
             return Ok(_dbContext.Games
                 .Include(x => x.GameLocations)
-                .ThenInclude(x => x.GameId)
+                .Include(x => x.GameSuspects)
+                .Include(x => x.GameClues)
                 .ToList());
         }
+
+        [HttpGet("brief/{gameId}")]
+        public ActionResult<Game> GetBriefGame(int gameId)
+        {
+            return _gameService.GetBriefGame(gameId);
+        }
+
 
         [HttpDelete("{gameId}")]
         public IActionResult Delete(int gameId)

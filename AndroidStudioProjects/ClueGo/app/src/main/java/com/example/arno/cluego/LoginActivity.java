@@ -97,8 +97,6 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
 
         mRequestQueue = Volley.newRequestQueue(this);
         String url= "https://clugo.azurewebsites.net/api/user/inlog/"+email+"/"+password;
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        final SharedPreferences.Editor editor = preferences.edit();
 
         stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

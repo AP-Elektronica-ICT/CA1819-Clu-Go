@@ -8,7 +8,7 @@ using ClueGoASP.Models;
 using ClueGoASP.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace ClueGoASP.Controllers
 {

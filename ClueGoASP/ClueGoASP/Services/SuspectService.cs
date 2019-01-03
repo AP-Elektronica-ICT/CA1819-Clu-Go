@@ -1,6 +1,7 @@
 ﻿using ClueGoASP.Data;
 using ClueGoASP.Helper;
 using ClueGoASP.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +53,18 @@ namespace ClueGoASP.Services
 
         public List<Suspect> GetAll()
         {
-            return _dbContext.Suspects.ToList();
+            /*var result = _dbContext.Clues.Select(clues => new
+             {
+                 clues = clues,
+                 Susname = clues.Suspect.SusName
+             }).ToList();*/
+
+            var result = _dbContext.Suspects
+                .Include(x => x.Clues)
+                
+                //.Where(c => c.Clues.Any(a => a.SusForeignKey == 6))
+                .ToList();
+            return result;
         }
 
         public Suspect UpdateSuspect(Suspect updateSus)

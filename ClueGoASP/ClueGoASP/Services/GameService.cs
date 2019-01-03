@@ -15,6 +15,7 @@ namespace ClueGoASP.Services
         List<Game> GetGameById(int gameId);
         Game CreateGame(int userId, int amtSus);
         int GetGameInfo(int gameId);
+        Game GetBriefGame(int gameId);
     }
     public class GameService : IGameService
     {
@@ -27,6 +28,7 @@ namespace ClueGoASP.Services
         public Game CreateGame(int userId, int amtSus)
         {
             var game = new Game();
+            var clues = new List<Clue>();
             var user = _dbContext.Users.SingleOrDefault(x => x.UserId == userId);               //Get the right user
 
             if (amtSus < 3 || amtSus >= 9)
@@ -62,23 +64,36 @@ namespace ClueGoASP.Services
                 var suspects = _dbContext.Suspects.OrderBy(x => Guid.NewGuid()).ToList();       //Randomize Suspect list
 
                 game.GameSuspects = new List<GameSuspect>();
+                //game.GameClues = new List<GameClue>();
                 for (int i = 0; i < amtSus; i++)                                                //Add suspects to a game.
                 {
                     game.GameSuspects.Add(new GameSuspect
                     {
                         Suspect = suspects[i]
                     });
+                    if (i == 0)
+                    { 
                     game.GameSuspects[0].isMurderer = true;
+                    clues.Add(_dbContext.Clues.SingleOrDefault(x => x.SusForeignKey == suspects[i].SusId && !x.Alibi));
+                    }
+                    else
+                        clues.Add(_dbContext.Clues.SingleOrDefault(x => x.SusForeignKey == suspects[i].SusId && x.Alibi));
                 }
 
-                //Random Clues
-                var clues = _dbContext.Clues.ToList();
+                //Create list from all clues from the suspects in the game.
+                /*clues = _dbContext.Clues.Where(r => r.SusForeignKey == 1).ToList();
+
+                for (int i = 0; i < amtSus; i++)
+                {
+                    clues.Add(_dbContext.Clues.SingleOrDefault(x => x.SusForeignKey == game.GameSuspects[i].SusId));
+                }*/
                 game.GameClues = new List<GameClue>();
                 for (int i = 0; i < amtSus; i++)
                 {
                     game.GameClues.Add(new GameClue
                     {
                         Clue = clues[i]
+                        
                     });
                 }
 
@@ -104,6 +119,11 @@ namespace ClueGoASP.Services
                 _dbContext.SaveChanges();
                 return "Game removed.";
             }
+        }
+
+        public Game GetBriefGame(int gameId)
+        {
+            return _dbContext.Games.Find(gameId);
         }
 
         public List<Game> GetGameById(int gameId)
