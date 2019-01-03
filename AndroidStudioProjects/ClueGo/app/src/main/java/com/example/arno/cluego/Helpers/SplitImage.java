@@ -1,4 +1,4 @@
-package com.example.arno.cluego;
+package com.example.arno.cluego.Helpers;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -6,6 +6,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+
+import com.example.arno.cluego.R;
+import com.example.arno.cluego.TestActivity;
 
 import java.util.ArrayList;
 

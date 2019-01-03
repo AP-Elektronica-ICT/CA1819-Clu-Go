@@ -1,4 +1,4 @@
-package com.example.arno.cluego;
+package com.example.arno.cluego.Objects;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.example.arno.cluego.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

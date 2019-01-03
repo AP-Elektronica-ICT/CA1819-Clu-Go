@@ -30,6 +30,7 @@ import com.example.arno.cluego.Helpers.ErrorCatcher;
 import com.example.arno.cluego.Objects.Game;
 import com.example.arno.cluego.Objects.User;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -147,14 +148,23 @@ public class StartGameFragment extends Activity implements Serializable {
                     @Override
                     public void onResponse(String response) {
                         Log.i(response,response);
-                        gameinfo.setText(response);
-
                         loadCircle.setVisibility(View.GONE);
 
-                        Intent i = new Intent(StartGameFragment.this, MainActivity.class);
-                        i.putExtra("userId", UID);
-                        i.putExtra("userDataPackage", usr);
-                        startActivity(i);
+                        try {
+                                JSONArray responseArray = new JSONArray(response);
+                                if (responseArray.length() == 0)
+                                    gameinfo.setText("You don't have an active game, start a new one and get hunting!");
+                                else {
+                                    gameinfo.setText(response);
+
+                                    Intent i = new Intent(StartGameFragment.this, MainActivity.class);
+                                    i.putExtra("userId", UID);
+                                    i.putExtra("userDataPackage", usr);
+                                    startActivity(i);
+                                }
+                        }catch (JSONException ex){
+                            gameinfo.setText(ex.toString());
+                        }
                     }
                 },
                 new Response.ErrorListener() {

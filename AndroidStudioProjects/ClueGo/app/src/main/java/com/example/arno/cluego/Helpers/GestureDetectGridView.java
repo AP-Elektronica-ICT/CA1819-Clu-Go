@@ -1,4 +1,4 @@
-package com.example.arno.cluego;
+package com.example.arno.cluego.Helpers;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -7,6 +7,8 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.GridView;
+
+import com.example.arno.cluego.PuzzleActivity;
 
 public class GestureDetectGridView extends GridView {
     private GestureDetector gDetector;

@@ -1,4 +1,4 @@
-package com.example.arno.cluego;
+package com.example.arno.cluego.Helpers;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
