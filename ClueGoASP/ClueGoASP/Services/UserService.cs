@@ -19,6 +19,9 @@ namespace ClueGoASP.Services
         User CreateUser(User newUser);
         User Deleteuser(int id);
         User UpdateUser(User updateUser, string username);
+        void AddWonGame(int id);
+        void AddFoundClues(int amt, int id);
+        void AddDistanceWalked(int amt, int id);
     }
     public class UserService : IUserService
     {
@@ -26,6 +29,19 @@ namespace ClueGoASP.Services
         public UserService(GameContext context)
         {
             _dbContext = context;
+        }
+        public string PasswordHash(string pwdHash)
+        {
+            MD5 mD5 = MD5.Create();
+            string stringToHash = pwdHash;
+            byte[] tmpHash = Encoding.ASCII.GetBytes(stringToHash);
+            byte[] hash = mD5.ComputeHash(tmpHash);
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var a in hash)
+                sb.Append(a.ToString("X2"));
+
+            return sb.ToString();
         }
 
         public User GetUserById(int id)
@@ -110,18 +126,25 @@ namespace ClueGoASP.Services
             return _dbContext.Users.ToList();
         }
 
-        public string PasswordHash(string pwdHash)
+        public void AddWonGame(int id)
         {
-            MD5 mD5 = MD5.Create();
-            string stringToHash = pwdHash;
-            byte[] tmpHash = Encoding.ASCII.GetBytes(stringToHash);
-            byte[] hash = mD5.ComputeHash(tmpHash);
+            var user = _dbContext.Users.Find(id);
+            user.GamesPlayed++;
+            _dbContext.SaveChanges();
+        }
 
-            StringBuilder sb = new StringBuilder();
-            foreach (var a in hash)
-                sb.Append(a.ToString("X2"));
+        public void AddFoundClues(int amt, int id)
+        {
+            var user = _dbContext.Users.Find(id);
+            user.cluesFound =+ amt;
+            _dbContext.SaveChanges();
+        }
 
-            return sb.ToString();
+        public void AddDistanceWalked(int amt, int id)
+        {
+            var user = _dbContext.Users.Find(id);
+            user.distanceWalked += amt;
+            _dbContext.SaveChanges();
         }
 
         /* public User ClearUsers(int id)

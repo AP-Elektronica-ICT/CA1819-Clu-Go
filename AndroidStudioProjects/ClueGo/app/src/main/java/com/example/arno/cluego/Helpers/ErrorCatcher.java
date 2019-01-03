@@ -1,5 +1,7 @@
 package com.example.arno.cluego.Helpers;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -12,6 +14,8 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.arno.cluego.EndActivity;
+import com.example.arno.cluego.StartGameFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,26 +48,22 @@ public class ErrorCatcher {
         }
     }
 
-    public void delete(final String url) {
-        StringRequest dr = new StringRequest(Request.Method.DELETE, url,
-                new Response.Listener<String>()
-                {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("Heyooo", "delete success!");
+    public void delete(final int userId, Context context) {
+            mRequestQueue = Volley.newRequestQueue(context);
+            String url= "https://clugo.azurewebsites.net/api/game/" + userId;
 
-                    }
-                },
-                new Response.ErrorListener()
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Delete Error", "onErrorResponse: " + error.toString());
+            StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("EndActivity", response);
 
-                    }
                 }
-        );
-        mRequestQueue.add(dr);
-    }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.i("Error.response", error.toString());
+                }
+            });
+            mRequestQueue.add(stringRequest);
+        }
 }
-

@@ -29,13 +29,16 @@ import com.example.arno.cluego.Objects.Clue;
 import com.example.arno.cluego.Objects.Game;
 import com.example.arno.cluego.Objects.Location;
 import com.example.arno.cluego.Objects.Suspect;
+import com.example.arno.cluego.Objects.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 
-public class MainActivity extends AppCompatActivity implements MapViewFragment.MapFragmentListener {
+
+public class MainActivity extends AppCompatActivity implements MapViewFragment.MapFragmentListener, Serializable {
     private MapViewFragment mapViewFragment = new MapViewFragment();
     private SuspectFragment suspectFragment= new SuspectFragment();
     private InventoryFragment inventoryFragment= new InventoryFragment();
@@ -48,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
     RequestQueue mRequestQueue;
     Bundle bundle;
 
+    User usr = new User();
     Game gameFromDatabase = new Game();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -73,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
                     Intent intent = new Intent(MainActivity.this,GuessActivity.class);
                     intent.putExtra("gameData", gameFromDatabase);
                     intent.putExtra("userId", gameId);
+                    intent.putExtra("userDataPackage", usr);
                     startActivity(intent);
                     return true;
             }
@@ -87,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
 
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         gameId = getIntent().getIntExtra("userId", 0);
+        usr = (User)getIntent().getSerializableExtra("userDataPackage");
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

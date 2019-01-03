@@ -17,7 +17,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.arno.cluego.Objects.User;
 
-public class EndActivity extends AppCompatActivity {
+import java.io.Serializable;
+
+public class EndActivity extends AppCompatActivity implements Serializable {
     Button btnEnd, btnDev;
     TextView tvTest;
     User usr = new User();
@@ -36,6 +38,7 @@ public class EndActivity extends AppCompatActivity {
         tvTest = findViewById(R.id.tv_test2);
 
         userId = getIntent().getIntExtra("userId", 0);
+        usr = (User)getIntent().getSerializableExtra("userDataPackage");
 
         tvTest.setText(String.valueOf(userId));
 
@@ -56,6 +59,8 @@ public class EndActivity extends AppCompatActivity {
                     Toast.makeText(EndActivity.this, response, Toast.LENGTH_SHORT).show();
 
                     Intent i = new Intent(EndActivity.this, StartGameFragment.class);
+                    i.putExtra("userId",userId);
+                    i.putExtra("userDataPackage", usr);
                     startActivity(i);
                 }
             }, new Response.ErrorListener() {

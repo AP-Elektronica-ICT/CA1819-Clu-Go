@@ -45,18 +45,19 @@ public class StartGameFragment extends Activity implements Serializable {
     Game gameFromDatabase = new Game();
 
     ErrorCatcher errorCatcher = new ErrorCatcher();
+    User usr = new User();
 
-    public int UID;
+    public int UID, amtItems;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_start_of_game);
 
-
-        final User usr = (User)getIntent().getSerializableExtra("UserPackage");
+        usr = (User)getIntent().getSerializableExtra("userDataPackage");
 
         UID = usr.getUserId();
+        amtItems = 3;
 
         gameinfo = findViewById(R.id.txt_info);
         serverinfo = findViewById(R.id.txt_server_info);
@@ -74,7 +75,7 @@ public class StartGameFragment extends Activity implements Serializable {
             public void onClick(View view) {
                 gameinfo.setText(" ");
                 loadCircle.setVisibility(View.VISIBLE);
-                StartGame(UID, 3);
+                StartGame(UID, amtItems);
             }
         });
 
@@ -114,8 +115,7 @@ public class StartGameFragment extends Activity implements Serializable {
                             gameinfo.setText(response);
                             loadCircle.setVisibility(View.GONE);
 
-                            Intent i = new Intent(StartGameFragment.this, MainActivity.class);
-                            startActivity(i);
+                            LoadGame(UID);
                     }
                 },
                 new Response.ErrorListener() {
@@ -153,6 +153,7 @@ public class StartGameFragment extends Activity implements Serializable {
 
                         Intent i = new Intent(StartGameFragment.this, MainActivity.class);
                         i.putExtra("userId", UID);
+                        i.putExtra("userDataPackage", usr);
                         startActivity(i);
                     }
                 },
@@ -184,7 +185,8 @@ public class StartGameFragment extends Activity implements Serializable {
                 "Start new game",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
+                        errorCatcher.delete(UID, StartGameFragment.this);
+                        StartGame(UID, amtItems);
                     }
                 });
 

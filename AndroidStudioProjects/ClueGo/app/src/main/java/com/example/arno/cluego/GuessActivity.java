@@ -21,16 +21,18 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.arno.cluego.Objects.Game;
 import com.example.arno.cluego.Objects.Suspect;
+import com.example.arno.cluego.Objects.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuessActivity extends AppCompatActivity {
+public class GuessActivity extends AppCompatActivity implements Serializable {
     ArrayList<String>suspectList;
     RequestQueue mRequestQueue;
     StringRequest stringRequest;
@@ -40,10 +42,10 @@ public class GuessActivity extends AppCompatActivity {
     TextView tvTest;
     int userId;
 
+    User usr = new User();
     Game game = new Game();
     final ArrayList<String> suspectNames = new ArrayList<String>();
 
-    private String url = "https://clugo.azurewebsites.net/api/suspect";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +57,7 @@ public class GuessActivity extends AppCompatActivity {
         listview = findViewById(R.id.ListView_guess);
 
         userId = getIntent().getIntExtra("userId", 0);
+        usr = (User)getIntent().getSerializableExtra("userDataPackage");
         game = (Game)getIntent().getSerializableExtra("gameData");
 
         tvTest.setText(game.getMurderer());
@@ -85,16 +88,16 @@ public class GuessActivity extends AppCompatActivity {
                 if(suspectGuess.equals(game.getMurderer())){;
                     Intent i = new Intent(GuessActivity.this, EndActivity.class);
                     i.putExtra("userId", userId);
+                    i.putExtra("userDataPackage", usr);
                     startActivity(i);
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"you have guessed incorrectly",Toast.LENGTH_LONG).show();
                 }
-
             }
         });
-
     }
+
     public void makeListViewAdapter(){
             ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
                     this,

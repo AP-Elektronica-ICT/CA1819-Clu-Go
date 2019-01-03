@@ -19,12 +19,14 @@ namespace ClueGoASP.Controllers
     {
         private readonly GameContext _dbContext;
         private IGameService _gameService;
+        private IUserService _userService;
 
 
-        public GameController(GameContext dbcontext, IGameService gameService)
+        public GameController(GameContext dbcontext, IGameService gameService, IUserService userService)
         {
             _dbContext = dbcontext;
             _gameService = gameService;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -39,8 +41,11 @@ namespace ClueGoASP.Controllers
         [HttpDelete("{gameId}")]
         public IActionResult Delete(int gameId)
         {
+            int amt = _gameService.GetGameInfo(gameId);
             try
             {
+                UpdateEndGame(gameId, amt);
+
                 var game = _gameService.DeleteGame(gameId);
                 return Ok(game);
             }
@@ -55,19 +60,7 @@ namespace ClueGoASP.Controllers
         {
             var item = _dbContext.Games.Find(gameId);
 
-            return Ok(_dbContext.Games
-                            .Include(x => x.GameLocations)
-                            .ThenInclude(x => x.Location)
-                            .Where(x => x.GameId == gameId)
-
-                            .Include(x => x.GameSuspects)
-                            .ThenInclude(x => x.Suspect)
-                            .Where(x => x.GameId == gameId)
-
-                            .Include(x => x.GameClues)
-                            .ThenInclude(x => x.Clue)
-                            .Where(x => x.GameId == gameId)
-                            .ToList());
+            return Ok(_gameService.GetGameById(gameId));
         }
 
         [HttpGet("create/{userId}/{amtSus}")]
@@ -81,6 +74,16 @@ namespace ClueGoASP.Controllers
             {
                 return BadRequest(new { message = ex.Message});
             }            
+        }
+
+        [HttpPut("updateEndGame/{userId}/{amtSus}")]
+        public IActionResult UpdateEndGame(int userId, int amtSus)
+        {
+            _userService.AddWonGame(userId);
+            _userService.AddDistanceWalked(amtSus, userId);
+            _userService.AddFoundClues(amtSus, userId);
+
+            return Ok("User stats have been updated.");            
         }
     }
 }

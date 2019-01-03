@@ -78,7 +78,6 @@ public class InventoryFragment extends Fragment {
                                     selecteditemdes.setText(foundClueList.get(position));
                                 }});
                         }
-
                     }
 
                 } catch (JSONException e){

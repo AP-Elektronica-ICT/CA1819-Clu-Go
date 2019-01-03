@@ -1,6 +1,7 @@
 ﻿using ClueGoASP.Data;
 using ClueGoASP.Helper;
 using ClueGoASP.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,9 @@ namespace ClueGoASP.Services
     public interface IGameService
     {
         string DeleteGame(int gameId);
-        Game GetGameById(int gameId);
+        List<Game> GetGameById(int gameId);
         Game CreateGame(int userId, int amtSus);
+        int GetGameInfo(int gameId);
     }
     public class GameService : IGameService
     {
@@ -104,9 +106,27 @@ namespace ClueGoASP.Services
             }
         }
 
-        public Game GetGameById(int gameId)
+        public List<Game> GetGameById(int gameId)
         {
-            return null;
+            return _dbContext.Games
+                            .Include(x => x.GameLocations)
+                            .ThenInclude(x => x.Location)
+                            .Where(x => x.GameId == gameId)
+
+                            .Include(x => x.GameSuspects)
+                            .ThenInclude(x => x.Suspect)
+                            .Where(x => x.GameId == gameId)
+
+                            .Include(x => x.GameClues)
+                            .ThenInclude(x => x.Clue)
+                            .Where(x => x.GameId == gameId)
+                            .ToList();
+        }
+
+        public int GetGameInfo(int gameId)
+        {          
+            var game = _dbContext.GameLocations.Where(x => x.GameId == gameId);
+            return game.Count();
         }
     }
 }

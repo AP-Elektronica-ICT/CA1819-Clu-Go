@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
         btnSignIn.setOnClickListener(Login);
         btnDev.setOnClickListener(DevMove);
     }
-    
+
     private View.OnClickListener Login = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
                     spinner.setVisibility(View.INVISIBLE);
 
                     Intent i = new Intent(LoginActivity.this, StartGameFragment.class);
-                    i.putExtra("UserPackage",user);
+                    i.putExtra("userDataPackage",user);
                     startActivity(i);
                 }catch(JSONException e)
                 {
@@ -191,4 +191,3 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
         startActivity(intent);
     }
 }
-

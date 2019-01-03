@@ -15,7 +15,7 @@ public class User implements Serializable {
 
 
     public void setUserId(int i){
-       this.userId = i;
+        this.userId = i;
 
     }
     public int getUserId(){
