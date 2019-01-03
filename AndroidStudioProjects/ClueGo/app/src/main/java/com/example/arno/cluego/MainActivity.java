@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
-
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
@@ -90,13 +89,13 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         gameId = getIntent().getIntExtra("userId", 0);
         usr = (User)getIntent().getSerializableExtra("userDataPackage");
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         GetGame(gameId);
+        //switchToSuspect();
     }
 
     @Override
@@ -218,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
                                 }
                                 bundle = new Bundle();
                                 bundle.putSerializable("game", gameFromDatabase);
+                                bundle.putSerializable("userDataPackage",usr);
                                 Log.e("bundleOpvragen", "onResponse: " + bundle);
 
                             } catch (JSONException e) {
@@ -267,8 +267,7 @@ public void sendBunble(Fragment _fragmap, Bundle _bundle){
     }
 
     public void switchToStats(){
-        FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.fragment_container, new StatsFragment()).addToBackStack(null).commit();
+        sendBunble(statsFragment,bundle);
     }
 
     public void startPuzzle(View view) {
