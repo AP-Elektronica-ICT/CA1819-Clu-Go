@@ -39,11 +39,27 @@ namespace ClueGoASP.Controllers
                 .ToList());
         }
 
-        [HttpGet("brief/{gameId}")]
+        [HttpGet("{gameId}")]
         public ActionResult<Game> GetBriefGame(int gameId)
         {
-            return _gameService.GetBriefGame(gameId);
+            try
+            {
+                return _gameService.GetBriefGame(gameId);
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
+
+        [HttpGet("full/{gameId}")]
+        public ActionResult<List<Game>> GetGameById(int gameId)
+        {
+            var item = _dbContext.Games.Find(gameId);
+
+            return Ok(_gameService.GetGameById(gameId));
+        }
+
 
 
         [HttpDelete("{gameId}")]
@@ -63,16 +79,21 @@ namespace ClueGoASP.Controllers
             }            
         }
 
-        [HttpGet("{gameId}")]
-        public ActionResult<List<Game>> GetGameById(int gameId)
+        [HttpGet("create/full/{userId}/{amtSus}")]
+        public ActionResult<Game> CreateGameFull(int userId, int amtSus)
         {
-            var item = _dbContext.Games.Find(gameId);
-
-            return Ok(_gameService.GetGameById(gameId));
+            try
+            {
+                return Ok(_gameService.CreateGameFull(userId, amtSus));
+            }
+            catch(AppException ex)
+            {
+                return BadRequest(new { message = ex.Message});
+            }            
         }
 
         [HttpGet("create/{userId}/{amtSus}")]
-        public ActionResult<Game> CreateGame(int userId, int amtSus)
+        public ActionResult CreateGame(int userId, int amtSus)
         {
             try
             {

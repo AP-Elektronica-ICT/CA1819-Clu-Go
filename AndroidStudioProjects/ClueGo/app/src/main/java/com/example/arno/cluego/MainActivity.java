@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
             Network network = new BasicNetwork(new HurlStack());
             mRequestQueue = new RequestQueue(cache, network);
             mRequestQueue.start();
-            String gameurl = "https://clugo.azurewebsites.net/api/game/" + GID;
+            String gameurl = "https://clugo.azurewebsites.net/api/game/full/" + GID;
 
             JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                     Request.Method.GET,

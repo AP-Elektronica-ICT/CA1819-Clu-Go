@@ -13,7 +13,8 @@ namespace ClueGoASP.Services
     {
         string DeleteGame(int gameId);
         List<Game> GetGameById(int gameId);
-        Game CreateGame(int userId, int amtSus);
+        Game CreateGameFull(int userId, int amtSus);
+        string CreateGame(int userId, int amtSus);
         int GetGameInfo(int gameId);
         Game GetBriefGame(int gameId);
     }
@@ -25,7 +26,7 @@ namespace ClueGoASP.Services
             _dbContext = context;
         }
 
-        public Game CreateGame(int userId, int amtSus)
+        public Game CreateGameFull(int userId, int amtSus)
         {
             var game = new Game();
             var clues = new List<Clue>();
@@ -81,12 +82,6 @@ namespace ClueGoASP.Services
                 }
 
                 //Create list from all clues from the suspects in the game.
-                /*clues = _dbContext.Clues.Where(r => r.SusForeignKey == 1).ToList();
-
-                for (int i = 0; i < amtSus; i++)
-                {
-                    clues.Add(_dbContext.Clues.SingleOrDefault(x => x.SusForeignKey == game.GameSuspects[i].SusId));
-                }*/
                 game.GameClues = new List<GameClue>();
                 for (int i = 0; i < amtSus; i++)
                 {
@@ -108,6 +103,15 @@ namespace ClueGoASP.Services
             }
         }
 
+        public string CreateGame(int userId, int amtSus)
+        {
+            var game = CreateGameFull(userId, amtSus);
+            if (game == null)
+                throw new AppException("Game could not be created");
+            else
+                return "Game created for userId: " + userId;
+        }
+
         public string DeleteGame(int gameId)
         {
             var game = _dbContext.Games.Find(gameId);
@@ -123,7 +127,11 @@ namespace ClueGoASP.Services
 
         public Game GetBriefGame(int gameId)
         {
-            return _dbContext.Games.Find(gameId);
+            var game = _dbContext.Games.Find(gameId);
+            if (game == null)
+                throw new AppException("User " + gameId + " does not have a current game.");
+            else
+                return game;
         }
 
         public List<Game> GetGameById(int gameId)

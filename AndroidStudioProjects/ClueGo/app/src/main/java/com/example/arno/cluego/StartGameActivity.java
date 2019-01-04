@@ -19,27 +19,29 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.arno.cluego.Helpers.ErrorCatcher;
+import com.example.arno.cluego.Helpers.RequestHelper;
 import com.example.arno.cluego.Objects.Game;
 import com.example.arno.cluego.Objects.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 
 
 public class StartGameActivity extends Activity implements Serializable {
-    TextView gameinfo,serverinfo,instructions, tvWelcomeMsg;
+    TextView gameinfo, serverinfo, instructions, tvWelcomeMsg;
     EditText etAmtSus;
     Button startBtn, continueBtn, testBtn;
     RequestQueue mRequestQueue;
     private StringRequest stringRequest;
 
     private String jsonResponse;
+    private boolean confirmed;
     Game gameFromDatabase = new Game();
 
-    ErrorCatcher errorCatcher = new ErrorCatcher();
+    RequestHelper requestHelper = new RequestHelper();
     User usr = new User();
 
     public int UID, amtItems;
@@ -101,7 +103,7 @@ public class StartGameActivity extends Activity implements Serializable {
 
         mRequestQueue = Volley.newRequestQueue(this);
 
-        String urlGameInfo ="https://clugo.azurewebsites.net/api/game/create/brief" + UID + "/" + amtItems;
+        String urlGameInfo ="https://clugo.azurewebsites.net/api/game/create/" + UID + "/" + amtItems;
 
         // Formulate the request and handle the response.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlGameInfo,
@@ -119,28 +121,30 @@ public class StartGameActivity extends Activity implements Serializable {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         loadCircle.setVisibility(View.GONE);
-                        String errorMessage = errorCatcher.ParseError(error);
+                        String errorMessage = requestHelper.ParseError(error);
                         gameinfo.setText(errorMessage);
 
-                        if (errorMessage.contains("already"))
+                        if (errorMessage.contains("already") && !confirmed)
                             ConfirmRemoveGame();
+                        else
+                            LoadGame(UID);
                     }
                 });
         mRequestQueue.add(stringRequest);
     }
 
     private void LoadGame(final int UID){
-        Intent i = new Intent(StartGameActivity.this, MainActivity.class);
+        /*Intent i = new Intent(StartGameActivity.this, MainActivity.class);
         i.putExtra("userId", UID);
         i.putExtra("userDataPackage", usr);
-        startActivity(i);
+        startActivity(i);*/
 
         final ProgressBar loadCircle = findViewById(R.id.progress_bar);
         //Start the queue
         //mRequestQueue.start();
         mRequestQueue = Volley.newRequestQueue(this);
 
-        String urlGameInfo ="https://clugo.azurewebsites.net/api/game/brief/" + UID;
+        String urlGameInfo ="https://clugo.azurewebsites.net/api/game/" + UID;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlGameInfo,
                 new Response.Listener<String>() {
@@ -149,9 +153,10 @@ public class StartGameActivity extends Activity implements Serializable {
                         Log.i(response,response);
                         loadCircle.setVisibility(View.GONE);
 
+
                         try {
-                                JSONArray responseArray = new JSONArray(response);
-                                if (responseArray.length() == 0)
+                                JSONObject responseObj = new JSONObject(response);
+                                if (responseObj.length() == 0)
                                     gameinfo.setText("You don't have an active game, start a new one and get hunting!");
                                 else {
                                     gameinfo.setText(response);
@@ -170,7 +175,9 @@ public class StartGameActivity extends Activity implements Serializable {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         loadCircle.setVisibility(View.GONE);
-                        String errorMessage = errorCatcher.ParseError(error);
+                        String errorMessage = requestHelper.ParseError(error);
+                        if (errorMessage.contains("does not"))
+                            gameinfo.setText("You don't have an active game, start a new one and get hunting!");
                         Log.d("ErrCatcherStartGameFrag", errorMessage);
                     }
                 });
@@ -182,7 +189,7 @@ public class StartGameActivity extends Activity implements Serializable {
         builder1.setMessage("You have an unfinished game, do you wish to continue this game?");
         builder1.setCancelable(true);
 
-        builder1.setPositiveButton(
+        builder1.setNegativeButton(
                 "Continue",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -190,16 +197,17 @@ public class StartGameActivity extends Activity implements Serializable {
                     }
                 });
 
-        builder1.setNeutralButton(
+        builder1.setPositiveButton(
                 "Start new game",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        errorCatcher.delete(UID, StartGameActivity.this);
+                        requestHelper.delete(UID, StartGameActivity.this);
+                        confirmed = true;
                         StartGame(UID, amtItems);
                     }
                 });
 
-        builder1.setNegativeButton(
+        builder1.setNeutralButton(
                 "Cancel",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

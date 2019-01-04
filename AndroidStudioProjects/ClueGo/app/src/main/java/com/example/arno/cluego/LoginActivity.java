@@ -19,7 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.arno.cluego.Helpers.ErrorCatcher;
+import com.example.arno.cluego.Helpers.RequestHelper;
 import com.example.arno.cluego.Objects.User;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
     private String url= "https://clugo.azurewebsites.net/api/user";
 
     CallbackManager callbackManager;
-    ErrorCatcher errorCatcher = new ErrorCatcher();
+    RequestHelper requestHelper = new RequestHelper();
 
     public User user = new User();
 
@@ -127,7 +127,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
             @Override
             public void onErrorResponse(VolleyError error) {
                 tv.setTextColor(Color.RED);
-                tv.setText(errorCatcher.ParseError(error));
+                tv.setText(requestHelper.ParseError(error));
 
                 spinner.setVisibility(View.INVISIBLE);
             }

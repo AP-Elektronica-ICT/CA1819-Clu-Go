@@ -15,7 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class ErrorCatcher {
+public class RequestHelper {
     private RequestQueue mRequestQueue;
 
     public String ParseError(VolleyError error) {
