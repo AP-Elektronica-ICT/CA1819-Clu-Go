@@ -29,7 +29,7 @@ import static com.facebook.FacebookSdk.getCacheDir;
 
 
 public class StartGameFragment extends Activity {
-    TextView gameinfo,serverinfo,instructions;
+    TextView gameinfo,instructions;
     Button startButton, continueBtn;
     RequestQueue mRequestQueue;
     private String jsonResponse;
@@ -42,7 +42,7 @@ public class StartGameFragment extends Activity {
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         gameinfo = findViewById(R.id.txt_info);
-        serverinfo = findViewById(R.id.txt_server_info);
+
         startButton = findViewById(R.id.btn_start);
         instructions = findViewById(R.id.txt_view_instructions);
         final ProgressBar loadCircle = findViewById(R.id.progress_bar);
@@ -87,7 +87,6 @@ public class StartGameFragment extends Activity {
                     @Override
                     public void onResponse(String response) {
                         Log.i(response,response.toString());
-                        gameinfo.setText(response);
                         loadCircle.setVisibility(View.GONE);
 
                         Intent i = new Intent(StartGameFragment.this, MainActivity.class);
@@ -125,7 +124,6 @@ public class StartGameFragment extends Activity {
                     @Override
                     public void onResponse(String response) {
                         Log.i(response,response);
-                        gameinfo.setText(response);
 
                         loadCircle.setVisibility(View.GONE);
 

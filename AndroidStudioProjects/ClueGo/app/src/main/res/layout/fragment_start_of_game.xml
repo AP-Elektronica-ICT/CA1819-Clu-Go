@@ -12,37 +12,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/background">
 
         <ImageView
             android:id="@+id/img_view_startgame"
             android:layout_width="193dp"
             android:layout_height="61dp"
-            android:src="@drawable/beginicon" />
+            android:src="@drawable/beginicon"
+            android:layout_marginTop="100px"/>
 
         <Button
             android:id="@+id/btn_start"
+            android:layout_marginBottom="20px"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="300px"
+            android:background="@drawable/round_button"
             android:text="@string/newGame" />
 
         <Button
             android:id="@+id/btn_continue"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Continue game"/>
+            android:background="@drawable/round_button"
+            android:text="Continue game" />
 
-
-        <Button
-            android:id="@+id/btn_puzzle"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="Puzzle"
-            android:onClick="startPuzzle"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/txt_info"
@@ -50,12 +45,6 @@
             android:layout_height="wrap_content"
             android:textSize="25sp" />
 
-
-        <TextView
-            android:id="@+id/txt_server_info"
-            android:layout_width="match_parent"
-            android:layout_height="219dp"
-            android:textSize="10sp" />
 
         <TextView
             android:id="@+id/txt_view_instructions"
