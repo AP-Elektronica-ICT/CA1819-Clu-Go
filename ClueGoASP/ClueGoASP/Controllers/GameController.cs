@@ -4,123 +4,128 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ClueGoASP.Services;
 using ClueGoASP.Models;
 using ClueGoASP.Data;
-using Microsoft.EntityFrameworkCore;
-
+using ClueGoASP.Helper;
 
 namespace ClueGoASP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
 
-
     public class GameController : ControllerBase
     {
-        private GameContext _dbContext;
+        private readonly GameContext _dbContext;
+        private IGameService _gameService;
+        private IUserService _userService;
 
 
-        public GameController(GameContext dbcontext)
+        public GameController(GameContext dbcontext, IGameService gameService, IUserService userService)
         {
             _dbContext = dbcontext;
-
+            _gameService = gameService;
+            _userService = userService;
         }
+
         [HttpGet]
         public ActionResult<List<Game>> GetAll()
         {
             return Ok(_dbContext.Games
                 .Include(x => x.GameLocations)
-                .ThenInclude(x => x.GameId)
+                .Include(x => x.GameSuspects)
+                .Include(x => x.GameClues)
                 .ToList());
         }
 
-        [HttpGet("delete/{gameId}")]
-        public ActionResult Delete(int gameId)
-        {
-            var item = _dbContext.Games.Find(gameId);
-
-            _dbContext.Games.Remove(item);
-            _dbContext.SaveChanges();
-
-            return Ok("Game from user: " + gameId + "removed");
-        }
-
         [HttpGet("{gameId}")]
-        public ActionResult<List<Game>> GetGameById(int gameId)
+        public ActionResult<Game> GetBriefGameByID(int gameId)
+        {
+            try
+            {
+                return _gameService.GetBriefGame(gameId);
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("full/{gameId}")]
+        public ActionResult<List<Game>> GetFullGameById(int gameId)
         {
             var item = _dbContext.Games.Find(gameId);
 
-            return Ok(_dbContext.Games
-                            .Include(x => x.GameLocations)
-                            .ThenInclude(x => x.Location)
-                            .Where(x => x.GameId == gameId)
-
-                            .Include(x => x.GameSuspects)
-                            .ThenInclude(x => x.Suspect)
-                            .Where(x => x.GameId == gameId)
-
-                            .Include(x => x.GameClues)
-                            .ThenInclude(x => x.Clue)
-                            .Where(x => x.GameId == gameId)
-                            .ToList());
+            return Ok(_gameService.GetGameById(gameId));
         }
 
-        [HttpGet("create/{amtGame}/{userId}")]
-        public ActionResult<Game> CreateGame(int amtGame, int userId)
+
+
+        [HttpDelete("{gameId}")]
+        public IActionResult Delete(int gameId)
         {
-            var game = new Game();
-
-            //Randomize location list
-            var locations = _dbContext.Locations.OrderBy(x => Guid.NewGuid()).ToList();
-            game.GameLocations = new List<GameLocation>();
-            for (int i = 0; i < amtGame; i++)
+            int amt = _gameService.GetGameInfo(gameId);
+            try
             {
-                if (locations[i].LocName != "Politiekantoor")
-                {
-                    game.GameLocations.Add(new GameLocation
-                    {
-                        Location = locations[i]
-                    });
-                }
+                UpdateEndGame(gameId, amt);
+
+                var game = _gameService.DeleteGame(gameId);
+                return Ok(game);
             }
-            var PoliceOffice = new GameLocation()
+            catch (AppException ex)
             {
-                LocId = 5
-            };
-            game.GameLocations.Add(PoliceOffice);
-
-            //Randomize Suspect list
-            var suspects = _dbContext.Suspects.OrderBy(x => Guid.NewGuid()).ToList();
-            game.GameSuspects = new List<GameSuspect>();
-            for (int i = 0; i < 3; i++)
-            {
-                game.GameSuspects.Add(new GameSuspect
-                {
-                    Suspect = suspects[i]
-                });
-                game.GameSuspects[0].isMurderer = true;
-            }
-
-            //Random Clues
-            var clues = _dbContext.Clues.ToList();
-            game.GameClues = new List<GameClue>();
-            for (int i = 0; i < amtGame; i++)
-            {
-                game.GameClues.Add(new GameClue
-                {
-                    Clue = clues[i]
-                });
-            }
-
-            var user = _dbContext.Users.SingleOrDefault(x => x.UserId == userId);
-            game.User = user;
-
-            _dbContext.Games.Add(game);
-            _dbContext.SaveChanges();
-
-            return Ok(game);
+                return BadRequest(new { message = ex.Message });
+            }            
         }
 
+        [HttpGet("create/full/{userId}/{amtSus}")]
+        public ActionResult<Game> CreateGameFull(int userId, int amtSus)
+        {
+            try
+            {
+                return Ok(_gameService.CreateGameFull(userId, amtSus));
+            }
+            catch(AppException ex)
+            {
+                return BadRequest(new { message = ex.Message});
+            }            
+        }
 
+        [HttpGet("create/{userId}/{amtSus}")]
+        public ActionResult CreateGame(int userId, int amtSus)
+        {
+            try
+            {
+                return Ok(_gameService.CreateGame(userId, amtSus));
+            }
+            catch(AppException ex)
+            {
+                return BadRequest(new { message = ex.Message});
+            }            
+        }
+
+        [HttpGet("game/clues/{gameId}")]
+        public ActionResult GetGameClues(int gameId)
+        {
+            try
+            {
+                return Ok(_gameService.GetPuzzleCluesByGame(gameId));
+            }
+            catch(AppException ex)
+            {
+                return BadRequest(new { message = ex.Message});
+            }            
+        }
+
+        [HttpPut("updateEndGame/{userId}/{amtSus}")]
+        public IActionResult UpdateEndGame(int userId, int amtSus)
+        {
+            _userService.AddWonGame(userId);
+            _userService.AddDistanceWalked(amtSus, userId);
+            _userService.AddFoundClues(amtSus, userId);
+
+            return Ok("User stats have been updated.");        
+        }
     }
 }

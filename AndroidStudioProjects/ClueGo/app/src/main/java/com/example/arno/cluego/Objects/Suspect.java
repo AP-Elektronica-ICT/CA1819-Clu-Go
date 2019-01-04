@@ -57,4 +57,5 @@ public class Suspect implements Serializable {
     public void setSusWeapon(String susWeapon) {
         this.susWeapon = susWeapon;
     }
+
 }

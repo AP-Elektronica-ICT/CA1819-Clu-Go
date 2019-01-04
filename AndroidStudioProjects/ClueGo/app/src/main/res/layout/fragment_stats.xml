@@ -1,14 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".StatsFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/stats" />
+        android:id="@+id/tv_Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Checkout your stats, "
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_Title"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/iv_Title"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/stats_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="55dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="114dp"
+        android:background="@drawable/iconfinder_foot_steps_feet_62857"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_Title" />
+
+    <TextView
+        android:id="@+id/labelDistance"
+        style="@style/StatsThemeStatsView"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="Distance walked: "
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_Distance"
+        app:layout_constraintStart_toEndOf="@+id/imageView3" />
+
+    <TextView
+        android:id="@+id/tv_Distance"
+        android:layout_width="wrap_content"
+        style="@style/StatsThemeStatsView"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/labelDistance"
+        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="55dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/clues_found_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+    <TextView
+        android:id="@+id/label_clues"
+        style="@style/StatsThemeStatsView"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="Clues found:"
+        app:layout_constraintStart_toEndOf="@+id/imageView5"
+        app:layout_constraintTop_toTopOf="@+id/imageView5" />
+
+    <TextView
+        android:id="@+id/tv_CluesFound"
+        android:layout_width="wrap_content"
+        style="@style/StatsThemeStatsView"
+        android:text="TextView"
+        app:layout_constraintBaseline_toBaselineOf="@+id/label_clues"
+        app:layout_constraintStart_toEndOf="@+id/label_clues" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="55dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5"
+        android:background="@drawable/games_played_icon"/>
+
+    <TextView
+        android:id="@+id/label_Games_Played"
+        style="@style/StatsThemeStatsView"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="Murders solved:"
+        app:layout_constraintStart_toEndOf="@+id/imageView6"
+        app:layout_constraintTop_toTopOf="@+id/imageView6" />
+
+    <TextView
+        android:id="@+id/tv_GamesPlayed"
+        android:layout_width="wrap_content"
+        style="@style/StatsThemeStatsView"
+        android:text="TextView"
+        app:layout_constraintBaseline_toBaselineOf="@+id/label_Games_Played"
+        app:layout_constraintStart_toEndOf="@+id/label_Games_Played" />
+
+
+</android.support.constraint.ConstraintLayout>

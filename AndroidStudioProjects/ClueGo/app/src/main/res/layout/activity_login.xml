@@ -100,6 +100,8 @@
                 android:textStyle="bold"
                 android:layout_marginTop="30px"
                 android:layout_marginBottom="30px"/>
+                android:textStyle="bold"
+                android:visibility="gone"/>
 
 
             <com.facebook.login.widget.LoginButton

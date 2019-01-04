@@ -5,12 +5,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 public class DetailFragment extends Fragment {
+    Button btnBack;
 
     public DetailFragment() {
 
@@ -22,6 +24,14 @@ public class DetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_detail, container, false);
+
+        btnBack = v.findViewById(R.id.btn_Back);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
 
         String name = getArguments().getString("name");
         String detail = getArguments().getString("detail");
@@ -45,6 +55,4 @@ public class DetailFragment extends Fragment {
 
         suspect_detail.setText(Description);
     }
-
-
 }

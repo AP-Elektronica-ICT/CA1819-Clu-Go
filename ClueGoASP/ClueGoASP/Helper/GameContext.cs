@@ -23,6 +23,7 @@ namespace ClueGoASP.Data
         public DbSet<Location> Locations { get; set; }
         public DbSet<GameLocation> GameLocations { get; set; }
         public DbSet<GameSuspect> GameSuspects { get; set; }
+        //public DbSet<GameClue> GameClues { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +33,7 @@ namespace ClueGoASP.Data
             modelBuilder.Entity<Location>().ToTable("Locations");
             modelBuilder.Entity<GameLocation>().ToTable("GameLocations");
             modelBuilder.Entity<GameSuspect>().ToTable("GameSuspects");
+            //modelBuilder.Entity<GameClue>().ToTable("GameClues");
 
             //Games and Location Many - Many
             modelBuilder.Entity<GameLocation>()
@@ -74,6 +76,13 @@ namespace ClueGoASP.Data
                 .HasMany(c => c.Games)
                 .WithOne(e => e.User)
                 .HasForeignKey(c => c.GameId)
+                .IsRequired();
+
+            //Suspect has many clues, clue has 1 suspect
+            modelBuilder.Entity<Clue>()
+                .HasOne(c => c.Suspect)
+                .WithMany(e => e.Clues)
+                .HasForeignKey(c => c.SusForeignKey)
                 .IsRequired();
         }
 

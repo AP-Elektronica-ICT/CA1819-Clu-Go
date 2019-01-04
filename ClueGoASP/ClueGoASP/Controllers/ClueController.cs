@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ClueGoASP.Data;
+using ClueGoASP.Helper;
 using ClueGoASP.Models;
+using ClueGoASP.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,53 +16,43 @@ namespace ClueGoASP.Controllers
     public class ClueController : ControllerBase
     {
         private readonly GameContext _dbContext;
-        public ClueController(GameContext context)
+        private IClueService _clueService;
+        public ClueController(GameContext context, IClueService clueService)
         {
             _dbContext = context;
+            _clueService = clueService;
         }
         // GET: api/Clue
         [HttpGet]
         public ActionResult<List<Clue>> GetAll()
         {
-            return _dbContext.Clues.ToList();
+            return _clueService.GetAll();
         }
-
-      
-
         // PUT: api/Clue/5
-        [HttpGet("{ClueId}")]
-        public IActionResult UpdateClue(int ClueId)
+        [HttpPut("{clueId}")]
+        public IActionResult SetFound(int clueId)
         {
-
-            var orgClue = _dbContext.Clues.SingleOrDefault(x => x.ClueId == ClueId);
-
-            if (orgClue == null)
-                return NotFound("Clue does not exist");
-            else
+            try
             {
-                orgClue.Found = true;
-
-                _dbContext.SaveChanges();
-                return Ok(orgClue);
+                return Ok(_clueService.SetFound(clueId));
             }
-        }
-        [HttpPut("put/{ClueId}")]
-        public IActionResult UpdateClue1([FromBody] Clue updateClue, int ClueId)
-        {
-
-            var orgClue = _dbContext.Clues.SingleOrDefault(x => x.ClueId == ClueId);
-
-            if (orgClue == null)
-                return NotFound("Clue does not exist");
-            else
+            catch (AppException ex)
             {
-                orgClue.Found = updateClue.Found;
-
-                _dbContext.SaveChanges();
-                return Ok(orgClue);
+                return BadRequest(new { message = ex.Message });
             }
         }
 
-
+        [HttpPut("put/{clueId}")]
+        public IActionResult UpdateClue([FromBody] Clue updateClue, int clueId)
+        {
+            try
+            {
+                return Ok(_clueService.UpdateClue(clueId, updateClue));
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }        
     }
 }

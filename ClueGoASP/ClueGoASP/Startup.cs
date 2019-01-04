@@ -38,6 +38,10 @@ namespace ClueGoASP
             });
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<IGameService, GameService>();
+            services.AddScoped<IClueService, ClueService>();
+            services.AddScoped<ISuspectService, SuspectService>();
 
             services.AddDbContext<GameContext>(options =>
                 options.UseSqlServer(

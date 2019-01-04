@@ -14,10 +14,14 @@ namespace ClueGoASP.Services
     public interface IUserService
     {
         User GetUserById(int id);
+        List<User> GetAllUsers();
         User Login(string username, string password);
         User CreateUser(User newUser);
-
         User Deleteuser(int id);
+        User UpdateUser(User updateUser, string username);
+        void AddWonGame(int id);
+        void AddFoundClues(int amt, int id);
+        void AddDistanceWalked(int amt, int id);
     }
     public class UserService : IUserService
     {
@@ -26,6 +30,20 @@ namespace ClueGoASP.Services
         {
             _dbContext = context;
         }
+        public string PasswordHash(string pwdHash)
+        {
+            MD5 mD5 = MD5.Create();
+            string stringToHash = pwdHash;
+            byte[] tmpHash = Encoding.ASCII.GetBytes(stringToHash);
+            byte[] hash = mD5.ComputeHash(tmpHash);
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var a in hash)
+                sb.Append(a.ToString("X2"));
+
+            return sb.ToString();
+        }
+
         public User GetUserById(int id)
         {
             return _dbContext.Users.Find(id);
@@ -46,6 +64,7 @@ namespace ClueGoASP.Services
         public User CreateUser(User newUser)
         {
             string _pwd = newUser.Password;
+            string username = newUser.Username;
             //passwoord hashen
             newUser.Password = PasswordHash(newUser.Password);
 
@@ -53,8 +72,10 @@ namespace ClueGoASP.Services
             bool emailAlreadyExists = _dbContext.Users.Any(x => x.Email == newUser.Email);
 
             //Validation check
-            if (_pwd == newUser.Username)
+            if (_pwd == username)
                 throw new AppException("Password cannot match username!");
+            else if (username == null || username.Length < 4)
+                throw new AppException("Username must be atleast 4 characters long!");
             else if (_pwd.Length < 6)
                 throw new AppException("Password must be atleast 6 characters long!");
             else if (usernameAlreadyExists)
@@ -83,35 +104,62 @@ namespace ClueGoASP.Services
             }
         }
 
-       /* public User ClearUsers(int id)
+        public User UpdateUser(User updateUser, string username)
         {
-            for (int _id = id; _id < _dbContext.Users.Count(); _id++)
+            var orgUser = _dbContext.Users.SingleOrDefault(x => x.Username == username);
+            if (orgUser == null)
             {
-                id = _id;
-                var user = _dbContext.Users.SingleOrDefault(x => x.UserId == id);
-                if (user == null)
-                    return NotFound();
-
-                _dbContext.Users.Remove(user);
-                _dbContext.SaveChanges();
+                throw new AppException("User does not exist.");                
             }
-            return Content("Delete succes!");
-        }*/
 
-        public string PasswordHash(string pwdHash)
-        {
-            MD5 mD5 = MD5.Create();
-            string stringToHash = pwdHash;
-            byte[] tmpHash = Encoding.ASCII.GetBytes(stringToHash);
-            byte[] hash = mD5.ComputeHash(tmpHash);
+            orgUser.Password = updateUser.Password;
+            orgUser.Username = updateUser.Username;
+            orgUser.Email = updateUser.Email;
 
-            StringBuilder sb = new StringBuilder();
-            foreach (var a in hash)
-                sb.Append(a.ToString("X2"));
-
-            return sb.ToString();
+            _dbContext.Users.Update(orgUser);
+            _dbContext.SaveChanges();
+            return orgUser;
         }
 
+        public List<User> GetAllUsers()
+        {
+            return _dbContext.Users.ToList();
+        }
 
+        public void AddWonGame(int id)
+        {
+            var user = _dbContext.Users.Find(id);
+            user.GamesPlayed++;
+            _dbContext.SaveChanges();
+        }
+
+        public void AddFoundClues(int amt, int id)
+        {
+            var user = _dbContext.Users.Find(id);
+            user.cluesFound =+ amt;
+            _dbContext.SaveChanges();
+        }
+
+        public void AddDistanceWalked(int amt, int id)
+        {
+            var user = _dbContext.Users.Find(id);
+            user.distanceWalked += amt;
+            _dbContext.SaveChanges();
+        }
+
+        /* public User ClearUsers(int id)
+         {
+             for (int _id = id; _id < _dbContext.Users.Count(); _id++)
+             {
+                 id = _id;
+                 var user = _dbContext.Users.SingleOrDefault(x => x.UserId == id);
+                 if (user == null)
+                     return NotFound();
+
+                 _dbContext.Users.Remove(user);
+                 _dbContext.SaveChanges();
+             }
+             return Content("Delete succes!");
+         }*/
     }
 }
