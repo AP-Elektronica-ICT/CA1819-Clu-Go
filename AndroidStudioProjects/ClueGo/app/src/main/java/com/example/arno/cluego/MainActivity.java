@@ -201,7 +201,6 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
                                 for (int i = 0; i < gameClues.length(); i++) {
 
                                     JSONObject gameClue = (JSONObject) gameClues.get(i);
-                                    //JSONObject singleClue = gameClue.getJSONObject("clue");
                                     int clueId = gameClue.getInt("clueId");
 
                                     JSONObject clue = gameClue.getJSONObject("clue");

@@ -24,6 +24,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.example.arno.cluego.Helpers.DirDataParser;
 import com.example.arno.cluego.Objects.Game;
+import com.example.arno.cluego.Objects.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -76,6 +77,7 @@ public class MapViewFragment extends Fragment {
         mMapView.onCreate(savedInstanceState);
 
         mMapView.onResume(); // needed to get the map to display immediately
+        //User usr = (User)
 
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
@@ -92,7 +94,9 @@ public class MapViewFragment extends Fragment {
                 // For showing a move to my location button
 
                 Bundle bundle = getArguments();
-                Game gameFromStart = (Game) bundle.getSerializable("game");
+                final Game gameFromStart = (Game) bundle.getSerializable("game");
+
+
 
                 List<com.example.arno.cluego.Objects.Location> locationsFromGame = gameFromStart.getLocations();
 
@@ -132,19 +136,20 @@ public class MapViewFragment extends Fragment {
 
                             Log.e("distancevalue", destMarker.getTitle());
 
-                            if(distance<20 && hasBeen==false){
-                                hasBeen=true;
+                            if(distance<20000 && hasBeen==false){
                                 if(destMarker.getTitle().equals("Politiekantoor")){
+                                    hasBeen=true;
                                     Intent intent = new Intent(getActivity(), GuessActivity.class);
+                                    intent.putExtra("gameData", gameFromStart);
+                                    startActivity(intent);
+
+                                }
+                                else{
+                                    hasBeen=true;
+                                    Intent intent = new Intent(getActivity(), PuzzleActivity.class);
+                                    intent.putExtra("gameData", gameFromStart);
                                     startActivity(intent);
                                 }
-                                Log.e("toast","locations are the same");
-
-                                Intent intent = new Intent(getActivity(), PuzzleActivity.class);
-                                startActivity(intent);
-                                Intent i = new Intent(getActivity(), PuzzleActivity.class);
-
-                                startActivity(i);
                             }
                         }
                     }

@@ -17,6 +17,7 @@ namespace ClueGoASP.Services
         string CreateGame(int userId, int amtSus);
         int GetGameInfo(int gameId);
         Game GetBriefGame(int gameId);
+        List<Game> GetPuzzleCluesByGame(int gameId);
     }
     public class GameService : IGameService
     {
@@ -155,6 +156,18 @@ namespace ClueGoASP.Services
         {          
             var game = _dbContext.GameLocations.Where(x => x.GameId == gameId);
             return game.Count();
+        }
+
+        public List<Game> GetPuzzleCluesByGame(int gameId)
+        {
+            var game = _dbContext.Games
+                .Include(x => x.GameClues)
+                .Where(y => y.GameId == gameId)
+                .ToList();
+            
+
+
+            return game;
         }
     }
 }

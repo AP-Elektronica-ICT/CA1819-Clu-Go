@@ -40,7 +40,7 @@ namespace ClueGoASP.Controllers
         }
 
         [HttpGet("{gameId}")]
-        public ActionResult<Game> GetBriefGame(int gameId)
+        public ActionResult<Game> GetBriefGameByID(int gameId)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace ClueGoASP.Controllers
         }
 
         [HttpGet("full/{gameId}")]
-        public ActionResult<List<Game>> GetGameById(int gameId)
+        public ActionResult<List<Game>> GetFullGameById(int gameId)
         {
             var item = _dbContext.Games.Find(gameId);
 
@@ -105,6 +105,19 @@ namespace ClueGoASP.Controllers
             }            
         }
 
+        [HttpGet("game/clues/{gameId}")]
+        public ActionResult GetGameClues(int gameId)
+        {
+            try
+            {
+                return Ok(_gameService.GetPuzzleCluesByGame(gameId));
+            }
+            catch(AppException ex)
+            {
+                return BadRequest(new { message = ex.Message});
+            }            
+        }
+
         [HttpPut("updateEndGame/{userId}/{amtSus}")]
         public IActionResult UpdateEndGame(int userId, int amtSus)
         {
@@ -112,7 +125,7 @@ namespace ClueGoASP.Controllers
             _userService.AddDistanceWalked(amtSus, userId);
             _userService.AddFoundClues(amtSus, userId);
 
-            return Ok("User stats have been updated.");            
+            return Ok("User stats have been updated.");        
         }
     }
 }
