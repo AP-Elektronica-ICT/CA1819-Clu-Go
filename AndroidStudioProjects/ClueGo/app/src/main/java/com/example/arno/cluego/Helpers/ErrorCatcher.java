@@ -1,11 +1,7 @@
 package com.example.arno.cluego.Helpers;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -14,8 +10,6 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.arno.cluego.EndActivity;
-import com.example.arno.cluego.StartGameFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;

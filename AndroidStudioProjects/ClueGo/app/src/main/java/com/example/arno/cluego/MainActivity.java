@@ -1,13 +1,10 @@
 package com.example.arno.cluego;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,6 +22,7 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.example.arno.cluego.Helpers.SuicidalFragmentListener;
 import com.example.arno.cluego.Objects.Clue;
 import com.example.arno.cluego.Objects.Game;
 import com.example.arno.cluego.Objects.Location;
@@ -38,12 +36,12 @@ import org.json.JSONObject;
 import java.io.Serializable;
 
 
-public class MainActivity extends AppCompatActivity implements MapViewFragment.MapFragmentListener, Serializable {
+public class MainActivity extends AppCompatActivity implements MapViewFragment.MapFragmentListener, Serializable, SuicidalFragmentListener {
     private MapViewFragment mapViewFragment = new MapViewFragment();
     private SuspectFragment suspectFragment= new SuspectFragment();
     private InventoryFragment inventoryFragment= new InventoryFragment();
     private StatsFragment statsFragment = new StatsFragment();
-    private StartGameFragment startGameFragment;
+    private StartGameActivity startGameActivity;
     private String jsonResponse;
     private boolean hasRequestsed;
     private int gameId;
@@ -99,6 +97,12 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
     }
 
     @Override
+    public void onFragmentSuicide(String tag) {
+        // Check tag if you do this with more than one fragmen, then:
+        getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
     public void onInputMapSent(JSONObject game) {
         mapViewFragment.updateGame(game);
     }
@@ -121,10 +125,8 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
                             Log.d("tag", response.toString());
 
                             try {
-
                                 JSONObject game = response.getJSONObject(0);
                                 //Save game across fragments in bundle.
-
 
                                 gameFromDatabase.setGameId(game.getInt("gameId"));
                                 gameFromDatabase.setGameWon(game.getBoolean("gameWon"));
@@ -181,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
 
                                     Suspect suspectFromDatabase = new Suspect();
                                     suspectFromDatabase.setMurderer(gamesuspect.getBoolean("isMurderer"));
+                                    suspectFromDatabase.setSusId(gamesuspect.getInt("susId"));
                                     suspectFromDatabase.setSusDescription(suspect.getString("susDescription"));
                                     suspectFromDatabase.setSusWeapon(suspect.getString("susWeapon"));
                                     suspectFromDatabase.setSusImgUrl(suspect.getString("susImgUrl"));

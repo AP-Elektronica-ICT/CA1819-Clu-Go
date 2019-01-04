@@ -8,16 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.arno.cluego.Objects.Game;
 import com.example.arno.cluego.Objects.Suspect;
+import com.example.arno.cluego.Objects.SuspectAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SuspectFragment extends Fragment {
-
  public SuspectFragment(){
 
  }
@@ -37,8 +40,41 @@ public class SuspectFragment extends Fragment {
  public  View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
      
   final View view = inflater.inflate(R.layout.suspect_list, container, false);
-     final ListView listView = (ListView) view.findViewById(R.id.suspect_list_view);
+     GridView gridview = view.findViewById(R.id.gridview);
+
+     Bundle bundle = getArguments();
+     Game currentGame = (Game) bundle.getSerializable("game");
+
      final ArrayList<String> Suspect_Names = new ArrayList<String>();
+     final List<Suspect> suspects = currentGame.getSuspects();
+     int amtSus = suspects.size();
+
+
+
+     for (int i = 0; i <suspects.size() ; i++) {
+
+         Suspect suspect = suspects.get(i);
+         String id = String.valueOf(suspect.getSusId());
+         String name = suspect.getSusName();
+         String weapon = suspect.getSusWeapon();
+         String description = suspect.getSusDescription();
+         Suspect_Names.add(name);
+     }
+
+     gridview.setAdapter(new SuspectAdapter(getContext(), suspects, amtSus));
+
+
+
+     gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+             String susName = String.valueOf(suspects.get(position).getSusId());
+
+             Toast.makeText(getContext(), susName, Toast.LENGTH_SHORT).show();
+
+             GoingInDetail(suspects.get(position).getSusDescription(), suspects.get(position).getSusName() ,suspects.get(position).getSusImgUrl() );
+         }
+     });
+     /*final ArrayList<String> Suspect_Names = new ArrayList<String>();
 
      Bundle bundle = getArguments();
      Game currentGame = (Game) bundle.getSerializable("game");
@@ -53,9 +89,8 @@ public class SuspectFragment extends Fragment {
          String weapon = suspect.getSusWeapon();
          String description = suspect.getSusDescription();
          Suspect_Names.add(name);
-
-
      }
+
      ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
              getActivity(),
              android.R.layout.simple_list_item_1,
@@ -68,7 +103,7 @@ public class SuspectFragment extends Fragment {
              GoingInDetail(suspects.get(position).getSusDescription(), suspects.get(position).getSusName() ,suspects.get(position).getSusImgUrl() );
 
          }
-     });
+     });*/
 
 
   return view;

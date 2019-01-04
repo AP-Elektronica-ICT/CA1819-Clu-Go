@@ -11,20 +11,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Cache;
-import com.android.volley.Network;
-import com.android.volley.NetworkResponse;
-import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.arno.cluego.Helpers.ErrorCatcher;
@@ -33,13 +24,11 @@ import com.example.arno.cluego.Objects.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.util.concurrent.TimeoutException;
 
 
-public class StartGameFragment extends Activity implements Serializable {
+public class StartGameActivity extends Activity implements Serializable {
     TextView gameinfo,serverinfo,instructions, tvWelcomeMsg;
     Button startButton, continueBtn, testBtn;
     RequestQueue mRequestQueue;
@@ -95,7 +84,7 @@ public class StartGameFragment extends Activity implements Serializable {
         testBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(StartGameFragment.this, MainActivity.class);
+                Intent i = new Intent(StartGameActivity.this, MainActivity.class);
                 startActivity(i);
             }
         });
@@ -136,7 +125,7 @@ public class StartGameFragment extends Activity implements Serializable {
     }
 
     private void LoadGame(final int UID){
-        Intent i = new Intent(StartGameFragment.this, MainActivity.class);
+        Intent i = new Intent(StartGameActivity.this, MainActivity.class);
         i.putExtra("userId", UID);
         i.putExtra("userDataPackage", usr);
         startActivity(i);
@@ -162,7 +151,7 @@ public class StartGameFragment extends Activity implements Serializable {
                                 else {
                                     gameinfo.setText(response);
 
-                                    Intent i = new Intent(StartGameFragment.this, MainActivity.class);
+                                    Intent i = new Intent(StartGameActivity.this, MainActivity.class);
                                     i.putExtra("userId", UID);
                                     i.putExtra("userDataPackage", usr);
                                     startActivity(i);
@@ -184,7 +173,7 @@ public class StartGameFragment extends Activity implements Serializable {
     }
 
     private void ConfirmRemoveGame(){
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(StartGameFragment.this);
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(StartGameActivity.this);
         builder1.setMessage("You have an unfinished game, do you wish to continue this game?");
         builder1.setCancelable(true);
 
@@ -200,7 +189,7 @@ public class StartGameFragment extends Activity implements Serializable {
                 "Start new game",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        errorCatcher.delete(UID, StartGameFragment.this);
+                        errorCatcher.delete(UID, StartGameActivity.this);
                         StartGame(UID, amtItems);
                     }
                 });
