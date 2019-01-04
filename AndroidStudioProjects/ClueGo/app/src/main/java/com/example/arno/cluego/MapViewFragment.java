@@ -95,6 +95,7 @@ public class MapViewFragment extends Fragment {
 
                 Bundle bundle = getArguments();
                 final Game gameFromStart = (Game) bundle.getSerializable("game");
+                final User usr = (User)bundle.getSerializable("userDataPackage");
 
 
 
@@ -136,11 +137,12 @@ public class MapViewFragment extends Fragment {
 
                             Log.e("distancevalue", destMarker.getTitle());
 
-                            if(distance<20000 && hasBeen==false){
+                            if(distance<100 && hasBeen==false){
                                 if(destMarker.getTitle().equals("Politiekantoor")){
                                     hasBeen=true;
                                     Intent intent = new Intent(getActivity(), GuessActivity.class);
                                     intent.putExtra("gameData", gameFromStart);
+                                    intent.putExtra("userDataPackage", usr);
                                     startActivity(intent);
 
                                 }
@@ -148,6 +150,7 @@ public class MapViewFragment extends Fragment {
                                     hasBeen=true;
                                     Intent intent = new Intent(getActivity(), PuzzleActivity.class);
                                     intent.putExtra("gameData", gameFromStart);
+                                    intent.putExtra("userDataPackage", usr);
                                     startActivity(intent);
                                 }
                             }
