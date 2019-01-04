@@ -49,63 +49,20 @@ public class SuspectFragment extends Fragment {
      final List<Suspect> suspects = currentGame.getSuspects();
      int amtSus = suspects.size();
 
-
-
      for (int i = 0; i <suspects.size() ; i++) {
 
          Suspect suspect = suspects.get(i);
-         String id = String.valueOf(suspect.getSusId());
          String name = suspect.getSusName();
-         String weapon = suspect.getSusWeapon();
-         String description = suspect.getSusDescription();
          Suspect_Names.add(name);
      }
 
      gridview.setAdapter(new SuspectAdapter(getContext(), suspects, amtSus));
 
-
-
      gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
          public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-             String susName = String.valueOf(suspects.get(position).getSusId());
-
-             Toast.makeText(getContext(), susName, Toast.LENGTH_SHORT).show();
-
              GoingInDetail(suspects.get(position).getSusDescription(), suspects.get(position).getSusName() ,suspects.get(position).getSusImgUrl() );
          }
      });
-     /*final ArrayList<String> Suspect_Names = new ArrayList<String>();
-
-     Bundle bundle = getArguments();
-     Game currentGame = (Game) bundle.getSerializable("game");
-
-    final List<Suspect> suspects = currentGame.getSuspects();
-
-
-     for (int i = 0; i <suspects.size() ; i++) {
-
-         Suspect suspect = suspects.get(i);
-         String name = suspect.getSusName();
-         String weapon = suspect.getSusWeapon();
-         String description = suspect.getSusDescription();
-         Suspect_Names.add(name);
-     }
-
-     ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
-             getActivity(),
-             android.R.layout.simple_list_item_1,
-             Suspect_Names);
-     listView.setAdapter(listViewAdapter);
-     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-         @Override
-         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-             GoingInDetail(suspects.get(position).getSusDescription(), suspects.get(position).getSusName() ,suspects.get(position).getSusImgUrl() );
-
-         }
-     });*/
-
-
   return view;
  }
 

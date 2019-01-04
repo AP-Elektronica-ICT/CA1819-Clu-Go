@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -30,7 +31,8 @@ import java.io.Serializable;
 
 public class StartGameActivity extends Activity implements Serializable {
     TextView gameinfo,serverinfo,instructions, tvWelcomeMsg;
-    Button startButton, continueBtn, testBtn;
+    EditText etAmtSus;
+    Button startBtn, continueBtn, testBtn;
     RequestQueue mRequestQueue;
     private StringRequest stringRequest;
 
@@ -50,23 +52,24 @@ public class StartGameActivity extends Activity implements Serializable {
         usr = (User)getIntent().getSerializableExtra("userDataPackage");
 
         UID = usr.getUserId();
-        amtItems = 3;
 
         gameinfo = findViewById(R.id.txt_info);
         serverinfo = findViewById(R.id.txt_server_info);
-        startButton = findViewById(R.id.btn_start);
+        startBtn = findViewById(R.id.btn_start);
         tvWelcomeMsg = findViewById(R.id.tv_welcome);
         instructions = findViewById(R.id.txt_view_instructions);
         final ProgressBar loadCircle = findViewById(R.id.progress_bar);
         continueBtn = findViewById(R.id.btn_continue);
         testBtn = findViewById(R.id.btn_test);
+        etAmtSus = findViewById(R.id.et_amtSus);
+
 
         tvWelcomeMsg.setText("Welcome back " + usr.getUsername() + "!");
 
-        startButton.setOnClickListener(new View.OnClickListener() {
+        testBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gameinfo.setText(" ");
+                amtItems = Integer.parseInt(etAmtSus.getText().toString());
                 loadCircle.setVisibility(View.VISIBLE);
                 StartGame(UID, amtItems);
             }
@@ -81,11 +84,13 @@ public class StartGameActivity extends Activity implements Serializable {
             }
         });
         
-        testBtn.setOnClickListener(new View.OnClickListener() {
+        startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(StartGameActivity.this, MainActivity.class);
-                startActivity(i);
+                testBtn.setVisibility(View.VISIBLE);
+                etAmtSus.setVisibility(View.VISIBLE);
+                continueBtn.setVisibility(View.INVISIBLE);
+                startBtn.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -96,7 +101,7 @@ public class StartGameActivity extends Activity implements Serializable {
 
         mRequestQueue = Volley.newRequestQueue(this);
 
-        String urlGameInfo ="https://clugo.azurewebsites.net/api/game/create/" + UID + "/" + amtItems;
+        String urlGameInfo ="https://clugo.azurewebsites.net/api/game/create/brief" + UID + "/" + amtItems;
 
         // Formulate the request and handle the response.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlGameInfo,
