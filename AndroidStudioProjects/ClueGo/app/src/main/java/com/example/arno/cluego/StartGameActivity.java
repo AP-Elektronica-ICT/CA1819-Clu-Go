@@ -56,7 +56,6 @@ public class StartGameActivity extends Activity implements Serializable {
         UID = usr.getUserId();
 
         gameinfo = findViewById(R.id.txt_info);
-        serverinfo = findViewById(R.id.txt_server_info);
         startBtn = findViewById(R.id.btn_start);
         tvWelcomeMsg = findViewById(R.id.tv_welcome);
         instructions = findViewById(R.id.txt_view_instructions);

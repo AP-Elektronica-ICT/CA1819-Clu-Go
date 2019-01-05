@@ -32,7 +32,7 @@
 
         <Button
             android:id="@+id/btn_start"
-            android:layout_marginBottom="20px"
+            android:layout_marginBottom="10px"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="300px"

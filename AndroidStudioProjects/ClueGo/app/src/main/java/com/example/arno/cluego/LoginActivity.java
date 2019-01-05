@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
     public User user = new User();
 
     // UI references.
-    private Button btnSignIn, btnDev;
+    private Button btnSignIn ;
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private TextView tv;
@@ -58,14 +58,12 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
         setContentView(R.layout.activity_login);
 
         btnSignIn = findViewById(R.id.email_sign_in_button);
-        btnDev = findViewById(R.id.btn_go_to_main);
         spinner = findViewById(R.id.progressBarLogin);
         mEmailView = findViewById(R.id.email);
         mPasswordView = findViewById(R.id.password);
         tv = findViewById(R.id.logging);
 
         btnSignIn.setOnClickListener(Login);
-        btnDev.setOnClickListener(DevMove);
     }
 
     private View.OnClickListener Login = new View.OnClickListener() {
