@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.volley.Cache;
 import com.android.volley.DefaultRetryPolicy;
@@ -34,6 +35,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements MapViewFragment.MapFragmentListener, Serializable, SuicidalFragmentListener {
@@ -45,12 +48,18 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
     private String jsonResponse;
     private boolean hasRequestsed;
     private int gameId;
+    private int test;
+
+    ArrayList<String> foundClueList;
+    ArrayList<String> foundClueImageList;
+    List<Clue> clueList;
 
     RequestQueue mRequestQueue;
     Bundle bundle;
 
     User usr = new User();
     Game gameFromDatabase = new Game();
+    Game gameFromDatabase1 = new Game();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -89,10 +98,24 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
 
         gameId = getIntent().getIntExtra("userId", 0);
         usr = (User)getIntent().getSerializableExtra("userDataPackage");
+        test = getIntent().getIntExtra("setClue", 0);
+        gameFromDatabase1 = (Game)getIntent().getSerializableExtra("gameData");
+        if (test > 0)
+        {
+            gameFromDatabase = gameFromDatabase1;
+            foundClueList = new ArrayList<String>();
+            foundClueImageList = new ArrayList<String>();
+            clueList = gameFromDatabase.getClues();
+
+            Clue clue = clueList.get(test);
+            clue.setFound(true);
+        }
+        else
+            GetGame(gameId);
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        GetGame(gameId);
+
         //switchToSuspect();
     }
 
@@ -220,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
                                     gameFromDatabase.setClues(clueFromDatabase);
                                 }
                                 bundle = new Bundle();
-                                bundle.putSerializable("game", gameFromDatabase);
+                                bundle.putSerializable("gameData", gameFromDatabase);
                                 bundle.putSerializable("userDataPackage",usr);
                                 Log.e("bundleOpvragen", "onResponse: " + bundle);
 

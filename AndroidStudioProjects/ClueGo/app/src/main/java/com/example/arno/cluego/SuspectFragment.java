@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SuspectFragment extends Fragment {
+    Game currentGame = new Game();
  public SuspectFragment(){
 
  }
@@ -43,7 +44,12 @@ public class SuspectFragment extends Fragment {
      GridView gridview = view.findViewById(R.id.gridview);
 
      Bundle bundle = getArguments();
-     Game currentGame = (Game) bundle.getSerializable("game");
+     if (bundle != null)
+        currentGame = (Game) bundle.getSerializable("gameData");
+     else {
+         currentGame = (Game)getActivity().getIntent().getSerializableExtra("gameData");
+     }
+
 
      final ArrayList<String> Suspect_Names = new ArrayList<String>();
      final List<Suspect> suspects = currentGame.getSuspects();
