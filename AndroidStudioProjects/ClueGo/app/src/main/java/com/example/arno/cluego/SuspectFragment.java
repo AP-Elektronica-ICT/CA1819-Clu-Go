@@ -22,7 +22,7 @@ import java.util.List;
 
 public class SuspectFragment extends Fragment {
     Game currentGame = new Game();
-    public SuspectFragment(){
+ public SuspectFragment(){
 
     }
 
@@ -40,9 +40,17 @@ public class SuspectFragment extends Fragment {
     @Override
     public  View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
-        final View view = inflater.inflate(R.layout.suspect_list, container, false);
-        GridView gridview = view.findViewById(R.id.gridview);
+     Bundle bundle = getArguments();
+     if (bundle != null)
+        currentGame = (Game) bundle.getSerializable("gameData");
+     else {
+         currentGame = (Game)getActivity().getIntent().getSerializableExtra("gameData");
+     }
 
+
+     final ArrayList<String> Suspect_Names = new ArrayList<String>();
+     final List<Suspect> suspects = currentGame.getSuspects();
+     int amtSus = suspects.size();
 
 
         Bundle bundle = getArguments();

@@ -36,10 +36,12 @@ public class StatsFragment extends Fragment {
         ivTitle = view.findViewById(R.id.iv_Title);
 
         Bundle bundle = getArguments();
-        if (!bundle.isEmpty()){
+        if (bundle != null){
             usr = (User)bundle.getSerializable("userDataPackage");
-            SetStats(usr);
+        }else{
+            usr = (User)getActivity().getIntent().getSerializableExtra("userDataPackage");
         }
+        SetStats(usr);
 
         return view;
     }

@@ -55,6 +55,8 @@ public class MapViewFragment extends Fragment {
         void onInputMapSent(JSONObject game);
     }
 
+    Game gameFromStart = new Game();
+    User usr = new User();
 
     boolean hasBeen;
     Marker destMarker;
@@ -94,8 +96,17 @@ public class MapViewFragment extends Fragment {
                 // For showing a move to my location button
 
                 Bundle bundle = getArguments();
-                final Game gameFromStart = (Game) bundle.getSerializable("game");
+                //final Game gameFromStart = (Game) bundle.getSerializable("gameData");
 
+
+                if (bundle != null){
+                    gameFromStart = (Game) bundle.getSerializable("gameData");
+                    usr = (User)bundle.getSerializable("userDataPackage");
+                }
+                else {
+                    gameFromStart = (Game)getActivity().getIntent().getSerializableExtra("gameData");
+                    usr = (User)getActivity().getIntent().getSerializableExtra("userDataPackage");
+                }
 
 
                 List<com.example.arno.cluego.Objects.Location> locationsFromGame = gameFromStart.getLocations();
@@ -136,11 +147,12 @@ public class MapViewFragment extends Fragment {
 
                             Log.e("distancevalue", destMarker.getTitle());
 
-                            if(distance<20000 && hasBeen==false){
+                            if(distance<100000 && hasBeen==false){
                                 if(destMarker.getTitle().equals("Politiekantoor")){
                                     hasBeen=true;
                                     Intent intent = new Intent(getActivity(), GuessActivity.class);
                                     intent.putExtra("gameData", gameFromStart);
+                                    intent.putExtra("userDataPackage", usr);
                                     startActivity(intent);
 
                                 }
@@ -148,6 +160,7 @@ public class MapViewFragment extends Fragment {
                                     hasBeen=true;
                                     Intent intent = new Intent(getActivity(), PuzzleActivity.class);
                                     intent.putExtra("gameData", gameFromStart);
+                                    intent.putExtra("userDataPackage", usr);
                                     startActivity(intent);
                                 }
                             }

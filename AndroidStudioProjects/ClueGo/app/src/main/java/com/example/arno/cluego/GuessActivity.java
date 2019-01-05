@@ -56,8 +56,9 @@ public class GuessActivity extends AppCompatActivity implements Serializable {
         tvTest = findViewById(R.id.tv_test);
         listview = findViewById(R.id.ListView_guess);
 
-        userId = getIntent().getIntExtra("userId", 0);
-        //usr = (User)getIntent().getSerializableExtra("userDataPackage");
+        usr = (User)getIntent().getSerializableExtra("userDataPackage");
+        userId = usr.getUserId();
+
         game = (Game)getIntent().getSerializableExtra("gameData");
 
         tvTest.setText(game.getMurderer());

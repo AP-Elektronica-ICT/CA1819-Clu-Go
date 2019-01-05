@@ -17,6 +17,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.arno.cluego.Helpers.GestureDetectGridView;
 import com.example.arno.cluego.Objects.CustomAdapter;
+import com.example.arno.cluego.Objects.Game;
+import com.example.arno.cluego.Objects.User;
 
 import org.json.JSONObject;
 
@@ -26,10 +28,13 @@ import java.util.Random;
 public class PuzzleActivity extends AppCompatActivity {
     private static GestureDetectGridView mGridView;
 
+    private static Game game = new Game();
+    private static User usr = new User();
+
     private static final int COLUMNS = 3;
     private static final int DIMENSIONS = COLUMNS * COLUMNS;
     private static Context mContext;
-
+    public static int numberFoundClues;
     private static int mColumnWidth, mColumnHeight;
 
     public static final String up = "up";
@@ -48,6 +53,9 @@ public class PuzzleActivity extends AppCompatActivity {
         init();
 
         scramble();
+
+        game = (Game)getIntent().getSerializableExtra("gameData");
+        usr = (User)getIntent().getSerializableExtra("userDataPackage");
 
         setDimensions();
     }
@@ -145,7 +153,7 @@ public class PuzzleActivity extends AppCompatActivity {
         tileList[currentPosition] = newPosition;
         display(context);
 
-        if (isSolved()) {
+        if (!isSolved()) {
             Toast.makeText(context, "Found new clue, added ransom note to your inventory!", Toast.LENGTH_SHORT).show();
             int clueId = 1;
             String url = "https://clugo.azurewebsites.net/api/clue/"+ clueId;
@@ -169,8 +177,11 @@ public class PuzzleActivity extends AppCompatActivity {
             );
             RequestQueue queue = Volley.newRequestQueue(context);
             queue.add(getRequest);
-
+            numberFoundClues++;
             Intent intent = new Intent(mContext, MainActivity.class);
+            intent.putExtra("setClue", numberFoundClues);
+            intent.putExtra("gameData", game);
+            intent.putExtra("userDataPackage", usr);
             mContext.startActivity(intent);
         }
     }
