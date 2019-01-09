@@ -194,8 +194,52 @@ namespace XUnitTestClueGo
                 Assert.Equal("User does not exist.", ex.Message);
             }            
         }
+        [Fact]
+        public void Pass_SetClueFound()
+        {
+            using (var globalContext = new GameContext(options))
+            {
+                gameService = new GameService(globalContext);
+                //act
+                var result1 = gameService.SetGameClueFound(3);
+                var result = gameService.GetFoundClues(3).Count;
+
+                //Assert
+                Assert.Equal(1, result);
+                Assert.Contains("changed to found", result1);
+            }
+        }
+        [Fact]
+        public void Pass_GetFoundClues()
+        {
+            var options = new DbContextOptionsBuilder<GameContext>().UseInMemoryDatabase(databaseName: "GameClueTests").Options;
+
+            using (var globalContext = new GameContext(options))
+            {
+                gameService = new GameService(globalContext);
+                //act
+                gameService.CreateGameFull(1, 3);
+                var game = gameService.CreateGameFull(1, 3);
+                var result = gameService.GetFoundClues(3).Count;
+                //Assert
+                Assert.Equal(1, result);
+            }
+        }
+        [Fact]
+        public void Pass_GetNotFoundClues()
+        {
+            using (var globalContext = new GameContext(options))
+            {
+                gameService = new GameService(globalContext);
+                //act
+                var result = gameService.GetFoundClues(3).Count;
+                //Assert
+                Assert.Equal(2, result);
+            }
+        }
+
         //NEEDS TO BE TESTED SEPERATE!!
-       [Fact]
+        [Fact]
         public void Pass_CreateGame()
         {
             //Arrange
@@ -205,10 +249,14 @@ namespace XUnitTestClueGo
             {
                 gameService = new GameService(globalContext);
                 //act
-                var result = gameService.CreateGame(1, 3);
+                var result = gameService.CreateGameFull(1, 3);
                 //Assert
                 Assert.Equal("tempUser", result.User.Username);
             }            
         }
+
+
+
+
     }
 }

@@ -9,6 +9,8 @@ namespace ClueGoASP.Models
     {
         public int ClueId { get; set; }
         public int GameId { get; set; }
+        public bool IsFound { get; set; }
+        //public string ClueName { get; set; }
         public Game Game { get; set; }
         public Clue Clue { get; set; }
     }

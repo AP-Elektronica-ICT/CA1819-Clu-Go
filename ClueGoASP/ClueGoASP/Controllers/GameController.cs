@@ -20,13 +20,15 @@ namespace ClueGoASP.Controllers
         private readonly GameContext _dbContext;
         private IGameService _gameService;
         private IUserService _userService;
+        private IClueService _clueService;
 
 
-        public GameController(GameContext dbcontext, IGameService gameService, IUserService userService)
+        public GameController(GameContext dbcontext, IGameService gameService, IUserService userService, IClueService clueService)
         {
             _dbContext = dbcontext;
             _gameService = gameService;
             _userService = userService;
+            _clueService = clueService;
         }
 
         [HttpGet]
@@ -34,6 +36,7 @@ namespace ClueGoASP.Controllers
         {
             return Ok(_dbContext.Games
                 .Include(x => x.GameLocations)
+                    
                 .Include(x => x.GameSuspects)
                 .Include(x => x.GameClues)
                 .ToList());
@@ -105,8 +108,8 @@ namespace ClueGoASP.Controllers
             }            
         }
 
-        [HttpGet("game/clues/{gameId}")]
-        public ActionResult GetGameClues(int gameId)
+        [HttpGet("{gameId}/clue")]
+        public ActionResult GetPuzzleCluesByGame(int gameId)
         {
             try
             {
@@ -118,6 +121,8 @@ namespace ClueGoASP.Controllers
             }            
         }
 
+
+
         [HttpPut("updateEndGame/{userId}/{amtSus}")]
         public IActionResult UpdateEndGame(int userId, int amtSus)
         {
@@ -126,6 +131,38 @@ namespace ClueGoASP.Controllers
             _userService.AddFoundClues(amtSus, userId);
 
             return Ok("User stats have been updated.");        
+        }
+
+        [HttpPut("setClue/{gameId}")]
+        public ActionResult SetGameClueFound(int gameId)
+        {
+            return Ok(_gameService.SetGameClueFound(gameId));
+        }
+
+        [HttpGet("{gameId}/found")]
+        public ActionResult GetFoundClues(int gameId)
+        {
+            try
+            {
+                return Ok(_gameService.GetFoundClues(gameId));
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("{gameId}/notfound")]
+        public ActionResult GetNotFoundClues(int gameId)
+        {
+            try
+            {
+                return Ok(_gameService.GetNotFoundClues(gameId));
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

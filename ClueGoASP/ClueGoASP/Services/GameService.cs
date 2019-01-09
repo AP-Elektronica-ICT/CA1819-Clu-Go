@@ -18,6 +18,10 @@ namespace ClueGoASP.Services
         int GetGameInfo(int gameId);
         Game GetBriefGame(int gameId);
         List<Game> GetPuzzleCluesByGame(int gameId);
+        //List<GameClue> GetGameClues(int gameId);
+        string SetGameClueFound(int gameId);
+        List<GameClue> GetFoundClues(int gameId);
+        List<GameClue> GetNotFoundClues(int gameId);
     }
     public class GameService : IGameService
     {
@@ -88,8 +92,8 @@ namespace ClueGoASP.Services
                 {
                     game.GameClues.Add(new GameClue
                     {
-                        Clue = clues[i]
-                        
+                        Clue = clues[i],
+                        //ClueName = clues[i].ClueName                        
                     });
                 }
 
@@ -128,11 +132,20 @@ namespace ClueGoASP.Services
 
         public Game GetBriefGame(int gameId)
         {
-            var game = _dbContext.Games.Find(gameId);
-            if (game == null)
-                throw new AppException("User " + gameId + " does not have a current game.");
-            else
-                return game;
+             var game = _dbContext.Games.Find(gameId);
+             if (game == null)
+                 throw new AppException("User " + gameId + " does not have a current game.");
+             else
+                 return game;
+
+            //var game = _dbContext.Games
+            //    .Include(x => x.GameClues)
+            //        .ThenInclude(clues => clues.ClueName)
+            //        .ToList();
+            //if (game == null)
+            //    throw new AppException("User " + gameId + " does not have a current game.");
+            //else
+            //    return game;
         }
 
         public List<Game> GetGameById(int gameId)
@@ -163,11 +176,34 @@ namespace ClueGoASP.Services
             var game = _dbContext.Games
                 .Include(x => x.GameClues)
                 .Where(y => y.GameId == gameId)
-                .ToList();
+                .ToList();         
             
-
-
             return game;
+        }        
+        public List<GameClue> GetFoundClues(int gameId)
+        {
+            var gameClues = _dbContext.GameClues.Where(x => x.IsFound && x.GameId == 3).ToList();
+
+            return gameClues;
+        }
+        public List<GameClue> GetNotFoundClues(int gameId)
+        {
+            var gameClues = _dbContext.GameClues.Where(x => !x.IsFound && x.GameId == 3).ToList();
+
+            return gameClues;
+        }
+        public string SetGameClueFound(int gameId)
+        {
+            List<GameClue> gameClues = GetNotFoundClues(gameId);
+            if (gameClues == null)
+                throw new AppException("All clues are found.");
+            else
+            {
+                gameClues[0].IsFound = true;
+                _dbContext.SaveChanges();
+            }
+
+            return "Clue" + gameClues[0].ClueId + "changed to found.";
         }
     }
 }

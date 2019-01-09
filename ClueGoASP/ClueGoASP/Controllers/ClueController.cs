@@ -53,6 +53,6 @@ namespace ClueGoASP.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
-        }        
+        }
     }
 }
