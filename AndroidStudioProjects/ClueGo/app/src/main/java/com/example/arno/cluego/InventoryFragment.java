@@ -1,5 +1,6 @@
 package com.example.arno.cluego;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -7,17 +8,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.arno.cluego.Helpers.RequestHelper;
+import com.example.arno.cluego.Helpers.SuccessCallBack;
 import com.example.arno.cluego.Objects.Clue;
 import com.example.arno.cluego.Objects.Game;
 import com.example.arno.cluego.Objects.ItemAdapter;
@@ -33,102 +39,65 @@ import java.util.List;
 
 
 public class InventoryFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    RequestQueue mRequestQueue;
-    StringRequest stringRequest;
-    ArrayList<String> foundClueList;
-    ArrayList<String> foundClueImageList;
-    List<Clue> clueList;
-    ListView listView;
+    Clue clue = new Clue();
+    List<Clue> clueList = new ArrayList<>();
 
-    Game game = new Game();
-
-    //private String url = "https://clugo.azurewebsites.net/api/clue";
+    TextView tvTest;
+    int gameId;
     public InventoryFragment() {
-        // Required empty public constructor
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_inventory, container, false);
-
-        Bundle bundle = getArguments();
-        if (bundle != null){
-            game = (Game) bundle.getSerializable("gameData");
-        }
-        else {
-            game = (Game)getActivity().getIntent().getSerializableExtra("gameData");
-        }
-        final GridView inventory = (GridView) v.findViewById(R.id.inventory);
-        final ImageView selecteditem = (ImageView) v.findViewById(R.id.item_picture);
-        final TextView selecteditemdes = (TextView) v.findViewById(R.id.item_description);
-        foundClueList = new ArrayList<String>();
-        foundClueImageList = new ArrayList<String>();
-        clueList = game.getClues();
-
-        for (int i = 0; i < clueList.size(); i++) {
-            if(clueList.get(i).isFound())
-                foundClueList.add(clueList.get(i).getClueName());
-        }
-        TextView tvTest = v.findViewById(R.id.item_description);
-        tvTest.setText(String.valueOf(foundClueList.size()) + "clues found, images komen later nog wel.");
-
-
-
-
-        /*mRequestQueue = Volley.newRequestQueue(getActivity());
-        stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.e("responseJson", "onResponse: " + response );
-                try {
-                    JSONArray clueArray = new JSONArray(response);
-                    for (int i = 0; i <= clueArray.length(); i++) {
-                        JSONObject singleClue = new JSONObject(clueArray.getString(i));
-                        final String clue = singleClue.getString("clueName");
-                        boolean foundClue = singleClue.getBoolean("found");
-                        final String clueimage = singleClue.getString("clueImgUrl");
-                        Log.e("SingleClue", "onResponse: " + singleClue.toString());
-                        Log.e("clueclue", "onResponse: " + clue);
-                        if (foundClue == true) {
-                            foundClueList.add(clue);
-                            foundClueImageList.add(clueimage);
-                            inventory.setAdapter(new ItemAdapter(getActivity(),foundClueImageList));
-                            inventory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                public void onItemClick(AdapterView<?> parent, View v,
-                                                        int position, long id) {
-                                    Picasso.get().load(foundClueImageList.get(position)).into(selecteditem);
-                                    selecteditemdes.setText(foundClueList.get(position));
-                                }});
-                        }
-                    }
-
-                } catch (JSONException e){
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("yoyoyo", "Error: " + error.toString());
-            }
-        });
-        mRequestQueue.add(stringRequest);
-        listView = (ListView)v.findViewById(R.id.ListView_guess);*/
-
-
+        final View v = inflater.inflate(R.layout.fragment_inventory, container, false);
+        gameId = getActivity().getIntent().getIntExtra("userId", 0);
+        tvTest = v.findViewById(R.id.tv_test);
+        getClues(v);
 
         return v;
     }
 
-    //public void makeListViewAdapter(){
+    public void getClues(final View v){
+        clueList.clear();
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET, "https://clugo.azurewebsites.net/api/game/" +gameId+"/found",
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d("invFrag", "onResponse: " + response.toString());
+                        try{
+                            if (response.length() == 0)
+                                Toast.makeText(getContext(), "No clues found yet", Toast.LENGTH_SHORT).show();
+                            else{
+                                for(int i=0;i<response.length();i++){
+                                    JSONObject _clue = response.getJSONObject(i);
 
+                                    clue.setClueId(_clue.getInt("clueId"));
+                                    clue.setClueDescription(_clue.getString("clueDescription"));
+                                    clue.setClueImgUrl(_clue.getString("clueImgUrl"));
+                                    clue.setClueName(_clue.getString("clueName"));
 
-    // TODO: Rename method, update argument and hook method into UI event
+                                    clueList.add(clue);
 
+                                    tvTest.append(clue.getClueName() + "\n");
+                                }
+                            }
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error){
+                        Toast.makeText(getContext(), "Er was eens een error", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+        Volley.newRequestQueue(getContext()).add(jsonArrayRequest);
+    }
 }
 

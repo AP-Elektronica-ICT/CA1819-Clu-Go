@@ -133,18 +133,32 @@ namespace ClueGoASP.Controllers
             return Ok("User stats have been updated.");        
         }
 
-        [HttpPut("setClue/{gameId}")]
+        [HttpPut("{gameId}/setFound")]
         public ActionResult SetGameClueFound(int gameId)
         {
-            return Ok(_gameService.SetGameClueFound(gameId));
+            try
+            {
+                return Ok(_gameService.SetGameClueFound(gameId));
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpGet("{gameId}/found")]
         public ActionResult GetFoundClues(int gameId)
         {
+
+            List<Clue> clues = new List<Clue>();
             try
             {
-                return Ok(_gameService.GetFoundClues(gameId));
+                foreach (var item in _gameService.GetFoundClues(gameId))
+                {
+                    clues.Add(_clueService.GetById(item));
+                }
+
+                return Ok(clues);
             }
             catch (AppException ex)
             {
@@ -155,9 +169,15 @@ namespace ClueGoASP.Controllers
         [HttpGet("{gameId}/notfound")]
         public ActionResult GetNotFoundClues(int gameId)
         {
+            List<Clue> clues = new List<Clue>();
             try
             {
-                return Ok(_gameService.GetNotFoundClues(gameId));
+                foreach (var item in _gameService.GetNotFoundClues(gameId))
+                {
+                    clues.Add(_clueService.GetById(item));
+                }
+
+                return Ok(clues);
             }
             catch (AppException ex)
             {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -290,7 +291,8 @@ public void sendBunble(Fragment _fragmap, Bundle _bundle){
     }
 
     public void switchToInventory(){
-       sendBunble(inventoryFragment, bundle);
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.fragment_container, new InventoryFragment()).addToBackStack(null).commit();
     }
 
     public void switchToStats(){

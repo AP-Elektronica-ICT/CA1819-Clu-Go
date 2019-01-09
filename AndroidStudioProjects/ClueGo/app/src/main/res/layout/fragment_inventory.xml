@@ -16,10 +16,10 @@
         <TextView
             android:layout_marginTop="40dp"
             android:layout_marginBottom="40dp"
-            android:id="@+id/item_description"
+            android:id="@+id/tv_test"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:text="Select an item for more info"
+            android:text=""
             android:layout_below="@+id/item_picture"
             android:textAlignment="center"
             android:layout_centerHorizontal="true"

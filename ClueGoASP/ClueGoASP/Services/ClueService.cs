@@ -13,6 +13,7 @@ namespace ClueGoASP.Services
         List<Clue> GetAll();
         Clue UpdateClue(int clueId, Clue updateClue);
         Clue SetFound(int clueId);
+        Clue GetById(int id);
 
     }
     public class ClueService : IClueService
@@ -26,6 +27,12 @@ namespace ClueGoASP.Services
         {
             return _dbContext.Clues.ToList();
         }
+
+        public Clue GetById(int id)
+        {
+            return _dbContext.Clues.Find(id);
+        }
+
         public Clue SetFound(int clueId)
         {
             var orgClue = _dbContext.Clues.SingleOrDefault(x => x.ClueId == clueId);
