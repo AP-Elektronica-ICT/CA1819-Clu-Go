@@ -232,31 +232,31 @@ namespace ClueGoASP.Data
                 {
                     Username = "WeynsA",
                     Email = "weyns.arno@gmail.com",
-                    Password = "123456"
+                    Password = "E10ADC3949BA59ABBE56E057F20F833E"
                 };
                 var admin1 = new User()
                 {
                     Username = "MassureA",
                     Email = "s091998@ap.be",
-                    Password = "123456"
+                    Password = "E10ADC3949BA59ABBE56E057F20F833E"
                 };
                 var admin2 = new User()
                 {
                     Username = "JoppeM",
                     Email = "joppe.mertens@gmail.com",
-                    Password = "123456"
+                    Password = "E10ADC3949BA59ABBE56E057F20F833E"
                 };
                 var admin3 = new User()
                 {
                     Username = "AlIbra",
                     Email = "s091997@ap.be",
-                    Password = "123456"
+                    Password = "E10ADC3949BA59ABBE56E057F20F833E"
                 };
                 var admin4 = new User()
                 {
                     Username = "Test",
                     Email = "Test@ap.be",
-                    Password = "123456"
+                    Password = "E10ADC3949BA59ABBE56E057F20F833E"
                 };
                 context.Users.Add(admin);
                 context.Users.Add(admin1);

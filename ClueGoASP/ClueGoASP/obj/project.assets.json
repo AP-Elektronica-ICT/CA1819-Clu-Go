@@ -12301,23 +12301,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\weyns\\.nuget\\packages\\": {},
+    "C:\\Users\\Arno\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\weyns\\Desktop\\School\\CA1819-Clu-Go\\ClueGoASP\\ClueGoASP\\ClueGoASP.csproj",
+      "projectUniqueName": "C:\\Users\\Arno\\Desktop\\CA1819-Clu-Go\\ClueGoASP\\ClueGoASP\\ClueGoASP.csproj",
       "projectName": "ClueGoASP",
-      "projectPath": "C:\\Users\\weyns\\Desktop\\School\\CA1819-Clu-Go\\ClueGoASP\\ClueGoASP\\ClueGoASP.csproj",
-      "packagesPath": "C:\\Users\\weyns\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\weyns\\Desktop\\School\\CA1819-Clu-Go\\ClueGoASP\\ClueGoASP\\obj\\",
+      "projectPath": "C:\\Users\\Arno\\Desktop\\CA1819-Clu-Go\\ClueGoASP\\ClueGoASP\\ClueGoASP.csproj",
+      "packagesPath": "C:\\Users\\Arno\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Arno\\Desktop\\CA1819-Clu-Go\\ClueGoASP\\ClueGoASP\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\weyns\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Arno\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

@@ -6,16 +6,19 @@ using System.Threading.Tasks;
 using ClueGoASP.Models;
 using ClueGoASP.Helper;
 using ClueGoASP.Data;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace ClueGoASP.Services
 {
     public interface ILocationService
     {
         List<Location> GetLocations();
+        int GetLocationIdByName(string locName);
         Location UpdateLoction(Location updateLoc);
         string DeleteLocation(int id);
         Location CreateLocation(Location newLoc);
+        List<GameLocation> GetGameLocations(int gameId);
+
     }
     public class LocationService : ILocationService
     {
@@ -85,6 +88,17 @@ namespace ClueGoASP.Services
                 _dbContext.SaveChanges();
                 return newLoc;
             }
+        }
+
+        public List<GameLocation> GetGameLocations(int gameId)
+        {
+            return _dbContext.GameLocations.Include(x => x.Location).Where(x => x.GameId == gameId).ToList();
+        }
+
+        public int GetLocationIdByName(string locName)
+        {
+            var result = _dbContext.Locations.SingleOrDefault(x => x.LocName == locName);
+            return result.LocId;
         }
     }
 }

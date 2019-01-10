@@ -18,22 +18,26 @@ namespace ClueGoASP.Services
         int GetGameInfo(int gameId);
         Game GetBriefGame(int gameId);
         List<Game> GetPuzzleCluesByGame(int gameId);
-        string SetGameClueFound(int gameId);
+        string SetGameClueFound(int gameId, string locName);
         List<object> GetFoundClues(int gameId);
         List<object> GetNotFoundClues(int gameId);
         List<GameSuspect> GetGameSuspects(int gameId);
+        void SetLocationVisited(int gameId, string locName);
+        
     }
     public class GameService : IGameService
     {
         private GameContext _dbContext;
         private IClueService _clueService;
         private ISuspectService _suspectService;
-                
-        public GameService(GameContext context, IClueService clueService, ISuspectService suspectService)
+        private ILocationService _locationService;
+
+        public GameService(GameContext context, IClueService clueService, ISuspectService suspectService, ILocationService locationService)
         {
             _dbContext = context;
             _clueService = clueService;
             _suspectService = suspectService;
+            _locationService = locationService;
         }
 
         public Game CreateGameFull(int userId, int amtSus)
@@ -46,9 +50,9 @@ namespace ClueGoASP.Services
                 throw new AppException("Number of suspects needs to be between 3 and 9");
             else if (_dbContext.Games.Find(userId) != null)
             {
-                throw new AppException("User already has a game");                
+                throw new AppException("User already has a game");
             }
-            else if(user == null)
+            else if (user == null)
             {
                 throw new AppException("User does not exist.");
             }
@@ -83,9 +87,9 @@ namespace ClueGoASP.Services
                         Suspect = suspects[i]
                     });
                     if (i == 0)
-                    { 
-                    game.GameSuspects[0].isMurderer = true;
-                    clues.Add(_dbContext.Clues.SingleOrDefault(x => x.SusForeignKey == suspects[i].SusId && !x.Alibi));
+                    {
+                        game.GameSuspects[0].isMurderer = true;
+                        clues.Add(_dbContext.Clues.SingleOrDefault(x => x.SusForeignKey == suspects[i].SusId && !x.Alibi));
                     }
                     else
                         clues.Add(_dbContext.Clues.SingleOrDefault(x => x.SusForeignKey == suspects[i].SusId && x.Alibi));
@@ -127,15 +131,6 @@ namespace ClueGoASP.Services
                 .Include(x => x.Suspect)
                 .Where(x => x.GameId == gameId)
                 .ToList();
-            //List<int> ids = gameSuspects.Select(x => x.SusId).ToList();
-            //List<object> suspects = new List<object>();
-            //if (gameSuspects == null)
-            //    throw new AppException("Could not find suspects.");
-            //else
-            //    foreach (var item in ids)
-            //    {
-            //        suspects.Add(_suspectService.GetBriefSuspect(item));
-            //    }
 
             return gameSuspects;
         }
@@ -155,11 +150,11 @@ namespace ClueGoASP.Services
 
         public Game GetBriefGame(int gameId)
         {
-             var game = _dbContext.Games.Find(gameId);
-             if (game == null)
-                 throw new AppException("User " + gameId + " does not have a current game.");
-             else
-                 return game;
+            var game = _dbContext.Games.Find(gameId);
+            if (game == null)
+                throw new AppException("User " + gameId + " does not have a current game.");
+            else
+                return game;
         }
 
         public List<Game> GetGameById(int gameId)
@@ -180,7 +175,7 @@ namespace ClueGoASP.Services
         }
 
         public int GetGameInfo(int gameId)
-        {          
+        {
             var game = _dbContext.GameLocations.Where(x => x.GameId == gameId);
             return game.Count();
         }
@@ -190,10 +185,10 @@ namespace ClueGoASP.Services
             var game = _dbContext.Games
                 .Include(x => x.GameClues)
                 .Where(y => y.GameId == gameId)
-                .ToList();         
-            
+                .ToList();
+
             return game;
-        }        
+        }
         public List<object> GetFoundClues(int gameId)
         {
             List<GameClue> gameClues = _dbContext.GameClues.Where(x => x.IsFound && x.GameId == gameId).ToList();
@@ -221,7 +216,7 @@ namespace ClueGoASP.Services
 
             return clues;
         }
-        public string SetGameClueFound(int gameId)
+        public string SetGameClueFound(int gameId, string locName)
         {
             List<GameClue> gameClues = _dbContext.GameClues.Where(x => !x.IsFound && x.GameId == gameId).ToList();
             if (gameClues.Count == 0)
@@ -232,7 +227,22 @@ namespace ClueGoASP.Services
                 _dbContext.SaveChanges();
             }
 
+            SetLocationVisited(gameId, locName);
+
             return "Clue" + gameClues[0].ClueId + "changed to found.";
         }
+
+        public void SetLocationVisited(int gameId, string locName)
+        {
+            int locId = _locationService.GetLocationIdByName(locName);
+            GameLocation location = _dbContext.GameLocations.SingleOrDefault(x => x.LocId == locId && x.GameId == gameId);
+
+            location.Visited = true;
+            _dbContext.SaveChanges();
+
+        }
+
+
+
     }
 }

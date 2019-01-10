@@ -73,5 +73,11 @@ namespace ClueGoASP.Data
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [HttpGet("{gameId}")]
+        public ActionResult<List<GameLocation>> GetLocationsByGame(int gameId)
+        {
+            return _locationService.GetGameLocations(gameId);
+        }
     }
 }

@@ -133,12 +133,12 @@ namespace ClueGoASP.Controllers
             return Ok("User stats have been updated.");        
         }
 
-        [HttpGet("{gameId}/setFound")]
-        public ActionResult SetGameClueFound(int gameId)
+        [HttpGet("{gameId}/{locName}/setFound")]
+        public ActionResult SetGameClueFound(int gameId, string locName)
         {
             try
             {
-                return Ok(_gameService.SetGameClueFound(gameId));
+                return Ok(_gameService.SetGameClueFound(gameId, locName));
             }
             catch (AppException ex)
             {
@@ -186,5 +186,14 @@ namespace ClueGoASP.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [HttpGet("{gameId}/setlocation/{locName}")]
+        public void SetLocationVisited(int gameId, string locName)
+        {
+            _gameService.SetLocationVisited(gameId, locName);
+        }
+
+        //[HttpGet("{gameId}/location")]
+        
     }
 }
