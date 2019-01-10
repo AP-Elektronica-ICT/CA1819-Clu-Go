@@ -29,8 +29,10 @@ public class RegisterActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getName();
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
-   // private String url= "https://azurewebsites.net/api/user";
-private String url ="https://clugo.azurewebsites.net/api/user";
+
+    String baseUrl, url;
+
+    // private String url= "https://azurewebsites.net/api/user";
 
 
     @Override
@@ -38,6 +40,9 @@ private String url ="https://clugo.azurewebsites.net/api/user";
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.register_form);
+        baseUrl = getResources().getString(R.string.baseUrl);
+        url = baseUrl + "user";
+
 
         TextView loginScreen = (TextView) findViewById(R.id.link_to_login);
 

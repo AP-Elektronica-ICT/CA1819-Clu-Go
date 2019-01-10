@@ -8,12 +8,13 @@ using ClueGoASP.Helper;
 using ClueGoASP.Data;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClueGoASP.Services
 {
     public interface IUserService
     {
-        User GetUserById(int id);
+        List<User> GetUserById(int id);
         List<User> GetAllUsers();
         User Login(string username, string password);
         User CreateUser(User newUser);
@@ -44,9 +45,12 @@ namespace ClueGoASP.Services
             return sb.ToString();
         }
 
-        public User GetUserById(int id)
+        public List<User> GetUserById(int id)
         {
-            return _dbContext.Users.Find(id);
+            return _dbContext.Users
+                .Include(x => x.Games)
+                .Where(x => x.UserId == id)                    
+                .ToList();
         }
 
         public User Login(string username, string password)
@@ -123,7 +127,9 @@ namespace ClueGoASP.Services
 
         public List<User> GetAllUsers()
         {
-            return _dbContext.Users.ToList();
+            return _dbContext.Users
+                .Include(x => x.Games)
+                .ToList();
         }
 
         public void AddWonGame(int id)

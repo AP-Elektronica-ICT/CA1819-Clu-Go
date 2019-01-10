@@ -54,5 +54,11 @@ namespace ClueGoASP.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [HttpGet("brief/{id}")]
+        public ActionResult<List<Clue>> GetBriefClue(int id)
+        {
+            return Ok(_clueService.GetBriefClue(id));
+        }
     }
 }

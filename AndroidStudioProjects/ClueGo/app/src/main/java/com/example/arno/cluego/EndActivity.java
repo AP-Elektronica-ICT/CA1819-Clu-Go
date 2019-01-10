@@ -23,17 +23,19 @@ public class EndActivity extends AppCompatActivity implements Serializable {
     Button btnEnd, btnDev;
     TextView tvTest;
     User usr = new User();
+    String baseUrl;
+
 
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
-    private String url= "https://clugo.azurewebsites.net/api/user";
+    private String url= baseUrl + "user";
     private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end);
-
+        baseUrl = getResources().getString(R.string.baseUrl);
         btnEnd = findViewById(R.id.btnEnd);
         tvTest = findViewById(R.id.tv_test2);
 
@@ -50,7 +52,7 @@ public class EndActivity extends AppCompatActivity implements Serializable {
         @Override
         public void onClick(View v) {
             mRequestQueue = Volley.newRequestQueue(EndActivity.this);
-            String url= "https://clugo.azurewebsites.net/api/game/" + userId;
+            String url= baseUrl + "game/" + userId;
 
             stringRequest = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
                 @Override

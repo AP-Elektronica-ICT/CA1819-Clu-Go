@@ -36,6 +36,7 @@ public class StartGameActivity extends Activity implements Serializable {
     Button startBtn, continueBtn, testBtn;
     RequestQueue mRequestQueue;
     private StringRequest stringRequest;
+    String baseUrl;
 
     private String jsonResponse;
     private boolean confirmed;
@@ -50,6 +51,7 @@ public class StartGameActivity extends Activity implements Serializable {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_start_of_game);
+        baseUrl = getResources().getString(R.string.baseUrl);
 
         usr = (User)getIntent().getSerializableExtra("userDataPackage");
 
@@ -102,7 +104,7 @@ public class StartGameActivity extends Activity implements Serializable {
 
         mRequestQueue = Volley.newRequestQueue(this);
 
-        String urlGameInfo ="https://clugo.azurewebsites.net/api/game/create/" + UID + "/" + amtItems;
+        String urlGameInfo = baseUrl + "game/create/" + UID + "/" + amtItems;
 
         // Formulate the request and handle the response.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlGameInfo,
@@ -143,7 +145,7 @@ public class StartGameActivity extends Activity implements Serializable {
         //mRequestQueue.start();
         mRequestQueue = Volley.newRequestQueue(this);
 
-        String urlGameInfo ="https://clugo.azurewebsites.net/api/game/" + UID;
+        String urlGameInfo =baseUrl + "game/" + UID;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlGameInfo,
                 new Response.Listener<String>() {
@@ -161,7 +163,7 @@ public class StartGameActivity extends Activity implements Serializable {
                                     gameinfo.setText(response);
 
                                     Intent i = new Intent(StartGameActivity.this, MainActivity.class);
-                                    i.putExtra("userId", UID);
+                                    i.putExtra("gameId", UID);
                                     i.putExtra("userDataPackage", usr);
                                     startActivity(i);
                                 }

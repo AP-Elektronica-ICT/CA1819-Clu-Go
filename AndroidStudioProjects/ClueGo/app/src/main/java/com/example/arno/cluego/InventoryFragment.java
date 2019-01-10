@@ -41,6 +41,8 @@ import java.util.List;
 public class InventoryFragment extends Fragment {
     Clue clue = new Clue();
     List<Clue> clueList = new ArrayList<>();
+    String baseUrl;
+
 
     TextView tvTest;
     int gameId;
@@ -52,8 +54,9 @@ public class InventoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_inventory, container, false);
-        gameId = getActivity().getIntent().getIntExtra("userId", 0);
+        gameId = getActivity().getIntent().getIntExtra("gameId", 0);
         tvTest = v.findViewById(R.id.tv_test);
+        baseUrl = getResources().getString(R.string.baseUrl);
         getClues(v);
 
         return v;
@@ -61,8 +64,10 @@ public class InventoryFragment extends Fragment {
 
     public void getClues(final View v){
         clueList.clear();
+        String url = baseUrl + "game/" +gameId+"/found";
+        Log.d("gameidiv", "getClues: " + gameId);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET, "https://clugo.azurewebsites.net/api/game/" +gameId+"/found",
+                Request.Method.GET, url,
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -73,7 +78,8 @@ public class InventoryFragment extends Fragment {
                                 Toast.makeText(getContext(), "No clues found yet", Toast.LENGTH_SHORT).show();
                             else{
                                 for(int i=0;i<response.length();i++){
-                                    JSONObject _clue = response.getJSONObject(i);
+                                    JSONArray _response = response.getJSONArray(i);
+                                    JSONObject _clue = _response.getJSONObject(0);
 
                                     clue.setClueId(_clue.getInt("clueId"));
                                     clue.setClueDescription(_clue.getString("clueDescription"));

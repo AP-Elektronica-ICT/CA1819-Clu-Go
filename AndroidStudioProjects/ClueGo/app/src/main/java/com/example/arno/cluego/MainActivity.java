@@ -48,8 +48,9 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
     private StartGameActivity startGameActivity;
     private String jsonResponse;
     private boolean hasRequestsed;
-    private int gameId;
-    private int test;
+    private int gameId, test;
+
+    String baseUrl;
 
     ArrayList<String> foundClueList;
     ArrayList<String> foundClueImageList;
@@ -82,9 +83,8 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
                     return true;
                 case R.id.test:
                     Intent intent = new Intent(MainActivity.this,GuessActivity.class);
-                    intent.putExtra("gameData", gameFromDatabase);
-                    intent.putExtra("userId", gameId);
-                    intent.putExtra("userDataPackage", usr);
+                    //intent.putExtra("gameData", gameFromDatabase);
+                    intent.putExtra("gameId", gameId);
                     startActivity(intent);
                     return true;
             }
@@ -96,8 +96,8 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        gameId = getIntent().getIntExtra("userId", 0);
+        baseUrl = getResources().getString(R.string.baseUrl);
+        gameId = getIntent().getIntExtra("gameId", 0);
         usr = (User)getIntent().getSerializableExtra("userDataPackage");
         test = getIntent().getIntExtra("setClue", 0);
         gameFromDatabase1 = (Game)getIntent().getSerializableExtra("gameData");
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
             Network network = new BasicNetwork(new HurlStack());
             mRequestQueue = new RequestQueue(cache, network);
             mRequestQueue.start();
-            String gameurl = "https://clugo.azurewebsites.net/api/game/full/" + GID;
+            String gameurl = baseUrl + "game/full/" + GID;
 
             JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                     Request.Method.GET,
@@ -296,7 +296,8 @@ public void sendBunble(Fragment _fragmap, Bundle _bundle){
     }
 
     public void switchToStats(){
-        sendBunble(statsFragment,bundle);
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.fragment_container, new StatsFragment()).addToBackStack(null).commit();
     }
 
     public void startPuzzle(View view) {

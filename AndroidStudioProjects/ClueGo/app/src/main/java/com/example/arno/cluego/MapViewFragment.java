@@ -57,6 +57,7 @@ public class MapViewFragment extends Fragment {
 
     Game gameFromStart = new Game();
     User usr = new User();
+    String baseUrl;
 
     boolean hasBeen;
     Marker destMarker;
@@ -70,7 +71,6 @@ public class MapViewFragment extends Fragment {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     public JSONObject gameFromStartGameFragment;
 
-    private String url ="https://clugo.azurewebsites.net/api/location";
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_maps, container, false);
@@ -80,6 +80,8 @@ public class MapViewFragment extends Fragment {
 
         mMapView.onResume(); // needed to get the map to display immediately
         //User usr = (User)
+
+        baseUrl = getResources().getString(R.string.baseUrl);
 
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());

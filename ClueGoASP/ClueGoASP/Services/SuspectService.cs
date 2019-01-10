@@ -12,6 +12,8 @@ namespace ClueGoASP.Services
     public interface ISuspectService
     {
         List<Suspect> GetAll();
+        Suspect GetById(int id);
+        IQueryable<object> GetBriefSuspect(int id);
         Suspect UpdateSuspect(Suspect updateSus);
         string DeleteSuspect(int id);
         Suspect CreateSuspect(Suspect newSus);
@@ -53,18 +55,31 @@ namespace ClueGoASP.Services
 
         public List<Suspect> GetAll()
         {
-            /*var result = _dbContext.Clues.Select(clues => new
-             {
-                 clues = clues,
-                 Susname = clues.Suspect.SusName
-             }).ToList();*/
-
             var result = _dbContext.Suspects
                 .Include(x => x.Clues)
-                
-                //.Where(c => c.Clues.Any(a => a.SusForeignKey == 6))
                 .ToList();
             return result;
+        }
+
+        public IQueryable<object> GetBriefSuspect(int susId)
+        {
+            var result = _dbContext.Suspects.Select(x => new
+            {
+                x.SusId,
+                x.SusName,
+                
+                x.SusDescription,
+                x.SusImgUrl,
+
+            })
+            .Where(x => x.SusId == susId);
+
+            return result;
+        }
+
+        public Suspect GetById(int id)
+        {
+            return _dbContext.Suspects.Find(id);
         }
 
         public Suspect UpdateSuspect(Suspect updateSus)

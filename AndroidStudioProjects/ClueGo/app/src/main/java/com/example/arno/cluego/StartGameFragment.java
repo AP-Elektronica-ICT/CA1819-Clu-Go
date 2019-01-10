@@ -34,6 +34,8 @@ public class StartGameFragment extends Activity {
     RequestQueue mRequestQueue;
     private String jsonResponse;
     Game gameFromDatabase = new Game();
+    String baseUrl;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class StartGameFragment extends Activity {
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         gameinfo = findViewById(R.id.txt_info);
-
+        baseUrl = getResources().getString(R.string.baseUrl);
         startButton = findViewById(R.id.btn_start);
         instructions = findViewById(R.id.txt_view_instructions);
         final ProgressBar loadCircle = findViewById(R.id.progress_bar);
@@ -79,7 +81,7 @@ public class StartGameFragment extends Activity {
         /* Start the queue */
         mRequestQueue.start();
 
-        String urlGameInfo ="https://clugo.azurewebsites.net/api/game/create/3/" + UID;
+        String urlGameInfo = baseUrl + "game/create/3/" + UID;
 
         // Formulate the request and handle the response.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlGameInfo,
@@ -117,7 +119,7 @@ public class StartGameFragment extends Activity {
         /* Start the queue */
         mRequestQueue.start();
 
-        String urlGameInfo ="https://clugo.azurewebsites.net/api/game/" + UID;
+        String urlGameInfo = baseUrl + "game/" + UID;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlGameInfo,
                 new Response.Listener<String>() {

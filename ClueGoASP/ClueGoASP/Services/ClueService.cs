@@ -11,9 +11,11 @@ namespace ClueGoASP.Services
     public interface IClueService
     {
         List<Clue> GetAll();
+        IQueryable<object> GetBriefClue(int id);
         Clue UpdateClue(int clueId, Clue updateClue);
         Clue SetFound(int clueId);
         Clue GetById(int id);
+
 
     }
     public class ClueService : IClueService
@@ -61,6 +63,21 @@ namespace ClueGoASP.Services
                 _dbContext.SaveChanges();
                 return orgClue;
             }
+        }
+
+        public IQueryable<object> GetBriefClue(int clueId)
+        {
+            var result = _dbContext.Clues.Select(x => new
+            {
+                x.ClueId,
+                x.ClueName,
+                x.ClueDescription,
+                x.ClueImgUrl
+            })
+            .Where(x => x.ClueId == clueId);
+            //.ToList();
+
+            return result;
         }
     }
 }

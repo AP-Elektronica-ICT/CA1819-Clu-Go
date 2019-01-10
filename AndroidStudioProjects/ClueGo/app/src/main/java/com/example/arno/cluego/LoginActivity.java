@@ -37,7 +37,8 @@ import java.io.Serializable;
 public class LoginActivity extends AppCompatActivity implements Serializable {
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
-    private String url= "https://clugo.azurewebsites.net/api/user";
+
+    String baseUrl;
 
     CallbackManager callbackManager;
     RequestHelper requestHelper = new RequestHelper();
@@ -64,6 +65,9 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
         tv = findViewById(R.id.logging);
 
         btnSignIn.setOnClickListener(Login);
+
+        baseUrl = getResources().getString(R.string.baseUrl);
+
     }
 
     private View.OnClickListener Login = new View.OnClickListener() {
@@ -89,7 +93,8 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
         String password = mPasswordView.getText().toString();
 
         mRequestQueue = Volley.newRequestQueue(this);
-        String url= "https://clugo.azurewebsites.net/api/user/inlog/"+email+"/"+password;
+        String url= baseUrl + "user/inlog/" + email+"/"+ password;
+        Log.d("loginactivity", "attemptLogin: " + url);
 
         stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

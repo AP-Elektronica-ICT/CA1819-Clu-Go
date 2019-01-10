@@ -32,9 +32,7 @@ namespace ClueGoASP.Data
         [HttpGet]
         public ActionResult<List<User>> GetAll()
         {
-            return _dbContext.Users
-                        .Include(x => x.Games)
-                        .ToList();
+            return _userService.GetAllUsers();
         }
         
 

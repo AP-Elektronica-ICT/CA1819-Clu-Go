@@ -31,7 +31,6 @@ public class RequestHelper {
     private static RequestQueue mRequestQueue;
     private StringRequest stringRequest;
     public static List<Clue> clues;
-    static Clue clue = new Clue();
     public String BASE_URL= "https://clugo.azurewebsites.net/api/";
     public String url;
 

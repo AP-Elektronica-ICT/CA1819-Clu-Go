@@ -2,9 +2,11 @@ package com.example.arno.cluego;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.Toast;
@@ -14,15 +16,19 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.arno.cluego.Helpers.GestureDetectGridView;
 import com.example.arno.cluego.Objects.CustomAdapter;
 import com.example.arno.cluego.Objects.Game;
 import com.example.arno.cluego.Objects.User;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class PuzzleActivity extends AppCompatActivity {
@@ -36,6 +42,8 @@ public class PuzzleActivity extends AppCompatActivity {
     private static Context mContext;
     public static int numberFoundClues;
     private static int mColumnWidth, mColumnHeight;
+
+    String baseUrl = getResources().getString(R.string.baseUrl);
 
     public static final String up = "up";
     public static final String down = "down";
@@ -154,35 +162,44 @@ public class PuzzleActivity extends AppCompatActivity {
         display(context);
 
         if (!isSolved()) {
-            Toast.makeText(context, "Found new clue, added ransom note to your inventory!", Toast.LENGTH_SHORT).show();
-            int clueId = 1;
-            String url = "https://clugo.azurewebsites.net/api/clue/"+ clueId;
+            String url = "baseUrl" + "game/" + game.getGameId() + "/setfound";
+           StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.d("puzzle", "onResponse: " + response);
+                    if (response.contains("changed")) {
+                        Toast.makeText(mContext, "Added new clue to your inventory!", Toast.LENGTH_SHORT).show();
 
-            JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                    new Response.Listener<JSONObject>()
-                    {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            // display response
-                            Log.d("Response", response.toString());
-                        }
-                    },
-                    new Response.ErrorListener()
-                    {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d("Error.Response", error.toString());
-                        }
+                        final Intent i = new Intent(mContext, MainActivity.class);
+                        i.putExtra("gameId", game.getGameId());
+                        mContext.startActivity(i);
                     }
-            );
-            RequestQueue queue = Volley.newRequestQueue(context);
-            queue.add(getRequest);
-            numberFoundClues++;
-            Intent intent = new Intent(mContext, MainActivity.class);
-            intent.putExtra("setClue", numberFoundClues);
-            intent.putExtra("gameData", game);
-            intent.putExtra("userDataPackage", usr);
-            mContext.startActivity(intent);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    int status = error.networkResponse.statusCode;
+                    if (status == 400){
+                        try {
+                            String string = new String(error.networkResponse.data);
+                            JSONObject object = new JSONObject(string);
+                            if (object.has("message"))
+                                Toast.makeText(mContext, object.get("message").toString(), Toast.LENGTH_SHORT).show();
+
+                            else
+                                Toast.makeText(mContext, object.get("error_description").toString(), Toast.LENGTH_SHORT).show();
+
+                        } catch (JSONException e) {
+
+                        }
+                        final Intent i = new Intent(mContext, MainActivity.class);
+                        i.putExtra("gameId", game.getGameId());
+                        mContext.startActivity(i);
+                    }
+                }
+            });
+            Volley.newRequestQueue(mContext).add(stringRequest);
+
         }
     }
 

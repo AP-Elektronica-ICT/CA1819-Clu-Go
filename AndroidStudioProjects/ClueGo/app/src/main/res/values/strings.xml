@@ -10,16 +10,6 @@
     <string name="stats">HERE COMES STATS</string>
     <string name="newGame">Start a new Game</string>
     <string name="instruction">Click the game icon to proceed</string>
-    <string-array name="suspects_array">
-        <item>John</item>
-        <item>Paul</item>
-        <item>Morgan</item>
-        <item>Ibrahim</item>
-        <item>Arno</item>
-        <item>Antoine</item>
-        <item>Jopperman</item>
-        <item>Omar</item>
-    </string-array>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_re_enter_password">Re-enter password</string>
@@ -44,4 +34,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="baseUrl">https://clugo.azurewebsites.net/api/</string>
 </resources>

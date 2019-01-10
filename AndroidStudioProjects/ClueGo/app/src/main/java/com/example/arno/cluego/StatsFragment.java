@@ -1,5 +1,7 @@
 package com.example.arno.cluego;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,8 +14,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.arno.cluego.Objects.Game;
 import com.example.arno.cluego.Objects.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class StatsFragment extends Fragment {
@@ -21,8 +32,10 @@ public class StatsFragment extends Fragment {
     TextView tvDistance, tvGamesPlayed, tvCluesFound, tvTitle;
     ImageView ivTitle;
     View view;
-
+    int userId;
     User usr = new User();
+    String baseUrl;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,12 +47,17 @@ public class StatsFragment extends Fragment {
         tvGamesPlayed = view.findViewById(R.id.tv_GamesPlayed);
         tvTitle = view.findViewById(R.id.tv_Title);
         ivTitle = view.findViewById(R.id.iv_Title);
-
-        Bundle bundle = getArguments();
+        baseUrl = getResources().getString(R.string.baseUrl);
+/*        Bundle bundle = getArguments();
+        try {
         if (bundle != null){
             usr = (User)bundle.getSerializable("userDataPackage");
         }else{
             usr = (User)getActivity().getIntent().getSerializableExtra("userDataPackage");
+        }
+        }catch (NullPointerException ex)*/{
+            userId = getActivity().getIntent().getIntExtra("gameId", 0);
+            GetUserData(userId);
         }
         SetStats(usr);
 
@@ -64,5 +82,38 @@ public class StatsFragment extends Fragment {
                 return true;
             }
         });
+    }
+
+    private void GetUserData(int userId) {
+
+        RequestQueue mRequestQueue = Volley.newRequestQueue(getContext());
+        String url= baseUrl + "user/" + userId;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("LoginActivity", response);
+
+                try{
+                    JSONObject userObj = new JSONObject(response);
+
+                    usr.setUserId(userObj.getInt("userId"));
+                    usr.setUsername(userObj.getString("username"));
+                    usr.setCluesFound(userObj.getInt("cluesFound"));
+                    usr.setDistanceWalked(userObj.getInt("distanceWalked"));
+                    usr.setGamesPlayed(userObj.getInt("gamesPlayed"));
+
+                }catch(JSONException e)
+                {
+                    Log.d("JSonErr", e.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        mRequestQueue.add(stringRequest);
     }
 }

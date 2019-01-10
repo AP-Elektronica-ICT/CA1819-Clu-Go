@@ -18,17 +18,22 @@ namespace ClueGoASP.Services
         int GetGameInfo(int gameId);
         Game GetBriefGame(int gameId);
         List<Game> GetPuzzleCluesByGame(int gameId);
-        //List<GameClue> GetGameClues(int gameId);
         string SetGameClueFound(int gameId);
-        List<int> GetFoundClues(int gameId);
-        List<int> GetNotFoundClues(int gameId);
+        List<object> GetFoundClues(int gameId);
+        List<object> GetNotFoundClues(int gameId);
+        List<GameSuspect> GetGameSuspects(int gameId);
     }
     public class GameService : IGameService
     {
         private GameContext _dbContext;
-        public GameService(GameContext context)
+        private IClueService _clueService;
+        private ISuspectService _suspectService;
+                
+        public GameService(GameContext context, IClueService clueService, ISuspectService suspectService)
         {
             _dbContext = context;
+            _clueService = clueService;
+            _suspectService = suspectService;
         }
 
         public Game CreateGameFull(int userId, int amtSus)
@@ -116,6 +121,24 @@ namespace ClueGoASP.Services
             else
                 return "Game created for userId: " + userId;
         }
+        public List<GameSuspect> GetGameSuspects(int gameId)
+        {
+            List<GameSuspect> gameSuspects = _dbContext.GameSuspects
+                .Include(x => x.Suspect)
+                .Where(x => x.GameId == gameId)
+                .ToList();
+            //List<int> ids = gameSuspects.Select(x => x.SusId).ToList();
+            //List<object> suspects = new List<object>();
+            //if (gameSuspects == null)
+            //    throw new AppException("Could not find suspects.");
+            //else
+            //    foreach (var item in ids)
+            //    {
+            //        suspects.Add(_suspectService.GetBriefSuspect(item));
+            //    }
+
+            return gameSuspects;
+        }
 
         public string DeleteGame(int gameId)
         {
@@ -137,15 +160,6 @@ namespace ClueGoASP.Services
                  throw new AppException("User " + gameId + " does not have a current game.");
              else
                  return game;
-
-            //var game = _dbContext.Games
-            //    .Include(x => x.GameClues)
-            //        .ThenInclude(clues => clues.ClueName)
-            //        .ToList();
-            //if (game == null)
-            //    throw new AppException("User " + gameId + " does not have a current game.");
-            //else
-            //    return game;
         }
 
         public List<Game> GetGameById(int gameId)
@@ -180,21 +194,32 @@ namespace ClueGoASP.Services
             
             return game;
         }        
-        public List<int> GetFoundClues(int gameId)
+        public List<object> GetFoundClues(int gameId)
         {
             List<GameClue> gameClues = _dbContext.GameClues.Where(x => x.IsFound && x.GameId == gameId).ToList();
             List<int> ids = gameClues.Select(x => x.ClueId).ToList();
 
+            List<object> clues = new List<object>();
+            foreach (var item in ids)
+            {
+                clues.Add(_clueService.GetBriefClue(item));
+            }
 
-            return ids;
+            return clues;
         }
-        public List<int> GetNotFoundClues(int gameId)
+        public List<object> GetNotFoundClues(int gameId)
         {
             List<GameClue> gameClues = _dbContext.GameClues.Where(x => !x.IsFound && x.GameId == gameId).ToList();
             List<int> ids = gameClues.Select(x => x.ClueId).ToList();
 
+            List<object> clues = new List<object>();
+            foreach (var item in ids)
+            {
+                clues.Add(_clueService.GetBriefClue(item));
+            }
 
-            return ids;
+
+            return clues;
         }
         public string SetGameClueFound(int gameId)
         {
