@@ -37,6 +37,7 @@ public class StartGameActivity extends Activity implements Serializable {
     RequestQueue mRequestQueue;
     private StringRequest stringRequest;
     String baseUrl;
+    int gameId;
 
     private String jsonResponse;
     private boolean confirmed;
@@ -54,6 +55,7 @@ public class StartGameActivity extends Activity implements Serializable {
         baseUrl = getResources().getString(R.string.baseUrl);
 
         usr = (User)getIntent().getSerializableExtra("userDataPackage");
+        gameId = getIntent().getIntExtra("gameId", 0);
 
         UID = usr.getUserId();
 
@@ -66,9 +68,10 @@ public class StartGameActivity extends Activity implements Serializable {
         testBtn = findViewById(R.id.btn_test);
         etAmtSus = findViewById(R.id.et_amtSus);
 
-
-        tvWelcomeMsg.setText("Welcome back " + usr.getUsername() + "!");
-
+        if(usr.getUsername() != null)
+            tvWelcomeMsg.setText("Welcome back " + usr.getUsername() + "!");
+        else
+            tvWelcomeMsg.setText("");
         testBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

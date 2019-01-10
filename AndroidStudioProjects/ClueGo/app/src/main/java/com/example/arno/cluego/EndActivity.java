@@ -39,8 +39,7 @@ public class EndActivity extends AppCompatActivity implements Serializable {
         btnEnd = findViewById(R.id.btnEnd);
         tvTest = findViewById(R.id.tv_test2);
 
-        userId = getIntent().getIntExtra("userId", 0);
-        usr = (User)getIntent().getSerializableExtra("userDataPackage");
+        userId = getIntent().getIntExtra("gameId", 0);
 
         tvTest.setText(String.valueOf(userId));
 
@@ -61,7 +60,7 @@ public class EndActivity extends AppCompatActivity implements Serializable {
                     Toast.makeText(EndActivity.this, response, Toast.LENGTH_SHORT).show();
 
                     Intent i = new Intent(EndActivity.this, StartGameActivity.class);
-                    i.putExtra("userId",userId);
+                    i.putExtra("gameId",userId);
                     i.putExtra("userDataPackage", usr);
                     startActivity(i);
                 }
@@ -74,6 +73,8 @@ public class EndActivity extends AppCompatActivity implements Serializable {
             });
             mRequestQueue.add(stringRequest);
         }
+
+
     };
 }
 

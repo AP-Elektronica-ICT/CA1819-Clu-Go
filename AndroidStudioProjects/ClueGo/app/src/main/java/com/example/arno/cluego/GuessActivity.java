@@ -99,7 +99,6 @@ public class GuessActivity extends AppCompatActivity implements Serializable {
                 if(suspectGuess.equals(murderer)){;
                     Intent i = new Intent(GuessActivity.this, EndActivity.class);
                     i.putExtra("gameId", gameId);
-                    i.putExtra("userDataPackage", usr);
                     startActivity(i);
                 }
                 else{
