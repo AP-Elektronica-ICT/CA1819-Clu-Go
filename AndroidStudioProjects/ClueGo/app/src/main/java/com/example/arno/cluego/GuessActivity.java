@@ -34,21 +34,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GuessActivity extends AppCompatActivity implements Serializable {
-    final ArrayList<String> suspectNames = new ArrayList<String>();
-    ArrayList<String>suspectList;
+
     RequestQueue mRequestQueue;
-    StringRequest stringRequest;
-    String suspectGuess;
+
     ListView listview;
-    String murderer;
     TextView tvTest;
-    int userId;
+
+    Game game = new Game();
+
     List<Suspect> suspects = new ArrayList<>();
     Suspect suspect = new Suspect();
+    ArrayList<String>suspectList;
+    final ArrayList<String> suspectNames = new ArrayList<String>();
+
     int gameId;
-    User usr = new User();
-    Game game = new Game();
-    String baseUrl;
+    String baseUrl, murderer, suspectGuess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +61,8 @@ public class GuessActivity extends AppCompatActivity implements Serializable {
         listview = findViewById(R.id.ListView_guess);
         baseUrl = getResources().getString(R.string.baseUrl);
 
-        //usr = (User)getIntent().getSerializableExtra("userDataPackage");
-        //userId = usr.getUserId();
-
-        //game = (Game)getIntent().getSerializableExtra("gameData");
         gameId = getIntent().getIntExtra("gameId", 0);
         GetSuspects(gameId);
-
-
-
     }
 
     public void makeListViewAdapter(){
@@ -123,8 +116,6 @@ public class GuessActivity extends AppCompatActivity implements Serializable {
 
                                     JSONObject _response = response.getJSONObject(i);
                                     suspect.setMurderer(_response.getBoolean("isMurderer"));
-
-
 
                                     JSONObject _suspect = _response.getJSONObject("suspect");
                                     if(_response.getBoolean("isMurderer"))

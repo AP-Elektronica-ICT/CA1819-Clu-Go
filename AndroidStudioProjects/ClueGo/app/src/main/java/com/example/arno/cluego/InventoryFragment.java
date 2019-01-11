@@ -58,6 +58,8 @@ public class InventoryFragment extends Fragment {
         tvTest = v.findViewById(R.id.tv_test);
         baseUrl = getResources().getString(R.string.baseUrl);
         getClues(v);
+        
+
 
         return v;
     }
@@ -75,7 +77,7 @@ public class InventoryFragment extends Fragment {
                         Log.d("invFrag", "onResponse: " + response.toString());
                         try{
                             if (response.length() == 0)
-                                Toast.makeText(getContext(), "No clues found yet", Toast.LENGTH_SHORT).show();
+                                tvTest.setText("You have not found any clues yet. Go to a gameLocation and solve the puzzle to get started!");
                             else{
                                 for(int i=0;i<response.length();i++){
                                     JSONArray _response = response.getJSONArray(i);

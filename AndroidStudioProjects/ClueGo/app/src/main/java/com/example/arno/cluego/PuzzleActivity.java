@@ -32,10 +32,13 @@ import java.util.Map;
 import java.util.Random;
 
 public class PuzzleActivity extends AppCompatActivity {
+    private static final String TAG = "TAG";
     private static GestureDetectGridView mGridView;
 
     private static Game game = new Game();
     private static User usr = new User();
+
+    private static int gameId;
 
     private static final int COLUMNS = 3;
     private static final int DIMENSIONS = COLUMNS * COLUMNS;
@@ -43,7 +46,7 @@ public class PuzzleActivity extends AppCompatActivity {
     public static int numberFoundClues;
     private static int mColumnWidth, mColumnHeight;
 
-    String baseUrl = getResources().getString(R.string.baseUrl);
+    public static String baseUrl, locName;
 
     public static final String up = "up";
     public static final String down = "down";
@@ -58,11 +61,15 @@ public class PuzzleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_puzzle);
         mContext = this;
 
+        baseUrl = getResources().getString(R.string.baseUrl);
+        locName = getIntent().getStringExtra("locName");
+
+
         init();
 
         scramble();
+        gameId = getIntent().getIntExtra("gameId", 0);
 
-        game = (Game)getIntent().getSerializableExtra("gameData");
         usr = (User)getIntent().getSerializableExtra("userDataPackage");
 
         setDimensions();
@@ -162,16 +169,17 @@ public class PuzzleActivity extends AppCompatActivity {
         display(context);
 
         if (!isSolved()) {
-            String url = "baseUrl" + "game/" + game.getGameId() + "/setfound";
+            String url = baseUrl + "game/" + gameId + "/" + locName + "/setfound";
+            Log.d(TAG, "swap: " + url);
            StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    Log.d("puzzle", "onResponse: " + response);
+                    Log.d("TAG", "onResponse: " + response);
                     if (response.contains("changed")) {
                         Toast.makeText(mContext, "Added new clue to your inventory!", Toast.LENGTH_SHORT).show();
 
                         final Intent i = new Intent(mContext, MainActivity.class);
-                        i.putExtra("gameId", game.getGameId());
+                        i.putExtra("gameId", gameId);
                         mContext.startActivity(i);
                     }
                 }
@@ -193,7 +201,7 @@ public class PuzzleActivity extends AppCompatActivity {
 
                         }
                         final Intent i = new Intent(mContext, MainActivity.class);
-                        i.putExtra("gameId", game.getGameId());
+                        i.putExtra("gameId", gameId);
                         mContext.startActivity(i);
                     }
                 }

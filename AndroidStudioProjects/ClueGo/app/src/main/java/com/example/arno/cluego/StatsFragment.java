@@ -48,18 +48,11 @@ public class StatsFragment extends Fragment {
         tvTitle = view.findViewById(R.id.tv_Title);
         ivTitle = view.findViewById(R.id.iv_Title);
         baseUrl = getResources().getString(R.string.baseUrl);
-/*        Bundle bundle = getArguments();
-        try {
-        if (bundle != null){
-            usr = (User)bundle.getSerializable("userDataPackage");
-        }else{
-            usr = (User)getActivity().getIntent().getSerializableExtra("userDataPackage");
-        }
-        }catch (NullPointerException ex)*/{
+
             userId = getActivity().getIntent().getIntExtra("gameId", 0);
             GetUserData(userId);
-        }
-        SetStats(usr);
+
+            SetStats(usr);
 
         return view;
     }

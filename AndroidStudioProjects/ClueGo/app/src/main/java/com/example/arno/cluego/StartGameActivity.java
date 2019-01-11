@@ -56,8 +56,10 @@ public class StartGameActivity extends Activity implements Serializable {
 
         usr = (User)getIntent().getSerializableExtra("userDataPackage");
         gameId = getIntent().getIntExtra("gameId", 0);
-
-        UID = usr.getUserId();
+        if (usr != null)
+            UID = usr.getUserId();
+        else
+            UID = gameId;
 
         gameinfo = findViewById(R.id.txt_info);
         startBtn = findViewById(R.id.btn_start);

@@ -11,7 +11,7 @@ public class Game implements Serializable {
     private String murderer;
     private ArrayList<Clue> clues = new ArrayList<Clue>();
 
-    private ArrayList<Location> locations = new ArrayList<Location>();
+    private ArrayList<GameLocation> gameLocations = new ArrayList<GameLocation>();
     private ArrayList<Suspect> suspects =new ArrayList<Suspect>();
 
     public void setGameId(int i){
@@ -37,9 +37,9 @@ public class Game implements Serializable {
     public void setClues(Clue cl) {
         this.clues.add(cl);
     }
-    public void setLocations(Location loc) {
+    public void setGameLocations(GameLocation loc) {
 
-        this.locations.add(loc);
+        this.gameLocations.add(loc);
     }
 
     public void setSuspects(Suspect suspect) {
@@ -51,8 +51,8 @@ public class Game implements Serializable {
         return suspects;
     }
 
-    public List<Location> getLocations() {
-        return locations;
+    public List<GameLocation> getGameLocations() {
+        return gameLocations;
     }
 
     public void setMurderer(Suspect suspect){

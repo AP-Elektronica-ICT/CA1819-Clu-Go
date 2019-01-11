@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -20,21 +21,30 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.arno.cluego.Helpers.DirDataParser;
+import com.example.arno.cluego.Helpers.SuccessCallBack;
 import com.example.arno.cluego.Objects.Game;
+import com.example.arno.cluego.Objects.GameLocation;
 import com.example.arno.cluego.Objects.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,6 +58,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.android.volley.VolleyLog.TAG;
+
 
 public class MapViewFragment extends Fragment {
     private MapFragmentListener listener;
@@ -58,14 +70,18 @@ public class MapViewFragment extends Fragment {
     Game gameFromStart = new Game();
     User usr = new User();
     String baseUrl;
+    SuccessCallBack successCallBack;
 
     boolean hasBeen;
     Marker destMarker;
     MapView mMapView;
-    RequestQueue mRequestQueue;
-    StringRequest stringRequest;
-    JSONObject allLocations;
-    Location policeOfficeLocation;
+    int gameId;
+    String locName;
+
+    GameLocation gameLocation;
+    List<GameLocation> visitedLocations = new ArrayList<>();
+    List<GameLocation> notVisitedLocations = new ArrayList<>();
+    GameLocation policeStation = new GameLocation();
     private final static int LOCATION_REQUEST_CODE = 101;
     private GoogleMap googleMap;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
@@ -75,185 +91,207 @@ public class MapViewFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_maps, container, false);
 
+        gameId = getActivity().getIntent().getIntExtra("gameId", 0);
+        if (gameId == 0)
+            Toast.makeText(getContext(),"GameId not found", Toast.LENGTH_SHORT).show();
+
+
         mMapView = rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
-        mMapView.onResume(); // needed to get the map to display immediately
-        //User usr = (User)
-
         baseUrl = getResources().getString(R.string.baseUrl);
 
-        try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-
+        GetLocations(gameId, new SuccessCallBack() {
             @Override
-            public void onMapReady(GoogleMap mMap) {
-                googleMap = mMap;
-                requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_REQUEST_CODE);
-                // For showing a move to my location button
+            public void onSuccess() {
+                try {
+                    MapsInitializer.initialize(getActivity().getApplicationContext());
 
-                Bundle bundle = getArguments();
-                //final Game gameFromStart = (Game) bundle.getSerializable("gameData");
-
-
-                if (bundle != null){
-                    gameFromStart = (Game) bundle.getSerializable("gameData");
-                    usr = (User)bundle.getSerializable("userDataPackage");
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                else {
-                    gameFromStart = (Game)getActivity().getIntent().getSerializableExtra("gameData");
-                    usr = (User)getActivity().getIntent().getSerializableExtra("userDataPackage");
-                }
+                //mMapView.onResume();
+                mMapView.getMapAsync(new OnMapReadyCallback() {
 
-
-                List<com.example.arno.cluego.Objects.Location> locationsFromGame = gameFromStart.getLocations();
-
-                for (int i = 0; i <locationsFromGame.size() ; i++) {
-
-                    double locLat = locationsFromGame.get(i).getLocLat();
-                    double locLng = locationsFromGame.get(i).getLoclong();
-                    String locName = locationsFromGame.get(i).getLocName();
-
-                    googleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(locLat, locLng))
-                            .title(locName)
-                            .draggable(true));
-                }
-
-                LatLng center1 = new LatLng(locationsFromGame.get(1).getLocLat(),locationsFromGame.get(1).getLoclong());
-
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(center1, 15));
-
-                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                    return;
-                }
-                googleMap.setMyLocationEnabled(true);
-
-
-                final LocationManager locationManager= (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-                final LocationListener locationListener = new LocationListener() {
                     @Override
-                    public void onLocationChanged(Location location) {
-                        if(destMarker != null){
-                            Location markerLoc = new Location("Destination");
-                            markerLoc.setLatitude(destMarker.getPosition().latitude);
-                            markerLoc.setLongitude(destMarker.getPosition().longitude);
-                            float distance = location.distanceTo(markerLoc);
+                    public void onMapReady(GoogleMap mMap) {
+                        googleMap = mMap;
 
-                            Log.e("distancevalue", destMarker.getTitle());
 
-                            if(distance<100000 && hasBeen==false){
-                                if(destMarker.getTitle().equals("Politiekantoor")){
-                                    hasBeen=true;
-                                    Intent intent = new Intent(getActivity(), GuessActivity.class);
-                                    intent.putExtra("gameData", gameFromStart);
-                                    intent.putExtra("userDataPackage", usr);
-                                    startActivity(intent);
 
-                                }
-                                else{
-                                    hasBeen=true;
-                                    Intent intent = new Intent(getActivity(), PuzzleActivity.class);
-                                    intent.putExtra("gameData", gameFromStart);
-                                    intent.putExtra("userDataPackage", usr);
-                                    startActivity(intent);
+                        requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_REQUEST_CODE);
+                        final BitmapDescriptor greenIcon = BitmapDescriptorFactory.fromResource(R.drawable.green_marker);
+                        final BitmapDescriptor policeOffice = BitmapDescriptorFactory.fromResource(R.drawable.police_shield);
+
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(policeStation.getLocLtLng())
+                                .title(policeStation.getLocName())
+                                .draggable(true)
+                                .icon(policeOffice));
+
+                        for (int i = 0; i < notVisitedLocations.size() ; i++) {
+                            googleMap.addMarker(new MarkerOptions()
+                                    .position(notVisitedLocations.get(i).getLocLtLng())
+                                    .title(notVisitedLocations.get(i).getLocName())
+                                    .draggable(true));
+                        }
+                        for (int i = 0; i <visitedLocations.size() ; i++) {
+
+                            googleMap.addMarker(new MarkerOptions()
+                                    .position(visitedLocations.get(i).getLocLtLng())
+                                    .title(visitedLocations.get(i).getLocName() + "(*)")
+                                    .icon(greenIcon)
+                                    .draggable(true));
+                        }
+                        try {
+                            LatLng center1 = notVisitedLocations.get(0).getLocLtLng();
+
+                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(center1, 15));
+                        }catch(IndexOutOfBoundsException ex) {
+                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.219,4.401694), 15));
+                        }
+                        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                            return;
+                        }
+                        googleMap.setMyLocationEnabled(true);
+
+                        try {
+                            boolean success = mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.style_json));
+                            if (success)
+                                Log.e(TAG, "onMapReady: " );
+                            if (!success) {
+                                Log.e("MapsActivityRaw", "Style parsing failed.");
+                            }
+                        } catch (Resources.NotFoundException e) {
+                            Log.e("MapsActivityRaw", "Can't find style.", e);
+                        }
+
+
+                        final LocationManager locationManager= (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+                        final LocationListener locationListener = new LocationListener() {
+                            @Override
+                            public void onLocationChanged(Location location) {
+                                if(destMarker != null && !destMarker.getTitle().contains("(*)")){
+                                    Location markerLoc = new Location("Destination");
+                                    markerLoc.setLatitude(destMarker.getPosition().latitude);
+                                    markerLoc.setLongitude(destMarker.getPosition().longitude);
+                                    float distance = location.distanceTo(markerLoc);
+
+                                    Log.e("distancevalue", destMarker.getTitle());
+
+                                    if(distance<100000){
+                                        if(destMarker.getTitle().equals("Politiekantoor")){
+                                            destMarker = null;
+                                            Intent intent = new Intent(getActivity(), GuessActivity.class);
+                                            intent.putExtra("gameId", gameId);
+                                            intent.putExtra("userDataPackage", usr);
+                                            startActivity(intent);
+
+                                        }
+                                        else{
+                                            locName = destMarker.getTitle();
+                                            destMarker = null;
+                                            Intent intent = new Intent(getActivity(), PuzzleActivity.class);
+                                            intent.putExtra("gameId", gameId);
+                                            intent.putExtra("locName", locName);
+                                            startActivity(intent);
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    }
 
 
-                    @Override
-                    public void onStatusChanged(String s, int i, Bundle bundle) {
+                            @Override
+                            public void onStatusChanged(String s, int i, Bundle bundle) {
 
-                    }
+                            }
 
-                    @Override
-                    public void onProviderEnabled(String s) {
+                            @Override
+                            public void onProviderEnabled(String s) {
 
-                    }
+                            }
 
-                    @Override
-                    public void onProviderDisabled(String s) {
+                            @Override
+                            public void onProviderDisabled(String s) {
 
-                    }
-                };
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,locationListener);
+                            }
+                        };
+                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,locationListener);
 
-                // For dropping a marker at a point on the Map
+                        // For dropping a marker at a point on the Map
 
-                mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-                    @Override
-                    public void onMarkerDragStart(Marker marker) {
+                        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                            @Override
+                            public void onMarkerDragStart(Marker marker) {
 
-                    }
+                            }
 
-                    @Override
-                    public void onMarkerDrag(Marker marker) {
+                            @Override
+                            public void onMarkerDrag(Marker marker) {
 
-                    }
+                            }
 
-                    @Override
-                    public void onMarkerDragEnd(Marker marker) {
+                            @Override
+                            public void onMarkerDragEnd(Marker marker) {
 
+                            }
+                        });
+
+                        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                            @Override
+                            public boolean onMarkerClick(Marker marker) {
+                                destMarker = marker;
+                                marker.showInfoWindow();
+                                return true;
+                            }
+                        });
+                        GoogleMap.InfoWindowAdapter infoWindowAdapter = new GoogleMap.InfoWindowAdapter() {
+                            @Override
+                            public View getInfoWindow(Marker marker) {
+                                return null;
+                            }
+
+                            @Override
+                            public View getInfoContents(Marker marker) {
+                                Location markerLoc = new Location("Destination");
+                                try{
+                                    markerLoc.setLatitude(destMarker.getPosition().latitude);
+                                    markerLoc.setLongitude(destMarker.getPosition().longitude);
+
+                                    float dist = googleMap.getMyLocation().distanceTo(markerLoc);
+
+                                    LayoutInflater layoutInflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                    View v = getLayoutInflater().inflate(R.layout.custom_window_info,null);
+                                    TextView distanceText = (TextView)v.findViewById(R.id.distance);
+                                    TextView titleText = (TextView)v.findViewById(R.id.title);
+                                    distanceText.setText(String.format(Math.round(dist)+" meters"));
+                                    titleText.setText(marker.getTitle());
+                                    return v;
+                                }catch(NullPointerException ex){
+                                    return  null;
+                                }
+                            }
+                        };
+                        googleMap.setInfoWindowAdapter(infoWindowAdapter);
+                        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                            @Override
+                            public void onInfoWindowClick(Marker marker) {
+                                String url = getRequestUrl(googleMap.getMyLocation(), marker.getPosition());
+                                TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
+                                taskRequestDirections.execute(url);
+
+                            }
+                        });
                     }
                 });
-
-                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                    @Override
-                    public boolean onMarkerClick(Marker marker) {
-                        destMarker = marker;
-                        marker.showInfoWindow();
-                        return true;
-                    }
-                });
-                GoogleMap.InfoWindowAdapter infoWindowAdapter = new GoogleMap.InfoWindowAdapter() {
-                    @Override
-                    public View getInfoWindow(Marker marker) {
-                        return null;
-                    }
-
-                    @Override
-                    public View getInfoContents(Marker marker) {
-                        Location markerLoc = new Location("Destination");
-                        markerLoc.setLatitude(destMarker.getPosition().latitude);
-                        markerLoc.setLongitude(destMarker.getPosition().longitude);
-                        float dist = googleMap.getMyLocation().distanceTo(markerLoc);
-
-                        LayoutInflater layoutInflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        View v = getLayoutInflater().inflate(R.layout.custom_window_info,null);
-                        TextView distanceText = (TextView)v.findViewById(R.id.distance);
-                        TextView titleText = (TextView)v.findViewById(R.id.title);
-                        distanceText.setText(String.format(Math.round(dist)+" meters"));
-                        titleText.setText(marker.getTitle());
-                        return v;
-                    }
-                };
-                googleMap.setInfoWindowAdapter(infoWindowAdapter);
-                mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                    @Override
-                    public void onInfoWindowClick(Marker marker) {
-                        String url = getRequestUrl(googleMap.getMyLocation(), marker.getPosition());
-                        TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
-                        taskRequestDirections.execute(url);
-
-                    }
-                });
-
             }
-
         });
-
-
         return rootView;
     }
+
+
     public void updateGame(JSONObject newGame){
         gameFromStartGameFragment = newGame;
     }
@@ -292,7 +330,7 @@ public class MapViewFragment extends Fragment {
 
                 if (grantResults.length == 0
                         || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getActivity(), "Unable to show location - permission required", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Unable to show gameLocation - permission required", Toast.LENGTH_LONG).show();
                 }
                 return;
             }
@@ -310,6 +348,7 @@ public class MapViewFragment extends Fragment {
         String url = "https://maps.googleapis.com/maps/api/directions/" + output+"?"+params;
         return url;
     }
+
     private String requestDirection(String reqUrl){
         String responseString ="";
         InputStream inputStream = null;
@@ -433,4 +472,54 @@ public class MapViewFragment extends Fragment {
         }
     }
 
-}
+    public void GetLocations (int gameId, final SuccessCallBack callBack){
+            String url = baseUrl + "location/" + gameId;
+            Log.d("TAG", "GetSuspects: " + url);
+            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url,null,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try{
+                                if (response.length() == 0)
+                                    Toast.makeText(getContext(), "No locations found", Toast.LENGTH_SHORT).show();
+                                else{
+
+                                    for(int i=0;i<response.length();i++){
+                                        GameLocation gameLocation = new GameLocation();
+                                        JSONObject _locations = response.getJSONObject(i);
+                                        Log.d(TAG, "onResponse: " + response);
+
+                                        gameLocation.setVisited(_locations.getBoolean("visited"));
+                                        JSONObject _location = _locations.getJSONObject("location");
+                                        Log.d(TAG, "onResponse: " + _location);
+
+                                        gameLocation.setLocId(_location.getInt("locId"));
+                                        gameLocation.setLocName(_location.getString("locName"));
+                                        gameLocation.setLocDescription(_location.getString("locDescription"));
+                                        gameLocation.setLocLtLng(_location.getDouble("locLat"), _location.getDouble("locLong"));
+
+                                        if (gameLocation.getLocName().contains("kantoor"))
+                                            policeStation = gameLocation;
+                                        else if(gameLocation.isVisited())
+                                            visitedLocations.add(gameLocation);
+                                        else
+                                            notVisitedLocations.add(gameLocation);
+                                    }
+                                }
+                                callBack.onSuccess();
+                            }catch (JSONException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener(){
+                        @Override
+                        public void onErrorResponse(VolleyError error){
+                            Toast.makeText(getContext(), "Er was eens een error", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
+            Volley.newRequestQueue(getContext()).add(jsonArrayRequest);
+        }
+    }
+

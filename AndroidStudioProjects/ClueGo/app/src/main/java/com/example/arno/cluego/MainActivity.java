@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.android.volley.Cache;
 import com.android.volley.DefaultRetryPolicy;
@@ -27,7 +26,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.arno.cluego.Helpers.SuicidalFragmentListener;
 import com.example.arno.cluego.Objects.Clue;
 import com.example.arno.cluego.Objects.Game;
-import com.example.arno.cluego.Objects.Location;
+import com.example.arno.cluego.Objects.GameLocation;
 import com.example.arno.cluego.Objects.Suspect;
 import com.example.arno.cluego.Objects.User;
 
@@ -117,7 +116,8 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        //switchToSuspect();
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.fragment_container, new InventoryFragment()).addToBackStack(null).commit();
     }
 
     @Override
@@ -169,22 +169,22 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
 
                                     jsonResponse += "locId: " + locId + "\n";
 
-                                    JSONObject location = gameLocation.getJSONObject("location");
+                                    JSONObject location = gameLocation.getJSONObject("gameLocation");
 
                                     double latitude = location.getDouble("locLat");
                                     double longtitude = location.getDouble("locLong");
                                     String desciption = location.getString("locDescription");
                                     String name = location.getString("locName");
 
-                                    Location locationFromDatabase = new Location();
-                                    locationFromDatabase.setLocDescription(location.getString("locDescription"));
-                                    locationFromDatabase.setLocName(location.getString("locName"));
-                                    locationFromDatabase.setLocLat(location.getDouble("locLat"));
-                                    locationFromDatabase.setLoclong(location.getDouble("locLong"));
+                                    GameLocation gameLocationFromDatabase = new GameLocation();
+                                    gameLocationFromDatabase.setLocDescription(location.getString("locDescription"));
+                                    gameLocationFromDatabase.setLocName(location.getString("locName"));
+                                    gameLocationFromDatabase.setLocLat(location.getDouble("locLat"));
+                                    gameLocationFromDatabase.setLoclong(location.getDouble("locLong"));
 
 
-                                    gameFromDatabase.setLocations(locationFromDatabase);
-                                    jsonResponse += "name: " + locationFromDatabase.getLocName() + " lat: " + locationFromDatabase.getLocLat() + " long: " + locationFromDatabase.getLoclong() + "\n";
+                                    gameFromDatabase.setGameLocations(gameLocationFromDatabase);
+                                    jsonResponse += "name: " + gameLocationFromDatabase.getLocName() + " lat: " + gameLocationFromDatabase.getLocLat() + " long: " + gameLocationFromDatabase.getLoclong() + "\n";
 
                                 }
 
