@@ -1,4 +1,4 @@
-package com.example.arno.cluego.Objects;
+package com.example.arno.cluego.Helpers;
 
 import android.view.View;
 import android.view.ViewGroup;

@@ -60,7 +60,6 @@ public class EndActivity extends AppCompatActivity implements Serializable {
                     Toast.makeText(EndActivity.this, response, Toast.LENGTH_SHORT).show();
 
                     Intent i = new Intent(EndActivity.this, StartGameActivity.class);
-                    Log.d("TAG", "USERIDEND: " + userId);
                     i.putExtra("gameId",userId);
                     startActivity(i);
                 }

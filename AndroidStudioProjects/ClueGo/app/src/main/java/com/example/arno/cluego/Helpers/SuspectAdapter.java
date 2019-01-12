@@ -1,4 +1,4 @@
-package com.example.arno.cluego.Objects;
+package com.example.arno.cluego.Helpers;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+
+import com.example.arno.cluego.Objects.Suspect;
 
 import java.util.ArrayList;
 import java.util.List;

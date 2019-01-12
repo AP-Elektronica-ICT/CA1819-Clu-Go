@@ -1,6 +1,7 @@
 package com.example.arno.cluego;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -37,7 +38,8 @@ import java.io.Serializable;
 public class LoginActivity extends AppCompatActivity implements Serializable {
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
-
+    SharedPreferences sharedpreferences;
+    public static final String MY_PREFS_NAME = "UserInfo";
     String baseUrl;
 
     CallbackManager callbackManager;
@@ -112,9 +114,10 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
                     user.setDistanceWalked(userObj.getInt("distanceWalked"));
                     user.setGamesPlayed(userObj.getInt("gamesPlayed"));
 
-                    /*TextView tv = findViewById(R.id.logging);
-                    tv.setText(response);
-                    String value = response;*/
+                    SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+                    editor.putString("userId", String.valueOf(user.getUserId()));
+                    editor.putString("userName", user.getUsername());
+                    editor.commit();
 
                     spinner.setVisibility(View.INVISIBLE);
 

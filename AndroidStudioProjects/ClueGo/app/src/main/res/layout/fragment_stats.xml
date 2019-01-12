@@ -10,17 +10,18 @@
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/tv_Title"
-        android:layout_width="0dp"
+        android:layout_width="151dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="56dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="Checkout your stats, "
+        android:text="Your stats"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.361"
         app:layout_constraintStart_toEndOf="@+id/iv_Title"
         app:layout_constraintTop_toTopOf="parent" />
 

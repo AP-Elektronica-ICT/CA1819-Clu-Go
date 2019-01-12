@@ -144,7 +144,7 @@ public class MapViewFragment extends Fragment {
                                     .draggable(true));
                         }
                         try {
-                            LatLng center1 = notVisitedLocations.get(0).getLocLtLng();
+                            LatLng center1 = policeStation.getLocLtLng();
 
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(center1, 15));
                         }catch(IndexOutOfBoundsException ex) {

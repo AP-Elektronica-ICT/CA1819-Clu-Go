@@ -4,6 +4,7 @@ package com.example.arno.cluego;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -31,13 +32,15 @@ import java.io.Serializable;
 
 
 public class StartGameActivity extends Activity implements Serializable {
-    TextView gameinfo, serverinfo, instructions, tvWelcomeMsg;
+    TextView gameinfo, instructions, tvWelcomeMsg;
     EditText etAmtSus;
     Button startBtn, continueBtn, testBtn;
     RequestQueue mRequestQueue;
     private StringRequest stringRequest;
-    String baseUrl;
+    String baseUrl, username;
     int gameId;
+
+    SharedPreferences prefs;
 
     private String jsonResponse;
     private boolean confirmed;
@@ -54,12 +57,11 @@ public class StartGameActivity extends Activity implements Serializable {
         setContentView(R.layout.fragment_start_of_game);
         baseUrl = getResources().getString(R.string.baseUrl);
 
-        usr = (User)getIntent().getSerializableExtra("userDataPackage");
-        gameId = getIntent().getIntExtra("gameId", 0);
-        if (usr != null)
-            UID = usr.getUserId();
-        else
-            UID = gameId;
+        prefs = getSharedPreferences("UserInfo", MODE_PRIVATE);
+        UID = Integer.parseInt(prefs.getString("userId", "0"));
+        username = prefs.getString("userName", "UserNotLoaded");
+
+        gameId = UID;
 
         gameinfo = findViewById(R.id.txt_info);
         startBtn = findViewById(R.id.btn_start);
@@ -70,10 +72,8 @@ public class StartGameActivity extends Activity implements Serializable {
         testBtn = findViewById(R.id.btn_test);
         etAmtSus = findViewById(R.id.et_amtSus);
 
-        if(usr.getUsername() != null)
-            tvWelcomeMsg.setText("Welcome back " + usr.getUsername() + "!");
-        else
-            tvWelcomeMsg.setText("");
+        tvWelcomeMsg.setText("Welcome back " + username + "!");
+
         testBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

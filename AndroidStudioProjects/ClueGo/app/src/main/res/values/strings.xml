@@ -35,5 +35,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="myInventory"><u>My inventory</u></string>
+
     <string name="baseUrl">https://clugo.azurewebsites.net/api/</string>
+    <string name="TAG">TAG</string>
 </resources>
