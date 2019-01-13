@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
     public User user = new User();
 
     // UI references.
-    private Button btnSignIn ;
+    Button btnSignIn ;
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private TextView tv;
@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
         baseUrl = getResources().getString(R.string.baseUrl);
 
     }
+
 
     private View.OnClickListener Login = new View.OnClickListener() {
         @Override
@@ -189,4 +190,6 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
     }
+
+
 }

@@ -31,6 +31,9 @@ import com.example.arno.cluego.Helpers.SuccessCallBack;
 import com.example.arno.cluego.Objects.Game;
 import com.example.arno.cluego.Objects.GameLocation;
 import com.example.arno.cluego.Objects.User;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.PointTarget;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -66,6 +69,7 @@ public class MapViewFragment extends Fragment {
     public interface MapFragmentListener{
         void onInputMapSent(JSONObject game);
     }
+    ShowcaseView showcaseView;
 
     Game gameFromStart = new Game();
     User usr = new User();
@@ -78,6 +82,8 @@ public class MapViewFragment extends Fragment {
     int gameId;
     String locName;
 
+    ShowcaseView scv1;
+
     GameLocation gameLocation;
     List<GameLocation> visitedLocations = new ArrayList<>();
     List<GameLocation> notVisitedLocations = new ArrayList<>();
@@ -89,7 +95,7 @@ public class MapViewFragment extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_maps, container, false);
+        final View rootView = inflater.inflate(R.layout.activity_maps, container, false);
 
         gameId = getActivity().getIntent().getIntExtra("gameId", 0);
         if (gameId == 0)
@@ -123,7 +129,7 @@ public class MapViewFragment extends Fragment {
                         final BitmapDescriptor greenIcon = BitmapDescriptorFactory.fromResource(R.drawable.green_marker);
                         final BitmapDescriptor policeOffice = BitmapDescriptorFactory.fromResource(R.drawable.police_shield);
 
-                        googleMap.addMarker(new MarkerOptions()
+                        Marker policeMarker = googleMap.addMarker(new MarkerOptions()
                                 .position(policeStation.getLocLtLng())
                                 .title(policeStation.getLocName())
                                 .draggable(true)
@@ -144,12 +150,29 @@ public class MapViewFragment extends Fragment {
                                     .draggable(true));
                         }
                         try {
-                            LatLng center1 = policeStation.getLocLtLng();
-
+                            LatLng center1 = notVisitedLocations.get(0).getLocLtLng();
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(center1, 15));
                         }catch(IndexOutOfBoundsException ex) {
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.219,4.401694), 15));
                         }
+
+                        scv1 = new ShowcaseView.Builder(getActivity())
+                                .setTarget(new PointTarget( (rootView.getWidth()/2),(rootView.getHeight()/2)))
+                                .setContentText("Click on one of the locations to get a little more information about it. " +
+                                        "Click on the marker information window to set it as your active location. (Shown by the route plotted towards it.)" +
+                                        "Walk over there and solve the puzzle to gather more clues and hints about the murder.")
+                                .setContentTitle("Point of interest.")
+                                .blockAllTouches()
+                                .singleShot(98)
+                                .setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        MoveTutorialToPolice();
+                                    }
+                                })
+                                .build();
+                        scv1.setButtonText("Next");
+
                         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
                             return;
@@ -349,6 +372,7 @@ public class MapViewFragment extends Fragment {
         return url;
     }
 
+
     private String requestDirection(String reqUrl){
         String responseString ="";
         InputStream inputStream = null;
@@ -472,6 +496,7 @@ public class MapViewFragment extends Fragment {
         }
     }
 
+
     public void GetLocations (int gameId, final SuccessCallBack callBack){
             String url = baseUrl + "location/" + gameId;
             Log.d("TAG", "GetSuspects: " + url);
@@ -521,5 +546,20 @@ public class MapViewFragment extends Fragment {
             );
             Volley.newRequestQueue(getContext()).add(jsonArrayRequest);
         }
+
+
+    private void MoveTutorialToPolice(){
+        try {
+            LatLng center1 = policeStation.getLocLtLng();
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(center1, 15));
+        }catch(IndexOutOfBoundsException ex) {
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.219,4.401694), 15));
+        }
+        scv1.setContentTitle("Police Station");
+        scv1.setContentText("Once you've found enough evidence and think you know who the real murderer is, go to the police station and declare your findings!");
+        scv1.setHideOnTouchOutside(true);
+        scv1.setBlocksTouches(false);
+        scv1.hideButton();
+    }
     }
 

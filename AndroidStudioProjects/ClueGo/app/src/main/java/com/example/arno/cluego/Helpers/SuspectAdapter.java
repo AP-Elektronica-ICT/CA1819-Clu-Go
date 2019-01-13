@@ -9,7 +9,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.example.arno.cluego.MainActivity;
 import com.example.arno.cluego.Objects.Suspect;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.PointTarget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +58,7 @@ public class SuspectAdapter extends BaseAdapter {
 
         Drawable drawable = mContext.getResources().getDrawable(mContext.getResources().getIdentifier("suspect"+mThumbIds.get(position), "drawable", mContext.getPackageName()));
         imageView.setImageDrawable(drawable);
+
         return imageView;
     }
 

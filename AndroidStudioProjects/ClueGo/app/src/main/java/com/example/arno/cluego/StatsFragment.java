@@ -58,7 +58,6 @@ public class StatsFragment extends Fragment {
     }
     public void SetStats(User usr){
         tvGamesPlayed.setText(String.valueOf(usr.getGamesPlayed()));
-        tvTitle.append(usr.getUsername() + "!");
         tvDistance.setText(String.valueOf(usr.getDistanceWalked() + " m"));
         tvCluesFound.setText(String.valueOf(usr.getCluesFound()));
 

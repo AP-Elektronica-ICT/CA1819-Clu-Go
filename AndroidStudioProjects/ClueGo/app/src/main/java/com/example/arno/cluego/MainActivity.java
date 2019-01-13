@@ -3,6 +3,9 @@ package com.example.arno.cluego;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.NavigationMenuItemView;
+import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.Toolbar;
 
 import com.android.volley.Cache;
 import com.android.volley.DefaultRetryPolicy;
@@ -23,12 +28,12 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.example.arno.cluego.Helpers.SuicidalFragmentListener;
 import com.example.arno.cluego.Objects.Clue;
 import com.example.arno.cluego.Objects.Game;
 import com.example.arno.cluego.Objects.GameLocation;
 import com.example.arno.cluego.Objects.Suspect;
 import com.example.arno.cluego.Objects.User;
+import com.github.amlcurran.showcaseview.ShowcaseView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,8 +43,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class MainActivity extends AppCompatActivity implements MapViewFragment.MapFragmentListener, Serializable, SuicidalFragmentListener {
+public class MainActivity extends AppCompatActivity implements MapViewFragment.MapFragmentListener, Serializable{
     private MapViewFragment mapViewFragment = new MapViewFragment();
     private SuspectFragment suspectFragment= new SuspectFragment();
     private InventoryFragment inventoryFragment= new InventoryFragment();
@@ -48,6 +52,11 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
     private String jsonResponse;
     private boolean hasRequestsed;
     private int gameId, test;
+    boolean showTutorial;
+
+    BottomNavigationView navigation;
+
+    FragmentManager manager = getSupportFragmentManager();
 
     String baseUrl;
 
@@ -61,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
     User usr = new User();
     Game gameFromDatabase = new Game();
     Game gameFromDatabase1 = new Game();
+
+    ShowcaseView showcaseView;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -97,9 +108,9 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
         setContentView(R.layout.activity_main);
         baseUrl = getResources().getString(R.string.baseUrl);
         gameId = getIntent().getIntExtra("gameId", 0);
-        usr = (User)getIntent().getSerializableExtra("userDataPackage");
+        //usr = (User)getIntent().getSerializableExtra("userDataPackage");
         test = getIntent().getIntExtra("setClue", 0);
-        gameFromDatabase1 = (Game)getIntent().getSerializableExtra("gameData");
+        //gameFromDatabase1 = (Game)getIntent().getSerializableExtra("gameData");
         if (test > 0)
         {
             gameFromDatabase = gameFromDatabase1;
@@ -113,18 +124,17 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
         else
             GetGame(gameId);
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.fragment_container, new InventoryFragment()).addToBackStack(null).commit();
+        navigation.setSelectedItemId(R.id.navigation_suspects);
+
+        manager.beginTransaction().replace(R.id.fragment_container, new SuspectFragment()).addToBackStack(null).commit();
+
+
+
     }
 
-    @Override
-    public void onFragmentSuicide(String tag) {
-        // Check tag if you do this with more than one fragmen, then:
-        getSupportFragmentManager().popBackStack();
-    }
 
     @Override
     public void onInputMapSent(JSONObject game) {
@@ -270,38 +280,22 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
             mRequestQueue.add(jsonArrayRequest);
     }
 
-public void sendBunble(Fragment _fragmap, Bundle _bundle){
-    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-    Fragment fragmap = _fragmap;
-
-    fragmap.setArguments(_bundle);
-
-    ft.replace(R.id.fragment_container, fragmap);
-    ft.addToBackStack(null);
-    ft.commit();
-    }
-
     public void switchToGame() {
-        sendBunble(mapViewFragment,bundle);
+        manager.beginTransaction().replace(R.id.fragment_container, new MapViewFragment()).addToBackStack(null).commit();
     }
 
     public void switchToSuspect(){
-        sendBunble(suspectFragment,bundle);
+        manager.beginTransaction().replace(R.id.fragment_container, new SuspectFragment()).addToBackStack(null).commit();
     }
 
     public void switchToInventory(){
-        FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction().replace(R.id.fragment_container, new InventoryFragment()).addToBackStack(null).commit();
     }
 
     public void switchToStats(){
-        FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction().replace(R.id.fragment_container, new StatsFragment()).addToBackStack(null).commit();
     }
 
-    public void startPuzzle(View view) {
-        Intent intent = new Intent(this, PuzzleActivity.class );
-        startActivity(intent);
-    }
+
+
 }

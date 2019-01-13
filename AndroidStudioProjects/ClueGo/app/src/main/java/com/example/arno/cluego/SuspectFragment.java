@@ -1,5 +1,6 @@
 package com.example.arno.cluego;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +20,11 @@ import com.android.volley.toolbox.Volley;
 import com.example.arno.cluego.Helpers.SuccessCallBack;
 import com.example.arno.cluego.Objects.Suspect;
 import com.example.arno.cluego.Helpers.SuspectAdapter;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.ShowcaseViewApi;
+import com.github.amlcurran.showcaseview.SimpleShowcaseEventListener;
+import com.github.amlcurran.showcaseview.targets.PointTarget;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +32,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 public class SuspectFragment extends Fragment {
     private int gameId;
@@ -35,33 +43,23 @@ public class SuspectFragment extends Fragment {
     Suspect suspect;
     ArrayList<String> suspectList;
     final ArrayList<String> suspectNames = new ArrayList<>();
+    boolean showTutorial;
+    GridView gridview;
+
+    ShowcaseView showcaseView;
 
  public SuspectFragment(){
-
-    }
-
-    public void GoingInDetail(String detail, String name, String image) {
-        FragmentManager manager = getFragmentManager();
-        DetailFragment newDetail = new DetailFragment();
-        Bundle args = new Bundle();
-        args.putString("detail", detail);
-        args.putString("name",name);
-        args.putString("image",image);
-        newDetail.setArguments(args);
-        manager.beginTransaction().replace(R.id.fragment_container, newDetail).addToBackStack(null).commit();
     }
 
     @Override
     public  View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
      final View view = inflater.inflate(R.layout.suspect_list, container, false);
-        final GridView gridview = view.findViewById(R.id.gridview);
+        gridview = view.findViewById(R.id.gridview);
 
         baseUrl = getResources().getString(R.string.baseUrl);
         gameId = getActivity().getIntent().getIntExtra("gameId", 0);
         suspects.clear();
-
-
 
         GetSuspects(gameId, new SuccessCallBack() {
             @Override
@@ -75,18 +73,47 @@ public class SuspectFragment extends Fragment {
                     suspectNames.add(name);
                 }
 
-                gridview.setAdapter(new SuspectAdapter(getContext(), suspects, amtSus));
+                gridview.setAdapter(new SuspectAdapter(getActivity(), suspects, amtSus));
+
 
                 gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                        showcaseView.hide();
+
                         GoingInDetail(suspects.get(position).getSusDescription(), suspects.get(position).getSusName(), suspects.get(position).getSusImgUrl());
                     }
                 });
             }
         });
 
+        showcaseView = new ShowcaseView.Builder(getActivity())
+                .setTarget( new PointTarget(250, 380))
+                .setContentTitle("Suspect list")
+                .setContentText("After a lot of work, the police have managed to shorten the list of possible murderers to these suspects. Click on one of them to get more information about that suspect.")
+                .hideOnTouchOutside()
+                .singleShot(99)
+                .build();
+        showcaseView.hideButton();
+
         return view;
     }
+
+    public void GoingInDetail(String detail, String name, String image) {
+        FragmentManager manager = getFragmentManager();
+        DetailFragment newDetail = new DetailFragment();
+        Bundle args = new Bundle();
+        args.putString("detail", detail);
+        args.putString("name",name);
+        args.putString("image",image);
+        newDetail.setArguments(args);
+        manager.beginTransaction().replace(R.id.fragment_container, newDetail).addToBackStack(null).commit();
+    }
+
+
+
+   /* public ShowcaseView getShowcaseView() {
+        return showcaseView;
+    }*/
 
     public void GetSuspects(int id, final SuccessCallBack callBack){
         String url = baseUrl + "game/" + id +"/suspect";
