@@ -35,8 +35,7 @@ namespace ClueGoASP.Controllers
         public ActionResult<List<Game>> GetAll()
         {
             return Ok(_dbContext.Games
-                .Include(x => x.GameLocations)
-                    
+                .Include(x => x.GameLocations)                    
                 .Include(x => x.GameSuspects)
                 .Include(x => x.GameClues)
                 .ToList());
@@ -48,6 +47,20 @@ namespace ClueGoASP.Controllers
             try
             {
                 return _gameService.GetBriefGame(gameId);
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("from/{username}")]
+        public ActionResult<Game> GetGameFrom(string username)
+        {
+            try
+            {
+                int id = _userService.GetUserIdByName(username);
+                return _gameService.GetBriefGame(id);
             }
             catch (AppException ex)
             {

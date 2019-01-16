@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -34,7 +35,7 @@ import java.io.Serializable;
 public class StartGameActivity extends Activity implements Serializable {
     TextView gameinfo, instructions, tvWelcomeMsg;
     EditText etAmtSus;
-    Button startBtn, continueBtn, testBtn;
+    Button startBtn, continueBtn, testBtn, joinBtn;
     RequestQueue mRequestQueue;
     private StringRequest stringRequest;
     String baseUrl, username;
@@ -42,8 +43,8 @@ public class StartGameActivity extends Activity implements Serializable {
 
     SharedPreferences prefs;
 
-    private String jsonResponse;
-    private boolean confirmed;
+    private String jsonResponse, urlGameInfo;
+    private boolean confirmed, isMultiplayer;
     Game gameFromDatabase = new Game();
 
     RequestHelper requestHelper = new RequestHelper();
@@ -70,6 +71,7 @@ public class StartGameActivity extends Activity implements Serializable {
         final ProgressBar loadCircle = findViewById(R.id.progress_bar);
         continueBtn = findViewById(R.id.btn_continue);
         testBtn = findViewById(R.id.btn_test);
+        joinBtn = findViewById(R.id.btn_JoinPlayer);
         etAmtSus = findViewById(R.id.et_amtSus);
 
         tvWelcomeMsg.setText("Welcome back " + username + "!");
@@ -77,7 +79,11 @@ public class StartGameActivity extends Activity implements Serializable {
         testBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                amtItems = Integer.parseInt(etAmtSus.getText().toString());
+                try{
+                amtItems = Integer.parseInt(etAmtSus.getText().toString());}
+                catch(NumberFormatException ex){
+                    Toast.makeText(StartGameActivity.this, "Enter a valid number between 3 - 7 please.", Toast.LENGTH_SHORT).show();
+                }
                 loadCircle.setVisibility(View.VISIBLE);
                 StartGame(UID, amtItems);
             }
@@ -88,7 +94,25 @@ public class StartGameActivity extends Activity implements Serializable {
             public void onClick(View v) {
                 gameinfo.setText(" ");
                 loadCircle.setVisibility(View.VISIBLE);
-                LoadGame(UID);
+                LoadGame(UID, "");
+            }
+        });
+
+        joinBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gameinfo.setText(" ");
+                loadCircle.setVisibility(View.VISIBLE);
+                etAmtSus.setVisibility(View.VISIBLE);
+                continueBtn.setVisibility(View.INVISIBLE);
+                startBtn.setVisibility(View.INVISIBLE);
+                joinBtn.setText("join");
+
+                etAmtSus.setHint("Enter the name of the player you wish to join.");
+                if (etAmtSus.equals(""))
+                    Toast.makeText(StartGameActivity.this, "Please enter a valid name.", Toast.LENGTH_SHORT).show();
+                else
+                    LoadGame(0, String.valueOf(etAmtSus.getText()));
             }
         });
         
@@ -104,7 +128,6 @@ public class StartGameActivity extends Activity implements Serializable {
     }
 
     private void StartGame(final int UID, int amtItems){
-
         final ProgressBar loadCircle = findViewById(R.id.progress_bar);
 
         mRequestQueue = Volley.newRequestQueue(this);
@@ -120,7 +143,7 @@ public class StartGameActivity extends Activity implements Serializable {
                             gameinfo.setText(response);
                             loadCircle.setVisibility(View.GONE);
 
-                            LoadGame(UID);
+                            LoadGame(UID, "0");
                     }
                 },
                 new Response.ErrorListener() {
@@ -131,26 +154,23 @@ public class StartGameActivity extends Activity implements Serializable {
                         gameinfo.setText(errorMessage);
 
                         if (errorMessage.contains("already") && !confirmed)
-                            ConfirmRemoveGame();
+                            DialogBuilder(getString(R.string.continueGame));
                         else
-                            LoadGame(UID);
+                            LoadGame(0, String.valueOf(etAmtSus.getText()));
                     }
                 });
         mRequestQueue.add(stringRequest);
     }
 
-    private void LoadGame(final int UID){
-        /*Intent i = new Intent(StartGameActivity.this, MainActivity.class);
-        i.putExtra("userId", UID);
-        i.putExtra("userDataPackage", usr);
-        startActivity(i);*/
-
+    private void LoadGame(final int UID, final String username){
         final ProgressBar loadCircle = findViewById(R.id.progress_bar);
-        //Start the queue
-        //mRequestQueue.start();
-        mRequestQueue = Volley.newRequestQueue(this);
+        urlGameInfo = baseUrl + "game/";
 
-        String urlGameInfo =baseUrl + "game/" + UID;
+        mRequestQueue = Volley.newRequestQueue(this);
+        if (UID == 0)
+            urlGameInfo += "from/" + username;
+        else
+            urlGameInfo += UID;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlGameInfo,
                 new Response.Listener<String>() {
@@ -158,18 +178,18 @@ public class StartGameActivity extends Activity implements Serializable {
                     public void onResponse(String response) {
                         Log.i(response,response);
                         loadCircle.setVisibility(View.GONE);
-
-
                         try {
                                 JSONObject responseObj = new JSONObject(response);
                                 if (responseObj.length() == 0)
-                                    gameinfo.setText("You don't have an active game, start a new one and get hunting!");
+                                    gameinfo.setText("You don't have an active game, please start a new one.");
                                 else {
                                     gameinfo.setText(response);
+                                    gameId = responseObj.getInt("gameId");
 
                                     Intent i = new Intent(StartGameActivity.this, MainActivity.class);
-                                    i.putExtra("gameId", UID);
+                                    i.putExtra("gameId", gameId);
                                     i.putExtra("userDataPackage", usr);
+                                    finish();
                                     startActivity(i);
                                 }
                         }catch (JSONException ex){
@@ -190,16 +210,16 @@ public class StartGameActivity extends Activity implements Serializable {
         mRequestQueue.add(stringRequest);
     }
 
-    private void ConfirmRemoveGame(){
+    private void DialogBuilder(String message){
         AlertDialog.Builder builder1 = new AlertDialog.Builder(StartGameActivity.this);
-        builder1.setMessage("You have an unfinished game, do you wish to continue this game?");
+        builder1.setMessage(message);
         builder1.setCancelable(true);
 
         builder1.setNegativeButton(
                 "Continue",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        LoadGame(UID);
+                        LoadGame(UID, "");
                     }
                 });
 

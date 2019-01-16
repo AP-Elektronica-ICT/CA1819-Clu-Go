@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hoofdLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -14,12 +15,13 @@
     android:background="@drawable/background">
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="284dp"
-            android:layout_height="90dp"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
             android:baselineAligned="false"
             app:srcCompat="@drawable/beginicon"
             tools:ignore="ContentDescription"
-            android:layout_marginBottom="100px"/>
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="120px"/>
 
     <LinearLayout
         android:id="@+id/email_login_form"
@@ -97,12 +99,12 @@
             android:id="@+id/label_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:clickable="true"
             android:gravity="end"
             android:onClick="openRegisterForm"
             android:text="@string/label_register_here"
-            android:textColor="#ffffff"
+            android:textColor="#fff"
             android:textSize="16sp"
             android:textStyle="bold|italic" />
 
@@ -110,7 +112,7 @@
             android:id="@+id/login_button"
             android:layout_width="352dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="4dp"
             android:background="@drawable/facebook_login_round" />
@@ -119,8 +121,7 @@
             android:id="@+id/logging"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="8dp"
             android:gravity="center"
             android:textColor="#098e38"
             android:textSize="16dip" />

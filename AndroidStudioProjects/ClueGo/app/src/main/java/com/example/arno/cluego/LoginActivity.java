@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -65,6 +66,9 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
         mEmailView = findViewById(R.id.email);
         mPasswordView = findViewById(R.id.password);
         tv = findViewById(R.id.logging);
+        LinearLayout layout = findViewById(R.id.hoofdLayout);
+
+        layout.getBackground().setAlpha(200);
 
         btnSignIn.setOnClickListener(Login);
 
@@ -106,6 +110,8 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
                 tv.setTextColor(Color.GREEN);
 
                 try{
+                    spinner.setVisibility(View.INVISIBLE);
+
                     JSONObject userObj = new JSONObject(response);
 
                     user.setUserId(userObj.getInt("userId"));
@@ -119,8 +125,6 @@ public class LoginActivity extends AppCompatActivity implements Serializable {
                     editor.putString("userId", String.valueOf(user.getUserId()));
                     editor.putString("userName", user.getUsername());
                     editor.commit();
-
-                    spinner.setVisibility(View.INVISIBLE);
 
                     Intent i = new Intent(LoginActivity.this, StartGameActivity.class);
                     i.putExtra("userDataPackage",user);

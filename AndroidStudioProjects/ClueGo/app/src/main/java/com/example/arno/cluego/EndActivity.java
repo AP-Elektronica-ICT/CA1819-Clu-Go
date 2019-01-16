@@ -61,6 +61,7 @@ public class EndActivity extends AppCompatActivity implements Serializable {
 
                     Intent i = new Intent(EndActivity.this, StartGameActivity.class);
                     i.putExtra("gameId",userId);
+                    finish();
                     startActivity(i);
                 }
             }, new Response.ErrorListener() {

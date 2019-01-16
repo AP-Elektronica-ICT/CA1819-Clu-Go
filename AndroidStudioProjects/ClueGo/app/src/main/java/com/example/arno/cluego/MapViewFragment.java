@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -14,10 +15,12 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.TextPaint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,14 +72,12 @@ public class MapViewFragment extends Fragment {
     public interface MapFragmentListener{
         void onInputMapSent(JSONObject game);
     }
+
     ShowcaseView showcaseView;
 
-    Game gameFromStart = new Game();
     User usr = new User();
     String baseUrl;
-    SuccessCallBack successCallBack;
 
-    boolean hasBeen;
     Marker destMarker;
     MapView mMapView;
     int gameId;
@@ -92,6 +93,8 @@ public class MapViewFragment extends Fragment {
     private GoogleMap googleMap;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     public JSONObject gameFromStartGameFragment;
+
+    int tutorialIndex;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -156,22 +159,44 @@ public class MapViewFragment extends Fragment {
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.219,4.401694), 15));
                         }
 
+                        TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+                        textPaint.setColor(Color.YELLOW);
+                        textPaint.setTextSize(54);
+
                         scv1 = new ShowcaseView.Builder(getActivity())
                                 .setTarget(new PointTarget( (rootView.getWidth()/2),(rootView.getHeight()/2)))
                                 .setContentText("Click on one of the locations to get a little more information about it. " +
-                                        "Click on the marker information window to set it as your active location. (Shown by the route plotted towards it.)" +
-                                        "Walk over there and solve the puzzle to gather more clues and hints about the murder.")
+                                        "Click on the marker information window to set it as your active location.")
                                 .setContentTitle("Point of interest.")
-                                .blockAllTouches()
+                                .setContentTextPaint(textPaint)
                                 .singleShot(98)
                                 .setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        MoveTutorialToPolice();
+                                        if (tutorialIndex == 0) {
+                                            scv1.setContentText("Walk over there and solve the puzzle to gather more clues and hints about the murder." +
+                                                    " Once you've solved a puzzle, the marker will turn green.");
+                                            tutorialIndex++;
+                                        }
+                                        else if (tutorialIndex == 1)
+                                            MoveTutorialToPolice();
+                                        else
+                                            scv1.hide();
                                     }
                                 })
                                 .build();
                         scv1.setButtonText("Next");
+
+                        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        // This aligns button to the bottom left side of screen
+                        lps.addRule(RelativeLayout.ALIGN_PARENT_END);
+                        lps.addRule(RelativeLayout.ALIGN_BOTTOM);
+                        // Set margins to the button, we add 16dp margins here
+                        int margin = ((Number) (getResources().getDisplayMetrics().density * 16)).intValue();
+                        lps.setMargins(margin, margin, margin, margin);
+                        scv1.setButtonPosition(lps);
+                        scv1.setScrollContainer(true);
+
 
                         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -552,14 +577,13 @@ public class MapViewFragment extends Fragment {
         try {
             LatLng center1 = policeStation.getLocLtLng();
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(center1, 15));
+            tutorialIndex++;
         }catch(IndexOutOfBoundsException ex) {
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.219,4.401694), 15));
         }
         scv1.setContentTitle("Police Station");
         scv1.setContentText("Once you've found enough evidence and think you know who the real murderer is, go to the police station and declare your findings!");
         scv1.setHideOnTouchOutside(true);
-        scv1.setBlocksTouches(false);
-        scv1.hideButton();
     }
     }
 

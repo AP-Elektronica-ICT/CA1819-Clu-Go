@@ -1,6 +1,5 @@
 package com.example.arno.cluego;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,13 +17,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.arno.cluego.Helpers.SuccessCallBack;
-import com.example.arno.cluego.Objects.Suspect;
 import com.example.arno.cluego.Helpers.SuspectAdapter;
+import com.example.arno.cluego.Objects.Suspect;
 import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.ShowcaseViewApi;
-import com.github.amlcurran.showcaseview.SimpleShowcaseEventListener;
 import com.github.amlcurran.showcaseview.targets.PointTarget;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,7 +71,6 @@ public class SuspectFragment extends Fragment {
 
                 gridview.setAdapter(new SuspectAdapter(getActivity(), suspects, amtSus));
 
-
                 gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                         showcaseView.hide();
@@ -92,8 +87,14 @@ public class SuspectFragment extends Fragment {
                 .setContentText("After a lot of work, the police have managed to shorten the list of possible murderers to these suspects. Click on one of them to get more information about that suspect.")
                 .hideOnTouchOutside()
                 .singleShot(99)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showcaseView.hide();
+                    }
+                })
                 .build();
-        showcaseView.hideButton();
+        showcaseView.setButtonText("Got it!");
 
         return view;
     }
@@ -108,12 +109,6 @@ public class SuspectFragment extends Fragment {
         newDetail.setArguments(args);
         manager.beginTransaction().replace(R.id.fragment_container, newDetail).addToBackStack(null).commit();
     }
-
-
-
-   /* public ShowcaseView getShowcaseView() {
-        return showcaseView;
-    }*/
 
     public void GetSuspects(int id, final SuccessCallBack callBack){
         String url = baseUrl + "game/" + id +"/suspect";

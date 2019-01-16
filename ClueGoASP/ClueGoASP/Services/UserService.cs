@@ -16,6 +16,7 @@ namespace ClueGoASP.Services
     {
         List<User> GetUserById(int id);
         List<User> GetAllUsers();
+        int GetUserIdByName(string name);
         User Login(string username, string password);
         User CreateUser(User newUser);
         User Deleteuser(int id);
@@ -151,6 +152,12 @@ namespace ClueGoASP.Services
             var user = _dbContext.Users.Find(id);
             user.distanceWalked += amt;
             _dbContext.SaveChanges();
+        }
+
+        public int GetUserIdByName(string name)
+        {
+            var result = _dbContext.Users.SingleOrDefault(x => x.Username == name);
+            return result.UserId;
         }
 
         /* public User ClearUsers(int id)
