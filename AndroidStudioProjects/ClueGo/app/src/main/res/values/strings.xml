@@ -25,12 +25,14 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="continueGame">You have an unfinished game, do you wish to continue this game?</string>
     <string name="label_register_here">No account yet? Register here!</string>
     <string name="continue_naar_map">Naar map gaan (testing)</string>
     <string name="sign_in_with_facebook">Sign in with facebook</string>
     <string name="title_activity_maps">Map</string>
     <string name="facebook_app_id">1895042873936175</string>
     <string name="fb_login_protocol_scheme">fb1895042873936175</string>
+    <string name="joinPlayerName">What is the username of the player you want to join?</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

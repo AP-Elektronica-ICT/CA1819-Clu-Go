@@ -31,6 +31,7 @@ namespace ClueGoASP.Services
         private IClueService _clueService;
         private ISuspectService _suspectService;
         private ILocationService _locationService;
+        //private IUserService _userService;
 
         public GameService(GameContext context, IClueService clueService, ISuspectService suspectService, ILocationService locationService)
         {
@@ -38,6 +39,7 @@ namespace ClueGoASP.Services
             _clueService = clueService;
             _suspectService = suspectService;
             _locationService = locationService;
+            //_userService = userService;
         }
 
         public Game CreateGameFull(int userId, int amtSus)
