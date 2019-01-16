@@ -35,9 +35,9 @@ namespace ClueGoASP.Data
                     };
                 var suspect2 = new Suspect()
                 {
-                    SusName = "Colonel Verdoot",
+                    SusName = "Colonel Mark Sveniers",
                     SusWeapon = "Ceremonial sword",
-                    SusDescription = "Col. Michael Mustard, is a gallant military hero whose glittering career hides a tarnished past.He believes that casualties are inevitable in war and is usually the sole survivor in battle. He became the boyfriend of the glamorous actress Ms. Scarlet. He was an old college friend of Mr. John Boddy from college. They both attended AP Hogeschool back in their day. Jhon and the Colonel are on bad terms ever since Colonel Mustard started a relation with Miss Scarlet.",
+                    SusDescription = "Col. Mark Sveniers, is a gallant military hero whose glittering career hides a tarnished past.He believes that casualties are inevitable in war and is usually the sole survivor in battle. He became the boyfriend of the glamorous actress Ms. Scarlet. He was an old college friend of Mr. John Boddy from college. They both attended AP Hogeschool back in their day. Jhon and the Colonel are on bad terms ever since Colonel Mark Sveniers started a relation with Miss Scarlet.",
                     SusImgUrl = "https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/04/08/unspecified-3.jpg?width=1368&height=912&fit=bounds&format=pjpg&auto=webp&quality=70",
                 };
                 var suspect3 = new Suspect()
@@ -49,7 +49,7 @@ namespace ClueGoASP.Data
                 };
                 var suspect4 = new Suspect()
                 {
-                    SusName = "Professor Peeters",
+                    SusName = "Professor Peter Thompson",
                     SusWeapon = "Revolver",
                     SusDescription = "Prof. Peter Peeters is a man with a degree of suspicion. Before he started his career as a teacher at AP, he was an associate of Jhon boddy at MoneyWell. His abrupt and unlawfull termination left the relationship between these mens in shambles. Would his research methods stand the scrutiny of a microscope?",
                     SusImgUrl = "https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/04/08/unspecified-6.jpg?width=1368&height=912&fit=bounds&format=pjpg&auto=webp&quality=70",
@@ -86,19 +86,13 @@ namespace ClueGoASP.Data
             // add clues if none exist
             if (!context.Clues.Any())
             {
-                /* var clue0 = new Clue()
-                 {
-                     ClueName = "RansomPuzzle",
-                     ClueDescription = "Puzzle from ransom note",
-                     ClueImgUrl = "https://exodusescaperoom.com/wp-content/uploads/2016/05/shutterstock_238275508.jpg",
-                     Found = false
-                 };*/
                 var clue1 = new Clue()
                 {
                     ClueName = "Knife",
                     ClueType = "AR",
                     ClueImgUrl = "https://banner2.kisspng.com/20171216/9d3/sword-png-image-5a3586cb11ea93.6540765515134573550734.jpg",
-                    Found = false,                   
+                    Found = false,    
+                    ClueDescription = "The victim died because of severe slashing wounds. Most likely inflicted by a sharp knife.",
                     SusForeignKey = 6
                 };
                 var clue2 = new Clue()
@@ -106,6 +100,7 @@ namespace ClueGoASP.Data
                     ClueName = "Rope",
                     ClueType = "AR",
                     ClueImgUrl = "https://png.pngtree.com/element_pic/16/12/25/29987abdff19ca380a7933742e2e25a4.jpg",
+                    ClueDescription = "The victim died by suffocation. We saw burn marks around the neck of the victim, so we can assume a rope was most likely the murder weapon.",
                     Found = false,
                     SusForeignKey = 7
                 };
@@ -115,14 +110,16 @@ namespace ClueGoASP.Data
                     ClueType = "AR",
                     ClueImgUrl = "https://image.spreadshirtmedia.net/image-server/v1/mp/designs/13432174,width=178,height=178/poison-bottle-with-a-skull.png",
                     Found = false,
+                    ClueDescription = "The autopsy revealed John Boddy died because of an unknown poison. We think the poison was administered by mixing it with a drink.",
                     SusForeignKey = 1
                 };
                 var clue4 = new Clue()
                 {
-                    ClueName = "Wooden cross",
+                    ClueName = "Silver cross",
                     ClueType = "AR",
                     ClueImgUrl = "https://www.clipartmax.com/png/middle/86-868176_wooden-cross-transparent-background.png",
                     Found = false,
+                    ClueDescription = "The victim died because of severe slashing wounds. Most likely inflicted by a sharp knife.",
                     SusForeignKey = 2
                 };
                 var clue5 = new Clue()
@@ -139,6 +136,7 @@ namespace ClueGoASP.Data
                     ClueType = "AR",
                     ClueImgUrl = "http://www.stickpng.com/assets/images/580b585b2edbce24c47b2921.png",
                     Found = false,
+                    ClueDescription = "We learned from the autopsy the Jhon boddy died because of an overdose of Morphine.",
                     SusForeignKey = 4
                 };
                 var clue7 = new Clue()
@@ -147,30 +145,25 @@ namespace ClueGoASP.Data
                     ClueType = "AR",
                     ClueImgUrl = "https://b.kisscc0.com/20180718/kwq/kisscc0-revolver-firearm-handgun-heckler-koch-p11-pistol-rusty-revolver-rendered-5b4ece451ee928.4789046315318912691266.jpg",
                     Found = false,
+                    ClueDescription = "The victim died from gunshot wounds.",
                     SusForeignKey = 5
-                };
-                var clue8 = new Clue()
-                {
-                    ClueName = "ScarletPhoto",
-                    ClueType = "Puzzle",
-                    ClueImgUrl = "https://banner2.kisspng.com/20171216/9d3/sword-png-image-5a3586cb11ea93.6540765515134573550734.jpg",
-                    Alibi = true,
-                    SusForeignKey = 1
                 };
                 var clue9 = new Clue()
                 {
-                    ClueName = "ShoppingReceipt",
+                    ClueName = "Shopping Receipt",
                     ClueType = "Puzzle",
                     ClueImgUrl = "https://cdn3.iconfinder.com/data/icons/shopping-70/64/shopping-6-512.png",
                     Alibi = true,
+                    ClueDescription = "Mrs white claims she was out doing arrands for Mrs Peacock. She showed a receipt from the Delhaize that places her too far away from the murder scene to be directly involved.",
                     SusForeignKey = 7
                 };
                 var clue10 = new Clue()
                 {
-                    ClueName = "HairdressAppointment",
+                    ClueName = "Hairdress Appointment",
                     ClueType = "Puzzle",
-                    ClueImgUrl = "https://ih0.redbubble.net/image.197718137.1264/poster%2C210x230%2Cf8f8f8-pad%2C210x230%2Cf8f8f8.lite-1u2.jpg",
+                    ClueImgUrl = "http://www.hairequipe.be/sites/default/files/ha_an_1.jpg",
                     Alibi = true,
+                    ClueDescription = "Mrs Peacock was seen getting a haircut at a local hairsalon around the time of the crime.",
                     SusForeignKey = 6
                 };
                 var clue11 = new Clue()
@@ -179,15 +172,8 @@ namespace ClueGoASP.Data
                     ClueType = "Puzzle",
                     ClueImgUrl = "https://upload.wikimedia.org/wikipedia/commons/4/48/Catholic_Mass_aboard_USS_Ronald_Reagan.jpg",
                     Alibi = true,
+                    ClueDescription = "Mr Green was taking confessions at his curch, so he could not be at the crime scene at the time of murder.", 
                     SusForeignKey = 2
-                };
-                var clue12 = new Clue()
-                {
-                    ClueName = "RansomPuzzle",
-                    ClueType = "Puzzle",
-                    ClueImgUrl = "https://cdn3.iconfinder.com/data/icons/cafe/512/cafe16-512.png",
-                    Alibi = true,
-                    SusForeignKey = 3
                 };
                 var clue13 = new Clue()
                 {
@@ -195,6 +181,7 @@ namespace ClueGoASP.Data
                     ClueType = "Puzzle",
                     ClueImgUrl = "https://thumb101.shutterstock.com/photos/display_pic_with_logo/920555/208250347.jpg",
                     Alibi = true,
+                    ClueDescription = "Doctor Boomgaerts was out of town for a congress about the possible consequences of sex changes.",
                     SusForeignKey = 4
                 };
                 var clue14 = new Clue()
@@ -203,7 +190,106 @@ namespace ClueGoASP.Data
                     ClueType = "Puzzle",
                     ClueImgUrl = "https://cdn2.iconfinder.com/data/icons/crazy-paparazzi-collection-svg/100/Noun_Project_100Icon_10px_grid_2-47-512.png",
                     Alibi = true,
+                    ClueDescription = "Professor Thompson was giving a lecture about cloud computing at AP when the crime was committed.",
                     SusForeignKey = 5
+                };
+                var clue15 = new Clue()
+                {
+                    ClueName = "Fitness club",
+                    ClueType = "Puzzle",
+                    ClueImgUrl = "https://www.basic-fit.com/Cms_Data/Contents/BasicFit_NL-BE/Media/ClubImages/Antwerpen-Sportpaleis/Antwerpen_Sportpaleis_Functioneel.jpg?w=390",
+                    Alibi = true,
+                    ClueDescription = "Miss Scarlet was seen taking a spinning class at the Basic Fit around the time of the murder.",
+                    SusForeignKey = 1
+                };
+                var clue16 = new Clue()
+                {
+                    ClueName = "Nord Antwerpen",
+                    ClueType = "Puzzle",
+                    ClueImgUrl = "https://u.tfstatic.com/restaurant_photos/003/294003/169/612/restaurant-du-nord-nord-facade-bc1a5.jpg",
+                    Alibi = true,
+                    ClueDescription = "Colonel Mark Sveniers has evidence that he checked in at the hotel 'Nord Antwerpen', so we think you can exclude him from your list of possible suspects.",
+                    SusForeignKey = 3
+                };
+                var clue16b = new Clue()
+                {
+                    ClueName = "Nord Antwerpen",
+                    ClueType = "Puzzle",
+                    ClueImgUrl = "https://u.tfstatic.com/restaurant_photos/003/294003/169/612/restaurant-du-nord-nord-facade-bc1a5.jpg",
+                    Alibi = true,
+                    ClueDescription = "Mrs White has evidence that he checked in at the hotel 'Nord Antwerpen', so we think you can exclude him from your list of possible suspects.",
+                    SusForeignKey = 7
+                };
+                var clue17 = new Clue()
+                {
+                    ClueName = "Medipolis",
+                    ClueType = "Puzzle",
+                    ClueImgUrl = "https://i1.wp.com/www.refractivealliance.com/wp-content/uploads/2017/01/Medipolis-Logo.jpg?fit=800%2C450",
+                    Alibi = true,
+                    ClueDescription = "Mrs Peacock had a doctors appointment at Mediopolis.",
+                    SusForeignKey = 6
+                };
+                var clue17b = new Clue()
+                {
+                    ClueName = "Medipolis",
+                    ClueType = "Puzzle",
+                    ClueImgUrl = "https://i1.wp.com/www.refractivealliance.com/wp-content/uploads/2017/01/Medipolis-Logo.jpg?fit=800%2C450",
+                    Alibi = true,
+                    ClueDescription = "Mrs White was doing consults throughout the entire day of the crime.",
+                    SusForeignKey = 4
+                };
+                var clue18 = new Clue()
+                {
+                    ClueName = "Audition Bourla",
+                    ClueType = "Puzzle",
+                    ClueImgUrl = "https://antwerpconventionbureau.be/wp-content/uploads/2017/10/Foyer-2.jpg",
+                    Alibi = true,
+                    ClueDescription = "Miss Scarlet was auditioning for a starring role at the 40 - 45 musical at bourla during the entire day of the murder.",
+                    SusForeignKey = 1
+                };
+                var clue20 = new Clue()
+                {
+                    ClueName = "Philadephia bookshop",
+                    ClueType = "Puzzle",
+                    ClueImgUrl = "https://i.redd.it/iext95hfc8o11.jpg",
+                    Alibi = true,
+                    ClueDescription = "Professor Thompson has a receipt from the time of murder, placing him at a bookstore across the city.",
+                    SusForeignKey = 5
+                };
+                var clue21 = new Clue()
+                {
+                    ClueName = "Physiotherapy session",
+                    ClueType = "Puzzle",
+                    ClueImgUrl = "https://cdn2.iconfinder.com/data/icons/crazy-paparazzi-collection-svg/100/Noun_Project_100Icon_10px_grid_2-47-512.png",
+                    Alibi = true,
+                    SusForeignKey = 4
+                };
+                var clue21b = new Clue()
+                {
+                    ClueName = "Employment agency",
+                    ClueType = "Puzzle",
+                    ClueImgUrl = "https://cdn2.iconfinder.com/data/icons/crazy-paparazzi-collection-svg/100/Noun_Project_100Icon_10px_grid_2-47-512.png",
+                    Alibi = true,
+                    ClueDescription = "Miss Scarlet was at an interview about a possible job in the film industry during the day of the crime.",
+                    SusForeignKey = 1
+                };
+                var clue22 = new Clue()
+                {
+                    ClueName = "Broker",
+                    ClueType = "Puzzle",
+                    ClueImgUrl = "https://s3-media3.fl.yelpcdn.com/bphoto/YGeenMRN2dGtOrd-S32UWg/ls.jpg",
+                    Alibi = true,
+                    ClueDescription = "Colonel Mark Sveniers was with an real estage agent going around Antwerp, looking for a possible investment in real estate at the time of murder.",
+                    SusForeignKey = 3
+                };
+                var clue23 = new Clue()
+                {
+                    ClueName = "City Park",
+                    ClueType = "Puzzle",
+                    ClueImgUrl = "https://www.euroreizen.be/userfiles/item/stadspark-antwerpen-antwerpen-2866_2866_1_xl.jpg",
+                    Alibi = true,
+                    ClueDescription = "Mr Green has witnesses placing him at the city park, walking his beloved German Shepard, around the time of murder.",
+                    SusForeignKey = 2
                 };
                 //context.Clues.Add(clue0);
                 context.Clues.Add(clue1);
@@ -213,13 +299,22 @@ namespace ClueGoASP.Data
                 context.Clues.Add(clue5);
                 context.Clues.Add(clue6);
                 context.Clues.Add(clue7);
-                context.Clues.Add(clue8);
                 context.Clues.Add(clue9);
                 context.Clues.Add(clue10);
                 context.Clues.Add(clue11);
-                context.Clues.Add(clue12);
                 context.Clues.Add(clue13);
                 context.Clues.Add(clue14);
+                context.Clues.Add(clue15);
+                context.Clues.Add(clue16);
+                context.Clues.Add(clue16b);
+                context.Clues.Add(clue17);
+                context.Clues.Add(clue17b);
+                context.Clues.Add(clue18);
+                context.Clues.Add(clue20);
+                context.Clues.Add(clue23);
+                context.Clues.Add(clue22);
+                context.Clues.Add(clue21);
+                context.Clues.Add(clue21b);
                 context.SaveChanges();
             }
             //add user if none exist
@@ -229,31 +324,31 @@ namespace ClueGoASP.Data
                 {
                     Username = "WeynsA",
                     Email = "weyns.arno@gmail.com",
-                    Password = "E10ADC3949BA59ABBE56E057F20F833E"
+                    Password = "E10ADC3949BA59ABBE56E057F20F883E"
                 };
                 var admin1 = new User()
                 {
                     Username = "MassureA",
                     Email = "s091998@ap.be",
-                    Password = "E10ADC3949BA59ABBE56E057F20F833E"
+                    Password = "E10ADC3949BA59ABBE56E057F20F883E"
                 };
                 var admin2 = new User()
                 {
                     Username = "JoppeM",
                     Email = "joppe.mertens@gmail.com",
-                    Password = "E10ADC3949BA59ABBE56E057F20F833E"
+                    Password = "E10ADC3949BA59ABBE56E057F20F883E"
                 };
                 var admin3 = new User()
                 {
                     Username = "AlIbra",
                     Email = "s091997@ap.be",
-                    Password = "E10ADC3949BA59ABBE56E057F20F833E"
+                    Password = "E10ADC3949BA59ABBE56E057F20F883E"
                 };
                 var admin4 = new User()
                 {
                     Username = "Test",
                     Email = "Test@ap.be",
-                    Password = "E10ADC3949BA59ABBE56E057F20F833E"
+                    Password = "E10ADC3949BA59ABBE56E057F20F883E"
                 };
                 context.Users.Add(admin);
                 context.Users.Add(admin1);

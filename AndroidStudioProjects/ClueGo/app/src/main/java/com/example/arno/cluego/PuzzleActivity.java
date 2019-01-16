@@ -2,6 +2,7 @@ package com.example.arno.cluego;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class PuzzleActivity extends AppCompatActivity {
@@ -40,7 +42,10 @@ public class PuzzleActivity extends AppCompatActivity {
     public static int numberFoundClues;
     private static int mColumnWidth, mColumnHeight;
 
-    public static String baseUrl, locName;
+    public static String baseUrl, locName, uri;
+    private static Drawable res1, res2, res3, res4, res5, res6, res7, res8, res9;
+
+    private static ArrayList<String> puzzleNames = new ArrayList<String>(Arrays.asList("ap", "stadhuis", "ellerman", "puzzleclue"));
 
     public static final String up = "up";
     public static final String down = "down";
@@ -58,6 +63,42 @@ public class PuzzleActivity extends AppCompatActivity {
         baseUrl = getResources().getString(R.string.baseUrl);
         locName = getIntent().getStringExtra("locName");
 
+        String usedPuzzle = puzzleNames.get((int) Math.random()*4+1);
+
+        for (int i = 0; i < 10; i++) {
+            uri = "@drawable/" + usedPuzzle + String.valueOf(i++);
+            int imageResource = mContext.getResources().getIdentifier(uri, null, mContext.getPackageName()); //get image  resource
+
+            switch (i){
+                case 1:
+                    res1 = mContext.getResources().getDrawable(imageResource, null);
+                    break;
+                case 2:
+                    res2 = mContext.getResources().getDrawable(imageResource, null);
+                    break;
+                case 3:
+                    res3 = mContext.getResources().getDrawable(imageResource, null);
+                    break;
+                case 4:
+                    res4 = mContext.getResources().getDrawable(imageResource, null);
+                    break;
+                case 5:
+                    res5 = mContext.getResources().getDrawable(imageResource, null);
+                    break;
+                case 6:
+                    res6 = mContext.getResources().getDrawable(imageResource, null);
+                    break;
+                case 7:
+                    res7 = mContext.getResources().getDrawable(imageResource, null);
+                    break;
+                case 8:
+                    res8 = mContext.getResources().getDrawable(imageResource, null);
+                    break;
+                case 9:
+                    res9 = mContext.getResources().getDrawable(imageResource, null);
+                    break;
+            }
+        }
 
         init();
 
@@ -132,23 +173,23 @@ public class PuzzleActivity extends AppCompatActivity {
             button = new Button(context);
 
             if (tileList[i].equals("0"))
-                button.setBackgroundResource(R.drawable.puzzleclue1);
+                button.setBackground(res1);
             else if (tileList[i].equals("1"))
-                button.setBackgroundResource(R.drawable.puzzleclue2);
+                button.setBackground(res2);
             else if (tileList[i].equals("2"))
-                button.setBackgroundResource(R.drawable.puzzleclue3);
+                button.setBackground(res3);
             else if (tileList[i].equals("3"))
-                button.setBackgroundResource(R.drawable.puzzleclue4);
+                button.setBackground(res4);
             else if (tileList[i].equals("4"))
-                button.setBackgroundResource(R.drawable.puzzleclue5);
+                button.setBackground(res5);
             else if (tileList[i].equals("5"))
-                button.setBackgroundResource(R.drawable.puzzleclue6);
+                button.setBackground(res6);
             else if (tileList[i].equals("6"))
-                button.setBackgroundResource(R.drawable.puzzleclue7);
+                button.setBackground(res7);
             else if (tileList[i].equals("7"))
-                button.setBackgroundResource(R.drawable.puzzleclue8);
+                button.setBackground(res8);
             else if (tileList[i].equals("8"))
-                button.setBackgroundResource(R.drawable.puzzleclue9);
+                button.setBackground(res9);
 
             buttons.add(button);
         }

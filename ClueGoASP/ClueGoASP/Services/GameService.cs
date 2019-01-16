@@ -82,6 +82,7 @@ namespace ClueGoASP.Services
 
                 game.GameSuspects = new List<GameSuspect>();
                 //game.GameClues = new List<GameClue>();
+                Random rnd = new Random();
                 for (int i = 0; i < amtSus; i++)                                                //Add suspects to a game.
                 {
                     game.GameSuspects.Add(new GameSuspect
@@ -94,7 +95,7 @@ namespace ClueGoASP.Services
                         clues.Add(_dbContext.Clues.SingleOrDefault(x => x.SusForeignKey == suspects[i].SusId && !x.Alibi));
                     }
                     else
-                        clues.Add(_dbContext.Clues.SingleOrDefault(x => x.SusForeignKey == suspects[i].SusId && x.Alibi));
+                        clues.Add((_dbContext.Clues.Where(x => x.SusForeignKey == suspects[i].SusId && x.Alibi)).ToList().ElementAtOrDefault(rnd.Next(1,2)));
                 }
 
                 //Create list from all clues from the suspects in the game.
