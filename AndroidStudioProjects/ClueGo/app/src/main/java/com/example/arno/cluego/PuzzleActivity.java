@@ -66,10 +66,14 @@ public class PuzzleActivity extends AppCompatActivity {
         String usedPuzzle = puzzleNames.get((int) Math.random()*4+1);
 
         for (int i = 0; i < 10; i++) {
-            uri = "@drawable/" + usedPuzzle + String.valueOf(i++);
-            int imageResource = mContext.getResources().getIdentifier(uri, null, mContext.getPackageName()); //get image  resource
+            int _imgValue = i;
 
-            switch (i){
+            int imgValue = _imgValue +1;
+            uri = "@drawable/" + usedPuzzle + String.valueOf(imgValue);
+            int imageResource = mContext.getResources().getIdentifier(uri, null, mContext.getPackageName()); //get image  resource
+            Log.d(TAG, "onCreate: " + uri);
+            Log.d(TAG, "onCreate: " + imageResource);
+            switch (imgValue){
                 case 1:
                     res1 = mContext.getResources().getDrawable(imageResource, null);
                     break;
@@ -203,7 +207,7 @@ public class PuzzleActivity extends AppCompatActivity {
         tileList[currentPosition] = newPosition;
         display(context);
 
-        if (!isSolved()) {
+        if (isSolved()) {
             String url = baseUrl + "game/" + gameId + "/" + locName + "/setfound";
             Log.d(TAG, "swap: " + url);
            StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

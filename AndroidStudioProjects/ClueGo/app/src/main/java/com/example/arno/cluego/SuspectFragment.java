@@ -86,7 +86,7 @@ public class SuspectFragment extends Fragment {
                 .setContentTitle("Suspect list")
                 .setContentText("After a lot of work, the police have managed to shorten the list of possible murderers to these suspects. Click on one of them to get more information about that suspect.")
                 .hideOnTouchOutside()
-                .singleShot(99)
+                .singleShot(9)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

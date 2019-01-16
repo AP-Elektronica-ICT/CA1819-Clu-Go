@@ -6,12 +6,14 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
 
             <ImageView
                 android:id="@+id/ivClueImg"
                 android:layout_width="100dp"
-                android:layout_height="100dp"/>
+                android:layout_height="100dp"
+                android:layout_gravity="center_vertical"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -23,6 +25,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
+                    android:textStyle="bold"
                     android:text="Rope"
                     android:textSize="20sp"/>
 
@@ -31,7 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="2dp"
                     android:text="Mlsdjfmlsdfmklkm she is very blalbladiemskdfmlqsdlfqmjsldkfqmsfjmlqsfdmlqsdfmlqmsfkmsqdflkqmsdfkjmlqsf"
                     android:textSize="14sp" />
 

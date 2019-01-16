@@ -169,7 +169,7 @@ public class MapViewFragment extends Fragment {
                                         "Click on the marker information window to set it as your active location.")
                                 .setContentTitle("Point of interest.")
                                 .setContentTextPaint(textPaint)
-                                .singleShot(98)
+                                .singleShot(8)
                                 .setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
