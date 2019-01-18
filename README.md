@@ -49,6 +49,61 @@ If the email and password exist in the database then the response will be valid 
 
 If the response is valid then you create a local object of the user data to be passed to other fragments and later on be displayed, afterwards you will get redirected to the start of the game where most o the data management happens.
 
+
+### Start Game Fragment (Met Vertaling)
+
+In this fragment most of the data gets brought in the only thing that doesnt happen in this fragment (datawise) is the change of dynamic data e.g clues updated from found to not found, guess suspect, ... Those things happen in the respective fragment where the change is required of applied.
+
+You get 3 options in this fragment.
+
+You start you own game - Start New Game
+
+You continue your own game that you haven't finished yet - Continue
+
+You join a friend game without losing your own - Join Game
+
+When you make a new game you get to choose how many suspects you want, this will also be the number of clues and locations there will be in the game. after you enter a number between 3 and 7 this number together with your userid gets added to an url who then communicates with the backend game controller. This controller checks if the user already has a game if he does he gets asked to continue his own game if he doesnt a new one will be made for him and will get loaded.
+
+If you continue a game you fetch a game from the database using your Userid if the Userid is 0 aka not found or doesnt exist, a second try will be made using the username(for joining other players using username).
+
+Wether a game exists or not also gets double checked. First if you get a response but the length of the response is 0 that means no data and second if you get no response aka the game you tried to fetch doesnt exist because none is found with the respective Userid or Username.
+
+If you make a new game or continue an existing one this is the data that will be brought in 
+
+* Locations
+* Suspects
+* Clues 
+* User Statistics
+
+#### Incomplete Vertaling
+
+In deze fragment word het overgrotendeel van je data binnengeroepen het enige wat hier niet word gedaan zijn de dynamische dingen bv. een clue updaten van not found naar found hier worden wel alle not found clues ingeladen voor gebruik.
+
+Het aantal clues en suspects die u te zien krijgt kunt u zelf (tussen 3 en 7) kiezen voor u een game start.
+
+U krijgt hier 3 opties
+
+U Start uw eigen game - Start New Game
+
+U Doet voort met uw game die u niet heeft afgemaakt - Continue
+
+U Doet mee met een vriend zijn game zonder dat u, uw eigen game kwijtraakt - Join Game
+
+Bij het maken van een nieuwe game word uw user id en uw aantal gekozen suspect/clues aan de url toegevoegd die url wordt nagekeken door de game controller of dergelijke user wel een game heeft of niet.
+
+Als de user geen game heeft word er automatisch een nieuwe game aangemaakt en geladen.
+
+Als de user al een game heeft word hij hiervan verwittigd
+
+### Main Activity
+
+This is as the name suggests the main activity the bottom part exists of the menu the upper part the container for the fragments.
+In here also the data gets organised in local objects instead of being used directy from the api call this makes it easier to use the data of course this doesnt work with everything, dynamic data still gets modified through calls.
+
+Alle fragmenten worden hier in opgeroepen hier zit ook de menu in
+Hier wordt ook alle data vanuit de api lokaal gerangschikt in objecten voor gebruik.
+
+
 ## Backend
 
 Our Backend is made in Visual Studio.
