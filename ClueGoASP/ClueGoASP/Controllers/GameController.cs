@@ -171,6 +171,18 @@ namespace ClueGoASP.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+        [HttpGet("{gameId}/weapon")]
+        public ActionResult GetARClue(int gameId)
+        {
+            try
+            {
+                return Ok(_gameService.GetARClue(gameId));
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
 
         [HttpGet("{gameId}/notfound")]
         public ActionResult GetNotFoundClues(int gameId)

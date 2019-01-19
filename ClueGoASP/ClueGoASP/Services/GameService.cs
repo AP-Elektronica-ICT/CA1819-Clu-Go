@@ -23,7 +23,7 @@ namespace ClueGoASP.Services
         List<object> GetNotFoundClues(int gameId);
         List<GameSuspect> GetGameSuspects(int gameId);
         void SetLocationVisited(int gameId, string locName);
-        
+        Clue GetARClue(int gameId);
     }
     public class GameService : IGameService
     {
@@ -205,6 +205,21 @@ namespace ClueGoASP.Services
 
             return clues;
         }
+        public Clue GetARClue(int gameId)
+        {
+            List<GameClue> gameClues = _dbContext.GameClues.Where(x => x.GameId == gameId).ToList();
+            List<int> ids = gameClues.Select(x => x.ClueId).ToList();
+
+            Clue result = new Clue();
+
+            foreach (var item in ids)
+            {
+                if (_clueService.GetById(item).ClueType == "AR")
+                    result = _clueService.GetById(item);
+            }
+
+            return result;
+        }
         public List<object> GetNotFoundClues(int gameId)
         {
             List<GameClue> gameClues = _dbContext.GameClues.Where(x => !x.IsFound && x.GameId == gameId).ToList();
@@ -234,6 +249,21 @@ namespace ClueGoASP.Services
 
             return "Clue" + gameClues[0].ClueId + "changed to found.";
         }
+        public string GetGameWeapon(int gameId)
+        {
+            List<GameClue> gameClues = _dbContext.GameClues.Where(x => !x.IsFound && x.GameId == gameId).ToList();
+            if (gameClues.Count == 0)
+                throw new AppException("All clues are found.");
+            else
+            {
+                gameClues[0].IsFound = true;
+                _dbContext.SaveChanges();
+            }
+
+            //SetLocationVisited(gameId);
+
+            return "Clue" + gameClues[0].ClueId + "changed to found.";
+        }
 
         public void SetLocationVisited(int gameId, string locName)
         {
@@ -244,8 +274,5 @@ namespace ClueGoASP.Services
             _dbContext.SaveChanges();
 
         }
-
-
-
     }
 }

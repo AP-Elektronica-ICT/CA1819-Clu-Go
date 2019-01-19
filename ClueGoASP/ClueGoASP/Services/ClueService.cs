@@ -72,7 +72,8 @@ namespace ClueGoASP.Services
                 x.ClueId,
                 x.ClueName,
                 x.ClueDescription,
-                x.ClueImgUrl
+                x.ClueImgUrl,
+                x.ClueType
             })
             .Where(x => x.ClueId == clueId);
             //.ToList();
