@@ -20,7 +20,11 @@ allprojects {
     repositories {
         google()
         jcenter()
+        flatDir{
+            dirs '..\\vuforiaGround\\libs'
+        }
     }
+
 }
 
 task clean(type: Delete) {

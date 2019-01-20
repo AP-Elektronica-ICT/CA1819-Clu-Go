@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ClueGo.iml" filepath="$PROJECT_DIR$/ClueGo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vuforiaGround/vuforiaGround.iml" filepath="$PROJECT_DIR$/vuforiaGround/vuforiaGround.iml" />
     </modules>
   </component>
 </project>
