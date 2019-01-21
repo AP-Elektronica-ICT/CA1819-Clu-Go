@@ -24,13 +24,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.Antoine.vuforiaGround.UnityPlayerActivity;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.arno.cluego.Helpers.DirDataParser;
 import com.example.arno.cluego.Helpers.SuccessCallBack;
+import com.example.arno.cluego.Objects.Clue;
 import com.example.arno.cluego.Objects.Game;
 import com.example.arno.cluego.Objects.GameLocation;
 import com.example.arno.cluego.Objects.User;
@@ -89,10 +93,12 @@ public class MapViewFragment extends Fragment {
     List<GameLocation> visitedLocations = new ArrayList<>();
     List<GameLocation> notVisitedLocations = new ArrayList<>();
     GameLocation policeStation = new GameLocation();
+    GameLocation arLocation = new GameLocation();
     private final static int LOCATION_REQUEST_CODE = 101;
     private GoogleMap googleMap;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     public JSONObject gameFromStartGameFragment;
+    String arClue;
 
     int tutorialIndex;
 
@@ -109,7 +115,6 @@ public class MapViewFragment extends Fragment {
         mMapView.onCreate(savedInstanceState);
 
         baseUrl = getResources().getString(R.string.baseUrl);
-
         GetLocations(gameId, new SuccessCallBack() {
             @Override
             public void onSuccess() {
@@ -240,11 +245,28 @@ public class MapViewFragment extends Fragment {
                                         }
                                         else{
                                             locName = destMarker.getTitle();
-                                            destMarker = null;
-                                            Intent intent = new Intent(getActivity(), PuzzleActivity.class);
-                                            intent.putExtra("gameId", gameId);
-                                            intent.putExtra("locName", locName);
-                                            startActivity(intent);
+                                            if(locName.equals(arLocation.getLocName())){
+                                                getWeapon(gameId, new SuccessCallBack() {
+                                                    @Override
+                                                    public void onSuccess() {
+                                                        setWeapon(gameId, new SuccessCallBack() {
+                                                            @Override
+                                                            public void onSuccess() {
+
+                                                            }
+                                                        });
+                                                        Intent intent = new Intent(getContext(), UnityPlayerActivity.class);
+                                                        intent.putExtra("arguments",arClue);
+                                                        startActivity(intent);
+                                                                                                            }
+                                                });
+                                            }else {
+                                                destMarker = null;
+                                                Intent intent = new Intent(getActivity(), PuzzleActivity.class);
+                                                intent.putExtra("gameId", gameId);
+                                                intent.putExtra("locName", locName);
+                                                startActivity(intent);
+                                            }
                                         }
                                     }
                                 }
@@ -521,6 +543,48 @@ public class MapViewFragment extends Fragment {
         }
     }
 
+    public void setWeapon(int gameId, final SuccessCallBack callBack){
+        String url = baseUrl + "game/" + gameId + "/" + locName + "/setweapon";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        Volley.newRequestQueue(getContext()).add(stringRequest);
+    }
+
+    public void getWeapon(int gameId, final SuccessCallBack callBack){
+        String url = baseUrl + "game/"+ gameId + "/weapon" ;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            arClue = response.getString("clueName");
+                            callBack.onSuccess();
+                        }
+
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getContext(), "Er was eens een error", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, error.getMessage());
+                    }
+                });
+
+        Volley.newRequestQueue(getContext()).add(jsonObjectRequest);
+    }
 
     public void GetLocations (int gameId, final SuccessCallBack callBack){
             String url = baseUrl + "location/" + gameId;
@@ -534,12 +598,14 @@ public class MapViewFragment extends Fragment {
                                     Toast.makeText(getContext(), "No locations found", Toast.LENGTH_SHORT).show();
                                 else{
 
-                                    for(int i=0;i<response.length();i++){
+                                    for(int i=0;i<response.length();i++) {
                                         GameLocation gameLocation = new GameLocation();
                                         JSONObject _locations = response.getJSONObject(i);
                                         Log.d(TAG, "onResponse: " + response);
 
                                         gameLocation.setVisited(_locations.getBoolean("visited"));
+                                        gameLocation.setClueType(_locations.getString("clueType"));
+
                                         JSONObject _location = _locations.getJSONObject("location");
                                         Log.d(TAG, "onResponse: " + _location);
 
@@ -552,6 +618,10 @@ public class MapViewFragment extends Fragment {
                                             policeStation = gameLocation;
                                         else if(gameLocation.isVisited())
                                             visitedLocations.add(gameLocation);
+                                        else if (gameLocation.getClueType().contains("AR")){
+                                            arLocation = gameLocation;
+                                            notVisitedLocations.add(gameLocation);
+                                            }
                                         else
                                             notVisitedLocations.add(gameLocation);
                                     }

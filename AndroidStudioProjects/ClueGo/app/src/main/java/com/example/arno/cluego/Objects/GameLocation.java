@@ -12,6 +12,7 @@ public class GameLocation implements Serializable {
     private int locId;
     private boolean visited;
     private LatLng locLtLng;
+    private String clueType;
 
     public boolean isVisited() {
         return visited;
@@ -67,6 +68,14 @@ public class GameLocation implements Serializable {
 
     public void setLocName(String locName) {
         this.locName = locName;
+    }
+
+    public String getClueType() {
+        return clueType;
+    }
+
+    public void setClueType(String clueType) {
+        this.clueType = clueType;
     }
 }
 
