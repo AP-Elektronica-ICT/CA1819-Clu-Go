@@ -108,3 +108,29 @@ Hier wordt ook alle data vanuit de api lokaal gerangschikt in objecten voor gebr
 
 Our Backend is made in Visual Studio.
 We made use of the ASP .net Core Framework
+# Deployment
+This appplication is a City game that can be played in teh city of Antwerp. In order to play the game a user must go through several steps in order to make it functional.
+
+# Installation
+
+## Requirements
+
+..* Android smartphone with Android 8.0 or higher
+..* Azure account with hosting capabilities
+..* Android Studio
+..* Visual Studio 2017
+..* VSCode
+
+## Installment
+First things first, let's install the dependencies on our computer:
+  git clone https://github.com/AP-Elektronica-ICT/CA1819-Clu-Go
+
+1. -> Azure database inlade
+### Android application
+
+Go to the folder containing all directories and open the folder named AndroidStudioProjects/ClueGo in Android studio. Since the game is run on an android application using various api calls in order to communicate with the database we'll have to adjust the url string used inside the application with the one supplied to you by your azure account.
+In Android studio locate the  values/strings.xml file and look for the string called "baseurl". Change this string to the baseurl of your own version of the hosted database. All url's used in the application are base on the baseurl so you won't have to change anything else.
+
+### Adding clues/locations
+
+We've added an angular project that allows users to add locations and clues to the database by accessing a webapplication dashboard. The angular application can be found in the  CA1819-Clu-Go\adminCluGo file located in the repository.
