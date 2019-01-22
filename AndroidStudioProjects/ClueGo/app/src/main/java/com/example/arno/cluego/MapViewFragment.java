@@ -52,6 +52,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONArray;
@@ -99,7 +100,7 @@ public class MapViewFragment extends Fragment {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     public JSONObject gameFromStartGameFragment;
     String arClue;
-
+    Polyline polyline;
     int tutorialIndex;
 
     @Override
@@ -517,10 +518,13 @@ public class MapViewFragment extends Fragment {
         }
         @Override
         protected void onPostExecute(List<List<HashMap<String,String>>>lists){
+            if(polyline!=null)
+                polyline.remove();
             ArrayList points = null;
-
             PolylineOptions polylineOptions = null;
+
             for(List<HashMap<String,String>>path:lists){
+
                 points = new ArrayList();
                 polylineOptions = new PolylineOptions();
                 for(HashMap<String,String>point : path){
@@ -535,7 +539,8 @@ public class MapViewFragment extends Fragment {
                 Log.e("polylines", polylineOptions.toString());
             }
             if(polylineOptions!=null){
-                googleMap.addPolyline(polylineOptions);
+                polyline = googleMap.addPolyline(polylineOptions);
+                //googleMap.addPolyline(polylineOptions);
             }
             else{
                 Log.e("TAG","Directions not found");
