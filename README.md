@@ -130,7 +130,7 @@ First things first, let's install the dependencies on our computer:
  git clone https://github.com/AP-Elektronica-ICT/CA1819-Clu-Go
 ```
 ### ASP database
-
+To setup a database, we will use Azure Database hosting. You need an Azure resourcegroup containing a SQLDatabase and a Web App. Once you have the connection string from your Azure database, add it to the application.json file in the ClueGoASP solution. Once you've changed the connectionstring to your own, you are ready to publish the API to your Web Application.
 
 ### Android application
 
