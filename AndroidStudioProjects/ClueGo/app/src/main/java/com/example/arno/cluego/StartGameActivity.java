@@ -140,7 +140,7 @@ public class StartGameActivity extends Activity implements Serializable {
                     @Override
                     public void onResponse(String response) {
                             Log.i(response,response);
-                            gameinfo.setText(response);
+                            //gameinfo.setText(response);
                             loadCircle.setVisibility(View.GONE);
 
                             LoadGame(UID, "0");
@@ -151,7 +151,7 @@ public class StartGameActivity extends Activity implements Serializable {
                     public void onErrorResponse(VolleyError error) {
                         loadCircle.setVisibility(View.GONE);
                         String errorMessage = requestHelper.ParseError(error);
-                        gameinfo.setText(errorMessage);
+                        //gameinfo.setText(errorMessage);
 
                         if (errorMessage.contains("already") && !confirmed)
                             DialogBuilder(getString(R.string.continueGame));
@@ -183,7 +183,7 @@ public class StartGameActivity extends Activity implements Serializable {
                                 if (responseObj.length() == 0)
                                     gameinfo.setText("You don't have an active game, please start a new one.");
                                 else {
-                                    gameinfo.setText(response);
+                                    //gameinfo.setText(response);
                                     gameId = responseObj.getInt("gameId");
 
                                     Intent i = new Intent(StartGameActivity.this, MainActivity.class);
@@ -193,7 +193,7 @@ public class StartGameActivity extends Activity implements Serializable {
                                     startActivity(i);
                                 }
                         }catch (JSONException ex){
-                            gameinfo.setText(ex.toString());
+                            //gameinfo.setText(ex.toString());
                         }
                     }
                 },
