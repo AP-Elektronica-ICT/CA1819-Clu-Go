@@ -131,8 +131,24 @@ First things first, let's install the dependencies on our computer:
 ### Android application
 
 Go to the folder containing all directories and open the folder named AndroidStudioProjects/ClueGo in Android studio. Since the game is run on an android application using various api calls in order to communicate with the database we'll have to adjust the url string used inside the application with the one supplied to you by your azure account.
-In Android studio locate the  values/strings.xml file and look for the string called "baseurl". Change this string to the baseurl of your own version of the hosted database. All url's used in the application are base on the baseurl so you won't have to change anything else.
+In Android studio locate the  ```values/strings.xml file``` and look for the string called "baseurl". Change this string to the baseurl of your own version of the hosted database. All url's used in the application are base on the baseurl so you won't have to change anything else.
 
-### Adding clues/locations
+### Adding locations
 
-We've added an angular project that allows users to add locations and clues to the database by accessing a webapplication dashboard. The angular application can be found in the CA1819-Clu-Go\adminCluGo file located in the repository.
+We've added an angular project that allows users to add locations and clues to the database by accessing a webapplication dashboard. The angular application can be found in the ```CA1819-Clu-Go\adminCluGo file``` located in the repository. Open this application in Visual studio code or another program that will allow you to change the source code. 
+
+Just like with the android application it is important that we change the url's of the http requests within this angular application in order to ensure that all calls are made to the right database. Following is a list of all code lines where an api call is made and where you must change the url to the one of your own hosted database.
+
+..* in ```location.component.ts``` line 32, line 50, line 51
+..- in ```locations.service.ts``` line 9
+
+Once this is done host the webapplication on your azure account.
+
+Lastly don't forget to  run ```npm install``` in order to install all node modules used in the application.
+
+
+
+
+
+
+
