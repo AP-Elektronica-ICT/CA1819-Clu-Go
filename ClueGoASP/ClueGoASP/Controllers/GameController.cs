@@ -159,6 +159,19 @@ namespace ClueGoASP.Controllers
             }
         }
 
+        [HttpGet("{gameId}/{locName}/setweapon")]
+        public ActionResult SetWeaponClueFound(int gameId, string locName)
+        {
+            try
+            {
+                return Ok(_gameService.SetWeaponClueFound(gameId, locName));
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         [HttpGet("{gameId}/found")]
         public ActionResult GetFoundClues(int gameId)
         {
