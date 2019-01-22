@@ -151,7 +151,7 @@ In here you also define the relationships the tables have to eachother.
 
 The relationship the tables have to eachother is easier to explain through a picture
 
-![alt text](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+![alt text](https://github.com/AP-Elektronica-ICT/CA1819-Clu-Go/blob/master/images/finaledatamodel.jpg)
 
 ### Services
 
