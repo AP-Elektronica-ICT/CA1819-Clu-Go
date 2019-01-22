@@ -281,11 +281,18 @@ namespace ClueGoASP.Services
 
         public string SetWeaponClueFound(int gameId, string locName)
         {
-            GetARClue(gameId).Found = true;
-            _dbContext.SaveChanges();
+            List<GameClue> gameClues = _dbContext.GameClues.Where(x => !x.IsFound && x.GameId == gameId).ToList();
+            if (gameClues.Count == 0)
+                throw new AppException("All clues are found.");
+            foreach (var item in gameClues)
+            {
+                if (_clueService.GetById(item.ClueId).ClueType == "AR")
+                    item.IsFound = true;
+
+            }
             SetLocationVisited(gameId, locName);
 
-            return "Clue" + GetARClue(gameId).ClueId + " changed to found.";
+            return "Clue" + gameClues[0].ClueId + " changed to found.";
         }
     }
 }

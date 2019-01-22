@@ -233,7 +233,6 @@ public class MapViewFragment extends Fragment {
                                     markerLoc.setLongitude(destMarker.getPosition().longitude);
                                     float distance = location.distanceTo(markerLoc);
 
-                                    Log.e("distancevalue", destMarker.getTitle());
 
                                     if(distance<100000){
                                         if(destMarker.getTitle().equals("Politiekantoor")){
@@ -490,7 +489,6 @@ public class MapViewFragment extends Fragment {
             }catch (Exception e){
                 e.printStackTrace();
             }
-            Log.e("responseurl",responseString);
             return responseString;
         }
         @Override
@@ -531,12 +529,10 @@ public class MapViewFragment extends Fragment {
                     double lat = Double.parseDouble(point.get("lat"));
                     double lon = Double.parseDouble(point.get("lon"));
                     points.add(new LatLng(lat,lon));
-                    Log.e("points",points.toString());
                 }
                 polylineOptions.addAll(points);
                 polylineOptions.width(15);
                 polylineOptions.color(Color.BLUE);
-                Log.e("polylines", polylineOptions.toString());
             }
             if(polylineOptions!=null){
                 polyline = googleMap.addPolyline(polylineOptions);
@@ -593,7 +589,6 @@ public class MapViewFragment extends Fragment {
 
     public void GetLocations (int gameId, final SuccessCallBack callBack){
             String url = baseUrl + "location/" + gameId;
-            Log.d("TAG", "GetSuspects: " + url);
             JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url,null,
                     new Response.Listener<JSONArray>() {
                         @Override
@@ -606,13 +601,11 @@ public class MapViewFragment extends Fragment {
                                     for(int i=0;i<response.length();i++) {
                                         GameLocation gameLocation = new GameLocation();
                                         JSONObject _locations = response.getJSONObject(i);
-                                        Log.d(TAG, "onResponse: " + response);
 
                                         gameLocation.setVisited(_locations.getBoolean("visited"));
                                         gameLocation.setClueType(_locations.getString("clueType"));
 
                                         JSONObject _location = _locations.getJSONObject("location");
-                                        Log.d(TAG, "onResponse: " + _location);
 
                                         gameLocation.setLocId(_location.getInt("locId"));
                                         gameLocation.setLocName(_location.getString("locName"));
