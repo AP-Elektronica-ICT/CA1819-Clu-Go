@@ -316,42 +316,41 @@ namespace ClueGoASP.Data
             //add user if none exist
             if (!context.Users.Any())
             {
-                var admin = new User()
+                List<User> users = new List<User>()
                 {
-                    Username = "WeynsA",
-                    Email = "weyns.arno@gmail.com",
-                    Password = "E10ADC3949BA59ABBE56E057F20F883E"
-                };
-                var admin1 = new User()
-                {
-                    Username = "MassureA",
-                    Email = "s091998@ap.be",
-                    Password = "E10ADC3949BA59ABBE56E057F20F883E"
-                };
-                var admin2 = new User()
-                {
-                    Username = "JoppeM",
-                    Email = "joppe.mertens@gmail.com",
-                    Password = "E10ADC3949BA59ABBE56E057F20F883E"
-                };
-                var admin3 = new User()
-                {
-                    Username = "AlIbra",
-                    Email = "s091997@ap.be",
-                    Password = "E10ADC3949BA59ABBE56E057F20F883E"
-                };
-                var admin4 = new User()
-                {
-                    Username = "Test",
-                    Email = "Test@ap.be",
-                    Password = "E10ADC3949BA59ABBE56E057F20F883E"
-                };
-                context.Users.Add(admin);
-                context.Users.Add(admin1);
-                context.Users.Add(admin2);
-                context.Users.Add(admin3);
-                context.Users.Add(admin4);
+                    new User()
+                    {
+                        Username = "WeynsA",
+                        Email = "weyns.arno@gmail.com",
+                        Password = "E10ADC3949BA59ABBE56E057F20F883E"
+                    },
+                    new User()
+                    {
+                        Username = "MassureA",
+                        Email = "s091998@ap.be",
+                        Password = "E10ADC3949BA59ABBE56E057F20F883E"
+                    },
+                    new User()
+                    {
+                        Username = "JoppeM",
+                        Email = "joppe.mertens@gmail.com",
+                        Password = "E10ADC3949BA59ABBE56E057F20F883E"
+                    },
+                    new User()
+                    {
+                        Username = "AlIbra",
+                        Email = "s091997@ap.be",
+                        Password = "E10ADC3949BA59ABBE56E057F20F883E"
+                    },
+                    new User()
+                    {
+                        Username = "Test",
+                        Email = "Test@ap.be",
+                        Password = "E10ADC3949BA59ABBE56E057F20F883E"
+                    },
+            };
 
+                context.Users.AddRange(users);
                 context.SaveChanges();
             }
             //add location if none exist

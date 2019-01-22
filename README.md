@@ -151,6 +151,8 @@ In here you also define the relationships the tables have to eachother.
 
 The relationship the tables have to eachother is easier to explain through a picture
 
+![alt text](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+
 ### Services
 
 Services are a wonderous thing to use once understood it servers as a medium between controllers and data access.
