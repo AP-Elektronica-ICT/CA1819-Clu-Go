@@ -149,7 +149,6 @@ Just like with the android application it is important that we change the url's 
 
 Once this is done host the webapplication on your azure account.
 
-Lastly don't forget to  run ```npm install``` in order to install all node modules used in the application.
 
 
 
