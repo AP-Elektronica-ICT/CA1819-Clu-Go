@@ -19,6 +19,7 @@ namespace ClueGoASP.Services
         Game GetBriefGame(int gameId);
         List<Game> GetPuzzleCluesByGame(int gameId);
         string SetGameClueFound(int gameId, string locName);
+        string SetWeaponClueFound(int gameId, string locName);
         List<object> GetFoundClues(int gameId);
         List<object> GetNotFoundClues(int gameId);
         List<GameSuspect> GetGameSuspects(int gameId);
@@ -276,6 +277,15 @@ namespace ClueGoASP.Services
             location.Visited = true;
             _dbContext.SaveChanges();
 
+        }
+
+        public string SetWeaponClueFound(int gameId, string locName)
+        {
+            GetARClue(gameId).Found = true;
+            _dbContext.SaveChanges();
+            SetLocationVisited(gameId, locName);
+
+            return "Clue" + GetARClue(gameId).ClueId + " changed to found.";
         }
     }
 }
