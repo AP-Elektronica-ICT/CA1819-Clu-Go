@@ -123,6 +123,7 @@ This appplication is a City game that can be played in teh city of Antwerp. In o
 
 ## Installment
 First things first, let's install the dependencies on our computer:
+
   git clone https://github.com/AP-Elektronica-ICT/CA1819-Clu-Go
 
 1. -> Azure database inlade
@@ -133,4 +134,4 @@ In Android studio locate the  values/strings.xml file and look for the string ca
 
 ### Adding clues/locations
 
-We've added an angular project that allows users to add locations and clues to the database by accessing a webapplication dashboard. The angular application can be found in the  CA1819-Clu-Go\adminCluGo file located in the repository.
+We've added an angular project that allows users to add locations and clues to the database by accessing a webapplication dashboard. The angular application can be found in the CA1819-Clu-Go\adminCluGo file located in the repository.
