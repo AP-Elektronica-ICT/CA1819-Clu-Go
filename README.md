@@ -117,11 +117,11 @@ This appplication is a City game that can be played in teh city of Antwerp. In o
 
 ## Requirements
 
-..* Android smartphone with Android 8.0 or higher
-..* Azure account with hosting capabilities
-..* Android Studio
-..* Visual Studio 2017
-..* VSCode
+  * Android smartphone with Android 8.0 or higher
+  * Azure account with hosting capabilities
+  * Android Studio
+  * Visual Studio 2017
+  * VSCode
 
 
 ## Installment
