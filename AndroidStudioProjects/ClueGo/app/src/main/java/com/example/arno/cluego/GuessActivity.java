@@ -76,8 +76,6 @@ public class GuessActivity extends AppCompatActivity implements Serializable {
     }
 
     public void setActivity(){
-        tvTest.setText(murderer);
-
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
@@ -92,6 +90,7 @@ public class GuessActivity extends AppCompatActivity implements Serializable {
                 if(suspectGuess.equals(murderer)){;
                     Intent i = new Intent(GuessActivity.this, EndActivity.class);
                     i.putExtra("gameId", gameId);
+                    i.putExtra("amtItems", suspectNames.size());
                     startActivity(i);
                 }
                 else{

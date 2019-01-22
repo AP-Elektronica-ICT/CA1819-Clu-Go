@@ -143,7 +143,7 @@ namespace ClueGoASP.Services
         public void AddFoundClues(int amt, int id)
         {
             var user = _dbContext.Users.Find(id);
-            user.cluesFound =+ amt;
+            user.cluesFound += amt;
             _dbContext.SaveChanges();
         }
 

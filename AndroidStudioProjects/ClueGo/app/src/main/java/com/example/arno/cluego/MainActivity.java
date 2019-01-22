@@ -91,12 +91,6 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.M
                 case R.id.navigation_stats:
                     switchToStats();
                     return true;
-                case R.id.test:
-                    Intent intent = new Intent(MainActivity.this,GuessActivity.class);
-                    //intent.putExtra("gameData", gameFromDatabase);
-                    intent.putExtra("gameId", gameId);
-                    startActivity(intent);
-                    return true;
             }
             return false;
         }

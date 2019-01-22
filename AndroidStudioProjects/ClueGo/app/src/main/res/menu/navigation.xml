@@ -21,9 +21,4 @@
         android:icon="@drawable/statistics_black"
         android:title="@string/title_notifications" />
 
-    <item
-        android:id="@+id/test"
-        android:icon="@drawable/innovation"
-        android:title="@string/title_notifications" />
-
 </menu>

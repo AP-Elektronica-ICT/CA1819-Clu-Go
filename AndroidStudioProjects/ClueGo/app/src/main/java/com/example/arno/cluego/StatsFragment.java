@@ -23,6 +23,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.arno.cluego.Objects.Game;
 import com.example.arno.cluego.Objects.User;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,7 +53,6 @@ public class StatsFragment extends Fragment {
             userId = getActivity().getIntent().getIntExtra("gameId", 0);
             GetUserData(userId);
 
-            SetStats(usr);
 
         return view;
     }
@@ -87,13 +87,18 @@ public class StatsFragment extends Fragment {
                 Log.i("LoginActivity", response);
 
                 try{
-                    JSONObject userObj = new JSONObject(response);
+                    JSONArray _userObj = new JSONArray(response);
+                    JSONObject userObj = _userObj.getJSONObject(0);
+                    Log.d(TAG, "onResponse: " + userObj);
 
                     usr.setUserId(userObj.getInt("userId"));
                     usr.setUsername(userObj.getString("username"));
                     usr.setCluesFound(userObj.getInt("cluesFound"));
                     usr.setDistanceWalked(userObj.getInt("distanceWalked"));
                     usr.setGamesPlayed(userObj.getInt("gamesPlayed"));
+
+                    SetStats(usr);
+
 
                 }catch(JSONException e)
                 {

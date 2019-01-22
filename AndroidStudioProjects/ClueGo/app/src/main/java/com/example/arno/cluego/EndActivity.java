@@ -1,6 +1,7 @@
 package com.example.arno.cluego;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,8 @@ public class EndActivity extends AppCompatActivity implements Serializable {
     User usr = new User();
     String baseUrl;
 
+    SharedPreferences prefs;
+
 
     private RequestQueue mRequestQueue;
     private StringRequest stringRequest;
@@ -39,9 +42,8 @@ public class EndActivity extends AppCompatActivity implements Serializable {
         btnEnd = findViewById(R.id.btnEnd);
         tvTest = findViewById(R.id.tv_test2);
 
-        userId = getIntent().getIntExtra("gameId", 0);
-
-        tvTest.setText(String.valueOf(userId));
+        prefs = getSharedPreferences("UserInfo", MODE_PRIVATE);
+        userId = Integer.parseInt(prefs.getString("userId", "0"));
 
         btnEnd.setOnClickListener(EndGame);
     }

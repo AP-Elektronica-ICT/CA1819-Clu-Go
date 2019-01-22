@@ -48,8 +48,8 @@ namespace ClueGoASP.Services
             var clues = new List<Clue>();
             var user = _dbContext.Users.SingleOrDefault(x => x.UserId == userId);               //Get the right user
 
-            if (amtSus < 3 || amtSus >= 9)
-                throw new AppException("Number of suspects needs to be between 3 and 9");
+            if (amtSus < 3 || amtSus >= 7)
+                throw new AppException("Number of suspects needs to be between 3 and 7");
             else if (_dbContext.Games.Find(userId) != null)
             {
                 throw new AppException("User already has a game");
@@ -65,13 +65,19 @@ namespace ClueGoASP.Services
                 for (int i = 0; i < amtSus; i++)                                                //Add given amount of locations to a game.
                 {
                     if (locations[i].LocName != "Politiekantoor")                               //Exclude policestation so it doesn't get added twice.
-                    {
+                    {    
                         game.GameLocations.Add(new GameLocation
                         {
                             Location = locations[i]
                         });
+                     
                     }
                 }
+
+                var ARLoc = game.GameLocations.ElementAt(2);
+                ARLoc.ClueType = "AR";
+
+
 
                 game.GameLocations.Add(new GameLocation                                         //Add the police office to the game.
                 {
@@ -104,8 +110,9 @@ namespace ClueGoASP.Services
                 {
                     game.GameClues.Add(new GameClue
                     {
+
                         Clue = clues[i],
-                        //ClueName = clues[i].ClueName                        
+                                               
                     });
                 }
 
@@ -230,8 +237,6 @@ namespace ClueGoASP.Services
             {
                 clues.Add(_clueService.GetBriefClue(item));
             }
-
-
             return clues;
         }
         public string SetGameClueFound(int gameId, string locName)
@@ -259,9 +264,7 @@ namespace ClueGoASP.Services
                 gameClues[0].IsFound = true;
                 _dbContext.SaveChanges();
             }
-
-            //SetLocationVisited(gameId);
-
+            
             return "Clue" + gameClues[0].ClueId + "changed to found.";
         }
 

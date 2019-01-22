@@ -218,7 +218,6 @@ namespace ClueGoASP.Controllers
             _gameService.SetLocationVisited(gameId, locName);
         }
 
-        //[HttpGet("{gameId}/location")]
-        
+        //[HttpGet("{gameId}/location")]        
     }
 }
