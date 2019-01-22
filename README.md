@@ -123,8 +123,9 @@ This appplication is a City game that can be played in teh city of Antwerp. In o
 
 ## Installment
 First things first, let's install the dependencies on our computer:
-
-  git clone https://github.com/AP-Elektronica-ICT/CA1819-Clu-Go
+```
+ git clone https://github.com/AP-Elektronica-ICT/CA1819-Clu-Go
+```
 
 1. -> Azure database inlade
 ### Android application
