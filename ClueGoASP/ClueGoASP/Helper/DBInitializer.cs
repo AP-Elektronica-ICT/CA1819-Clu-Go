@@ -18,74 +18,70 @@ namespace ClueGoASP.Data
             //add suspectsd if none exist
             if (!context.Suspects.Any())
             {
-                var suspect0 = new Suspect()
-                {
-                    //  SuspectId = 1,
-                    SusName = "Miss Scarlett",
-                    SusWeapon = "Poison",
-                    SusDescription = "Ms. Vivienne Sakura Scarlet is a vivacious and aspiring actress whose passion for fame, fortune, and especially men will let no one stand in her way. The glamorous daughter of Mrs. Elizabeth Peacock and beautiful girlfriend of Col. Michael Mustard. She was the former fiancée of Mr. John Boddy.",
-                    SusImgUrl = "https://i.pinimg.com/originals/95/ce/3d/95ce3da06af8b1c09a4b2d4fa603b7a0.jpg",
-                };
-                var suspect1 = new Suspect()
-                {
-                    SusName = "Mr. Green",
-                    SusWeapon = "Silver cross",
-                    SusDescription = "Rev. Jonathan Green, is questioned by many on whether he is a saint or sinner. Known for shady dealings on the stock market, he used this money to help the Church of England. His relation with Jhon boddy was at an all time low since Jonathan lost alof of money through investments made by Jhon boddy.",
-                    SusImgUrl = "https://pbs.twimg.com/profile_images/447953368271814657/Inf33QvJ.jpeg",
-                    };
-                var suspect2 = new Suspect()
-                {
-                    SusName = "Colonel Mark Sveniers",
-                    SusWeapon = "Ceremonial sword",
-                    SusDescription = "Col. Mark Sveniers, is a gallant military hero whose glittering career hides a tarnished past.He believes that casualties are inevitable in war and is usually the sole survivor in battle. He became the boyfriend of the glamorous actress Ms. Scarlet. He was an old college friend of Mr. John Boddy from college. They both attended AP Hogeschool back in their day. Jhon and the Colonel are on bad terms ever since Colonel Mark Sveniers started a relation with Miss Scarlet.",
-                    SusImgUrl = "https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/04/08/unspecified-3.jpg?width=1368&height=912&fit=bounds&format=pjpg&auto=webp&quality=70",
-                };
-                var suspect3 = new Suspect()
-                {
-                    SusName = "Dr. Boomgaerts",
-                    SusWeapon = "Morphine",
-                    SusDescription = "The now divorced Doctor practices medicine at his family practician. He lives in luxury, always has the latest of the latest when it comes to technology and cars. He was anything but happy with the way Jhon boddy went through life. Mainly because his former wife left him for Jhon boddy. The Doctors latest lover is currently unknown.",
-                    SusImgUrl = "https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/04/08/unspecified-4.jpg?width=1368&height=912&fit=bounds&format=pjpg&auto=webp&quality=70",
-                };
-                var suspect4 = new Suspect()
-                {
-                    SusName = "Professor Peter Thompson",
-                    SusWeapon = "Revolver",
-                    SusDescription = "Prof. Peter Peeters is a man with a degree of suspicion. Before he started his career as a teacher at AP, he was an associate of Jhon boddy at MoneyWell. His abrupt and unlawfull termination left the relationship between these mens in shambles. Would his research methods stand the scrutiny of a microscope?",
-                    SusImgUrl = "https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/04/08/unspecified-6.jpg?width=1368&height=912&fit=bounds&format=pjpg&auto=webp&quality=70",
+                List<Suspect> suspects = new List<Suspect>() {
 
-                };
-                var suspect5 = new Suspect()
-                {
-                    SusName = "Mrs. Peacock",
-                    SusWeapon = "Knife",
-                    SusDescription = "Mrs. Elizabeth Peacock is the ex-wife of entrepreneur Roland Hoedts, who died under very suspicious circumstances. She constantly tries to live up to her reputation that she would rather forget. She is nicknamed Ma Bluebird because of the mysterious deaths of her husbands. She went almost bankrupt after investing money with Jhon boddy and had several court cases against him.",
-                    SusImgUrl = "https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/04/08/unspecified.jpg?width=1368&height=912&fit=bounds&format=pjpg&auto=webp&quality=70",
+                    new Suspect()
+                    {
+                        //  SuspectId = 1,
+                        SusName = "Miss Scarlett",
+                        SusWeapon = "Poison",
+                        SusDescription = "Ms. Vivienne Sakura Scarlet is a vivacious and aspiring actress whose passion for fame, fortune, and especially men will let no one stand in her way. The glamorous daughter of Mrs. Elizabeth Peacock and beautiful girlfriend of Col. Michael Mustard. She was the former fiancée of Mr. John Boddy.",
+                        SusImgUrl = "https://i.pinimg.com/originals/95/ce/3d/95ce3da06af8b1c09a4b2d4fa603b7a0.jpg",
+                    },
+                    new Suspect()
+                    {
+                        SusName = "Mr. Green",
+                        SusWeapon = "Silver cross",
+                        SusDescription = "Rev. Jonathan Green, is questioned by many on whether he is a saint or sinner. Known for shady dealings on the stock market, he used this money to help the Church of England. His relation with Jhon boddy was at an all time low since Jonathan lost alof of money through investments made by Jhon boddy.",
+                        SusImgUrl = "https://pbs.twimg.com/profile_images/447953368271814657/Inf33QvJ.jpeg",
+                    },
+                    new Suspect()
+                    {
+                        SusName = "Colonel Mark Sveniers",
+                        SusWeapon = "Ceremonial sword",
+                        SusDescription = "Col. Mark Sveniers, is a gallant military hero whose glittering career hides a tarnished past.He believes that casualties are inevitable in war and is usually the sole survivor in battle. He became the boyfriend of the glamorous actress Ms. Scarlet. He was an old college friend of Mr. John Boddy from college. They both attended AP Hogeschool back in their day. Jhon and the Colonel are on bad terms ever since Colonel Mark Sveniers started a relation with Miss Scarlet.",
+                        SusImgUrl = "https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/04/08/unspecified-3.jpg?width=1368&height=912&fit=bounds&format=pjpg&auto=webp&quality=70",
+                    },
+                    new Suspect()
+                    {
+                        SusName = "Dr. Boomgaerts",
+                        SusWeapon = "Morphine",
+                        SusDescription = "The now divorced Doctor practices medicine at his family practician. He lives in luxury, always has the latest of the latest when it comes to technology and cars. He was anything but happy with the way Jhon boddy went through life. Mainly because his former wife left him for Jhon boddy. The Doctors latest lover is currently unknown.",
+                        SusImgUrl = "https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/04/08/unspecified-4.jpg?width=1368&height=912&fit=bounds&format=pjpg&auto=webp&quality=70",
+                    },
+                     new Suspect()
+                    {
+                        SusName = "Professor Peter Thompson",
+                        SusWeapon = "Revolver",
+                        SusDescription = "Prof. Peter Peeters is a man with a degree of suspicion. Before he started his career as a teacher at AP, he was an associate of Jhon boddy at MoneyWell. His abrupt and unlawfull termination left the relationship between these mens in shambles. Would his research methods stand the scrutiny of a microscope?",
+                        SusImgUrl = "https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/04/08/unspecified-6.jpg?width=1368&height=912&fit=bounds&format=pjpg&auto=webp&quality=70",
 
-                };
-                var suspect6 = new Suspect()
-                {
-                    SusName = "Mrs. White",
-                    SusWeapon = "Rope",
-                    SusDescription = "Mrs. Blanche White is the loyal housekeeper and a devoted confidant. She hides a secret indulgence, we think she might be involved with Mr. Green. She currently lives with her employer, Mrs. Elizabeth Peacock, who is also her close friend. She knows all the news throughout Antwerp. She was the former employee of Jhon boddy, but after a string of sexual complaints, she decided to quit working for him.",
-                    SusImgUrl = "https://static.giantbomb.com/uploads/scale_small/0/5768/698578-white_puzzle.jpg",
+                    },
+                    new Suspect()
+                    {
+                        SusName = "Mrs. Peacock",
+                        SusWeapon = "Knife",
+                        SusDescription = "Mrs. Elizabeth Peacock is the ex-wife of entrepreneur Roland Hoedts, who died under very suspicious circumstances. She constantly tries to live up to her reputation that she would rather forget. She is nicknamed Ma Bluebird because of the mysterious deaths of her husbands. She went almost bankrupt after investing money with Jhon boddy and had several court cases against him.",
+                        SusImgUrl = "https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/04/08/unspecified.jpg?width=1368&height=912&fit=bounds&format=pjpg&auto=webp&quality=70",
 
+                    },
+                    new Suspect()
+                    {
+                        SusName = "Mrs. White",
+                        SusWeapon = "Rope",
+                        SusDescription = "Mrs. Blanche White is the loyal housekeeper and a devoted confidant. She hides a secret indulgence, we think she might be involved with Mr. Green. She currently lives with her employer, Mrs. Elizabeth Peacock, who is also her close friend. She knows all the news throughout Antwerp. She was the former employee of Jhon boddy, but after a string of sexual complaints, she decided to quit working for him.",
+                        SusImgUrl = "https://static.giantbomb.com/uploads/scale_small/0/5768/698578-white_puzzle.jpg",
+
+                    },
                 };
 
-                context.Suspects.Add(suspect0);
-                context.Suspects.Add(suspect1);
-                context.Suspects.Add(suspect2);
-                context.Suspects.Add(suspect3);
-                context.Suspects.Add(suspect4);
-                context.Suspects.Add(suspect5);
-                context.Suspects.Add(suspect6);
-               
+                context.Suspects.AddRange(suspects);             
                 context.SaveChanges();
 
             }
             // add clues if none exist
             if (!context.Clues.Any())
-            {
+            {               
                 var clue1 = new Clue()
                 {
                     ClueName = "Knife",

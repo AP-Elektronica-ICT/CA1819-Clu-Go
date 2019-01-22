@@ -100,8 +100,8 @@ Als de user al een game heeft word hij hiervan verwittigd
 This is as the name suggests the main activity the bottom part exists of the menu the upper part the container for the fragments.
 In here also the data gets organised in local objects instead of being used directy from the api call this makes it easier to use the data of course this doesnt work with everything, dynamic data still gets modified through calls.
 
-Alle fragmenten worden hier in opgeroepen hier zit ook de menu in
-Hier wordt ook alle data vanuit de api lokaal gerangschikt in objecten voor gebruik.
+//Alle fragmenten worden hier in opgeroepen hier zit ook de menu in
+//Hier wordt ook alle data vanuit de api lokaal gerangschikt in objecten voor gebruik.
 
 
 ## Backend
@@ -130,6 +130,8 @@ For example a game contains much data this would be very tedious and unorganized
 
 So to simple our cause we made use of linking tables to basically "link" or two objects to one and then later on use that object.
 
+Basically a linked table is a join table of 2 different object.
+
 let me continue my example for the game table.
 A game has many Clues to be found.
 those Clues are bound to a Suspect thats something you can do in the Suspect model.
@@ -145,11 +147,15 @@ public DBSet<Clue> Clues {get; set;}
 
 that actually means that you make a table in the database named Clues that contains objects based on the Clue model.
 
+In here you also define the relationships the tables have to eachother.
+
+The relationship the tables have to eachother is easier to explain through a picture
+
 ### Services
 
 Services are a wonderous thing to use once understood it servers as a medium between controllers and data access.
 
-The wonderous thing about it is that it makes Sql injection very hard if not impossible.
+The best thing about it is that it makes Sql injection very hard if not impossible and in general creates a extra layer of security because it doesnt communicate with the front end directly.
 
 And it really creates that extra layer that makes testing easier and allowes for a higher level oversight over data handling.
 
