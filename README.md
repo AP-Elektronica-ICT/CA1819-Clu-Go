@@ -106,9 +106,61 @@ Hier wordt ook alle data vanuit de api lokaal gerangschikt in objecten voor gebr
 
 ## Backend
 
+### General info
+
 Our Backend is made in Visual Studio.
-We made use of the ASP .net Core Framework
+We made use of the ASP .net Core Entinty Framework.
+ASP as we all probably know has a layered structure and in this chapter we will be going through them each step of the way.
+
+### Models
+
+What are models?
+
+Models are basically what each row in the table will look like.
+Models will contain properties, those will be your "columns" in the database.
+When you want to make a new row in the database you have to make and object of the model and add values to the given properties.
+Once the object is valid then it can be inserted in the database through the entity framework.
+This can be through a controller/service or through the initializer.
+
+Models can also contain Foreign keys or Collections/Lists of other object.
+
+And in our case thats strongly the case and almost true for every table.
+
+For example a game contains much data this would be very tedious and unorganized to all put in one table, Simply maintaining that kind of data would be an administrative nightmare.
+
+So to simple our cause we made use of linking tables to basically "link" or two objects to one and then later on use that object.
+
+let me continue my example for the game table.
+A game has many Clues to be found.
+those Clues are bound to a Suspect thats something you can do in the Suspect model.
+But if we go further and think how is a game going to know which Clues to use we need to find a solution for that and the solution is the linking table what it does is when you make a new game it gives the gameid to the linking table and adds a fitting clue to the linking table based on the chosen murderer.
+
+Same to location it choses a random location from the database adds a gameid to and that will be the used table in the game. When you reach a location a random clue gets chosen from the clues linked to the game.
+
+### Context
+
+In here the actual table gets made. When you make a statement like 
+
+public DBSet<Clue> Clues {get; set;}
+
+that actually means that you make a table in the database named Clues that contains objects based on the Clue model.
+
+### Services
+
+Services are a wonderous thing to use once understood it servers as a medium between controllers and data access.
+
+The wonderous thing about it is that it makes Sql injection very hard if not impossible.
+
+And it really creates that extra layer that makes testing easier and allowes for a higher level oversight over data handling.
+
+We switched to services in the testing phase a real shame we didnt switch earlier because of the ease and oversight it created.
+
+### Controllers
+
+Controller used to do more earlier in the project now they only call the required service to do the job.
+
 # Deployment
+
 This appplication is a City game that can be played in teh city of Antwerp. In order to play the game a user must go through several steps in order to make it functional.
 
 
@@ -125,6 +177,7 @@ This appplication is a City game that can be played in teh city of Antwerp. In o
 
 
 ## Installment
+
 First things first, let's install the dependencies on our computer:
 ```
  git clone https://github.com/AP-Elektronica-ICT/CA1819-Clu-Go
